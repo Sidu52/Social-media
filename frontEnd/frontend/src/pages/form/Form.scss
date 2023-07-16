@@ -1,0 +1,218 @@
+/* LoginPage.css */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+.root-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 600px;
+  background-image: url('../../assets/image/3d-rendering-bunch-square-logos-main-social-media-apps-orange-background_284880-215.png');
+  background-size: cover;
+  background-position: center;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+  }
+
+  .container {
+
+    position: absolute;
+    top: 50%;
+    transform: translate(0, -50%);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+
+    .sub-container {
+      margin-bottom: 20px;
+      min-width: 250px;
+      width: 35%;
+
+      .title {
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin-bottom: 10px;
+        color: #fff;
+      }
+
+      .description {
+        font-size: 1rem;
+        font-weight: 500;
+        margin: 20px 0;
+        color: #fff;
+      }
+
+      .dontaion__button {
+        padding: 15px 30px;
+      }
+    }
+
+    .btn {
+      position: relative;
+      overflow: hidden;
+      background: transparent;
+      color: #fff;
+      border: 1px solid white;
+      border-radius: 30px;
+      cursor: pointer;
+      display: inline-block;
+      transition: color 0.5s ease;
+
+      &::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 101%;
+        height: 101%;
+        z-index: -1;
+        background: white;
+        transition: 0.5s;
+        transition-timing-function: ease;
+        transform-origin: 0 0;
+        transition-timing-function: cubic-bezier(0.5, 1.6, 0.4, 0.7);
+        transform: scaleY(0);
+
+      }
+
+      &:hover {
+        transition: color 1s ease;
+        transition: all 0.3s ease;
+        color: black;
+        font-weight: 500;
+
+        &::before {
+          transform: scale(1);
+        }
+      }
+    }
+
+    .button {
+      position: relative;
+      z-index: 1;
+    }
+
+    .formContainer {
+      min-width: 30%;
+      // min-width: 250px;
+      padding: 40px;
+      background: rgba(0, 0, 0, .5);
+      box-sizing: border-box;
+      box-shadow: 0 15px 25px rgba(0, 0, 0, .6);
+      border-radius: 20px;
+
+      .text,
+      a {
+        margin: 0 0 30px;
+        padding: 0;
+        color: #fff;
+        text-align: center;
+        text-decoration: none;
+      }
+
+      .user-box {
+        position: relative;
+
+
+        input {
+
+          width: 100%;
+          padding: 10px 0;
+          font-size: 16px;
+          color: #fff;
+          margin-bottom: 30px;
+          border: none;
+          border-bottom: 1px solid #fff;
+          outline: none;
+          background: transparent;
+        }
+
+        label {
+          position: absolute;
+          top: -20px;
+          left: 0;
+          padding: 10px 0;
+          font-size: 16px;
+          color: #fff;
+          pointer-events: none;
+          transition: .5s;
+        }
+      }
+
+      .button1 {
+        padding: 5px;
+        border: none;
+        border-radius: 10px;
+        font-weight: 500;
+        min-width: 35%;
+      }
+
+      .submit__button {
+        padding: 8px 10px;
+        text-decoration: none;
+      }
+
+    }
+
+
+
+    @media (max-width:975px) {
+      .sub-container {
+        width: 20%;
+      }
+
+      .formContainer {
+        width: 50%;
+        padding: 20px;
+      }
+    }
+
+  }
+
+  .loginSingup {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    .link {
+      text-decoration: none;
+
+      &:hover {
+        color: red;
+        scale: (1.2);
+      }
+    }
+  }
+
+  @media (max-width: 576px) {
+    /* Styles for mobile devices */
+    height: 750px;
+
+    .container {
+      flex-direction: column;
+
+      .formContainer {
+        min-width: 350px;
+        padding: 15px;
+      }
+    }
+
+
+    .sub-container .description {
+      display: none;
+    }
+  }
+
+
+}

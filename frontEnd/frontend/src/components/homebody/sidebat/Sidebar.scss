@@ -1,0 +1,132 @@
+:root {
+    --ig-separator: 219, 219, 219;
+}
+
+body {
+    font-family: Roboto, serif;
+}
+
+.user__profile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid black;
+    border-radius: 35px;
+    margin: 10px;
+    margin-bottom: 0;
+    padding: 0 15px;
+    background: #e5dacb;
+
+    img {
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+    }
+
+}
+
+.sidebar {
+    background-color: #ffffff;
+    position: sticky;
+    height: 100vh;
+    width: 15%;
+    border-right: 1px solid rgb(var(--ig-separator));
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+    margin-bottom: 50px;
+
+    .logo-wrapper {
+        width: 100%;
+        padding: 5px 25px;
+        margin-bottom: 20px;
+
+        img {
+            width: 105px;
+        }
+    }
+
+    .sidebar-menu {
+        font-size: 1rem;
+        list-style-type: none;
+        padding: 0 12px 20px 8px;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        // flex-grow: 3;
+
+        &.bottom {
+            flex-grow: 0;
+            margin-bottom: 40px;
+        }
+
+        li {
+            // margin-bottom: 10px;
+
+            a.nav-link {
+                border-radius: 10px;
+                padding: 16px 15px;
+                color: #333333;
+                text-decoration: none;
+                display: flex;
+                align-items: center;
+
+                &.active {
+                    font-weight: bold;
+
+                    img.icon {
+                        border: 2px solid black;
+                    }
+                }
+
+                .icon {
+                    margin-right: 15px;
+                    width: 24px;
+                    height: 24px;
+                    transition: all 0.2s ease-in-out;
+                }
+
+                &:hover {
+                    background-color: #f5f5f5;
+
+                    .icon {
+                        transform: scale(1.08);
+                    }
+                }
+            }
+        }
+    }
+
+    .rounded-circle {
+        border-radius: 100%;
+    }
+
+    .sidebarFriend {
+        display: flex;
+        flex-direction: column;
+        margin-left: 10px;
+        gap: 5px;
+        margin-bottom: 50%;
+
+        h3 {
+            text-align: center;
+            background: #2389ff;
+            color: white;
+            padding: 10px 0;
+            border-radius: 20px;
+        }
+
+        li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 5px 0;
+        }
+
+        img {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+        }
+    }
+}
