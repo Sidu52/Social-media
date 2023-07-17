@@ -33,6 +33,18 @@ export default function Sidebar() {
 
         fetchUserData();
     }, []);
+
+    const handleUserProfile = async (e, data) => {
+        e.preventDefault();
+        try {
+            localStorage.setItem('userData', JSON.stringify(data));
+            // Redirect to the profile page
+            window.location.href = '../../../profile/post';
+        } catch (error) {
+            console.log('fail', error);
+        }
+    }
+
     return (
         <div className="sidebar">
             <div className="user__profile">
@@ -123,7 +135,7 @@ export default function Sidebar() {
             <div className="sidebarFriend">
                 <h3>Friends</h3>
                 {user.map((data, index) => (
-                    <li key={index} >
+                    <li className='sidebar__User' key={index} onClick={((e) => { handleUserProfile(e, data) })} >
                         <img src={data.avatar ? data.avatar : profile} />
                         <span className="sidebarFrindName">{data.username}</span>
                     </li>

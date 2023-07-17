@@ -8,6 +8,7 @@ import { toast } from 'react-toastify';
 import profile from '../../../assets/image/profile.png';
 import Comment from './comment/Comment';
 
+
 export default function Feed() {
     const [form, setForm] = useState({ content: '', imgurl: '' });
     const [posts, setPosts] = useState([]);
@@ -17,34 +18,37 @@ export default function Feed() {
     const [commentBoxIndex, setCommentBoxIndex] = useState(null);
 
 
-    const data = localStorage.getItem('Data');
-    let parsedData;
-    if (data) {
-        parsedData = JSON.parse(data);
-    } else {
-        console.log('No data found in localStorage.');
-    }
+    const data = JSON.parse(localStorage.getItem('Data'));
 
     useEffect(() => {
-        axios
-            .get('http://localhost:9000')
-            .then(response => {
-                console.log(response.data.likes)
+        const fetchData = async () => {
+            try {
+                let response;
+                if (data) {
+                    response = await axios.get(`http://localhost:9000?id=${data._id}`);
+                } else {
+                    response = await axios.get(`http://localhost:9000`);
+                }
+                console.log(response.data.data);
                 setPosts(response.data.data);
                 setUsers(response.data.user);
-            })
-            .catch(error => {
+            } catch (error) {
                 console.log(error);
-            });
+            }
+        };
+
+        fetchData();
     }, [refreshCount]);
 
+
+    //Create Post
     const handleSubmit = async e => {
         e.preventDefault();
         const formData = new FormData();
 
         formData.append('content', form.content);
         formData.append('img', form.imgurl);
-        formData.append('user', parsedData._id);
+        formData.append('user', data._id);
         setForm({ content: '', imgurl: '' });
 
         try {
@@ -53,7 +57,6 @@ export default function Feed() {
             if (response.data) {
                 toast.success(response.data.message);
             }
-
             // Add the new post to the posts state
             setPosts([...posts, { content: response.data.content, fileUrl: response.data.fileUrl }]);
 
@@ -67,35 +70,33 @@ export default function Feed() {
         }
     };
 
-    //Save Post
+    //Save Post on Profile
     const handleSave = async (id) => {
-        if (parsedData) {
+        if (data) {
             const response = await axios.post('http://localhost:9000/savepost', {
                 id: id
             });
             if (response.data) {
                 toast.success(response.data.message);
             }
-
-
         }
-
     }
+
+    //Handle Post Like
     const handleLike = async (id) => {
         try {
             setClick(false)
             if (click) {
-                const response = await axios.post(`http://localhost:9000/toggle/like?id=${id}&type=Post&userid=${parsedData._id}`);
+                const response = await axios.post(`http://localhost:9000/toggle/like?id=${id}&type=Post&userid=${data._id}`);
                 if (response.data) {
                     // Find the post in the posts state and update its like count
                     const updatedPosts = posts.map(post => {
                         if (post._id === id) {
                             return {
                                 ...post,
-                                likes: response.data.likes // Assuming the API response includes the updated like count
+                                likes: response.data.likes
                             };
                         }
-
                         return post;
                     });
                     setClick(true)
@@ -117,7 +118,7 @@ export default function Feed() {
         <div className="post__container">
             <form className="create-post" onSubmit={handleSubmit}>
                 <div className="profile__photo">
-                    <img src={parsedData ? parsedData.avatar : profile} className="feed__profile" alt="Profile" />
+                    <img src={data ? data.avatar : profile} className="feed__profile" alt="Profile" />
 
                     <div>
                         <label className="custom__file_upload">
@@ -145,7 +146,7 @@ export default function Feed() {
             </form>
 
             {/* Feed */}
-            {posts.map((post, index) => {
+            {posts && posts.map((post, index) => {
                 const postUser = users.find(user => user._id == post.user);
                 return (
                     <div className="feed" key={index}>
@@ -181,7 +182,7 @@ export default function Feed() {
                                 {commentBoxIndex === index && <Comment
                                     post={post}
                                     users={users}
-                                    localuser={parsedData}
+                                    localuser={data}
                                     sendDataToParent={handleDataFromChild}
                                 />}
                                 <div className='comment__cross' onClick={(e) => { setCommentBoxIndex(null) }}>
@@ -189,7 +190,7 @@ export default function Feed() {
                                 </div>
 
                             </div>
-                            <div>
+                            <div className='like__box'>
                                 {post.fileUrl ? <AiOutlineCloudDownload /> : ''}
                                 <AiTwotoneSave onClick={() => handleSave(post._id)} />
                             </div>

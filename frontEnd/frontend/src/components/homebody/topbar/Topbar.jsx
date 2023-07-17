@@ -3,22 +3,15 @@ import './Topbar.scss';
 import { BsSearch } from 'react-icons/bs';
 import { BiSolidUserCircle } from 'react-icons/bi';
 import Logo from '../../../assets/image/logo.png'
-import { useSelector } from 'react-redux';
 import profile from '../../../assets/image/profile.png'
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
-const data = localStorage.getItem('Data');
-let parsedData;
-if (data) {
-    parsedData = JSON.parse(data);
-} else {
-    console.log("No data found in localStorage.");
-}
+const data = JSON.parse(localStorage.getItem('Data'));
 
 const Topbar = () => {
-    const cart = useSelector((state) => state.user);
+
     const [toggle, setToggle] = useState(false);
 
     const userSignout = async () => {
@@ -37,6 +30,10 @@ const Topbar = () => {
             console.log('fail', error);
         }
     }
+    //set Localuse for profile show
+    const handleLinkClick = () => {
+        localStorage.setItem('userData', JSON.stringify(data));
+    };
 
     return (
         <nav >
@@ -72,13 +69,15 @@ const Topbar = () => {
                     <div className="dropdown nav-item">
                         <button type="button" className="btn dropdown-toggle" data-bs-toggle="dropdown" onClick={((e) => { setToggle(!toggle) })}>
                             {/* <BiSolidUserCircle style={{ fontSize: "30px" }} /> */}
-                            <img src={parsedData && parsedData.avatar ? parsedData.avatar : profile} style={{ width: "40px", height: "40px", borderRadius: "50%" }} />
+                            <img src={data && data.avatar ? data.avatar : profile} style={{ width: "40px", height: "40px", borderRadius: "50%" }} />
 
                         </button>
                         <ul className="dropdown-menu" style={{ display: toggle ? "flex" : "none" }}>
                             <li><Link className="dropdown-item" to="/form/signup">Register</Link></li>
                             <li><Link className="dropdown-item" to="/form/signin">Sign in</Link></li>
-                            <li><Link className="dropdown-item" to="/profile/post">Profile</Link></li>
+
+                            <li><Link className="dropdown-item" to="/profile/post" onClick={handleLinkClick} >Profile</Link></li>
+
                             <li>
                                 <hr className="dropdown-divider" />
                             </li>

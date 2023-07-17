@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import './Comment.scss'
 import axios from 'axios';
+import { toast } from 'react-toastify';
 import profile from '../../../../assets/image/profile.png';
 export default function Comment({ post, users, localuser, sendDataToParent }) {
     const [comment, setComment] = useState("");
     const [data, setData] = useState([]);
+    const [contactEdit, setContactEdit] = useState(false);
     const postUser = users.find(user => user._id == post.user);
 
 
@@ -35,7 +37,7 @@ export default function Comment({ post, users, localuser, sendDataToParent }) {
             setData(response.data.data);
         };
         fetchData();
-    }, []);
+    }, [setData, , postUser]);
 
     const handleComment = async (e) => {
         try {
@@ -43,7 +45,6 @@ export default function Comment({ post, users, localuser, sendDataToParent }) {
             const response = await axios.post(`http://localhost:9000/toggle/comment?id=${post._id}&userid=${localuser._id}&data=${comment}`);
             if (response.data) {
                 setData(prevState => [...prevState, response.data.data]);
-                console.log(data)
             }
         } catch (error) {
             console.log('fail', error);
@@ -54,27 +55,53 @@ export default function Comment({ post, users, localuser, sendDataToParent }) {
     const handleLike = async (id) => {
         try {
             const response = await axios.post(`http://localhost:9000/toggle/like?id=${id}&type=Comment&userid=${localuser._id}`);
-            console.log(response.data)
-            // if (response.data) {
-            //     // Find the post in the posts state and update its like count
-            //     const updatedPosts = posts.map(post => {
-            //         if (post._id === id) {
-            //             return {
-            //                 ...post,
-            //                 likes: response.data.likes // Assuming the API response includes the updated like count
-            //             };
-            //         }
-
-            //         return post;
-            //     });
-
-            // }
+            // console.log(response.data)
+            if (response.data) {
+                // Find the comment in the data state and update its like count
+                const updatedData = data.map(comment => {
+                    if (comment._id === id) {
+                        return {
+                            ...comment,
+                            likes: response.data.likes // Assuming the API response includes the updated like count
+                        };
+                    }
+                    return comment;
+                });
+                setData(updatedData);
+            }
 
         } catch (error) {
             console.log('fail', error);
         }
     }
 
+    const handleEdit = async (e, id, editedContent) => {
+        e.preventDefault();
+        try {
+            const response = await axios.put(`http://localhost:9000/toggle/comment?id=${id}&userid=${localuser._id}&data=${editedContent}`);
+            if (response.data.success) {
+                toast.success(response.data.message);
+            } else {
+                toast.error(response.data.message);
+            }
+            if (response.data) {
+                const updatedData = data.map(comment => {
+                    if (comment._id === id) {
+                        return {
+                            ...comment,
+                            content: editedContent
+                        };
+                    }
+                    return comment;
+                });
+                setData(updatedData);
+                setContactEdit(false);
+            }
+        } catch (error) {
+            console.log('Error editing comment:', error);
+        }
+
+    }
 
     return (
 
@@ -100,19 +127,25 @@ export default function Comment({ post, users, localuser, sendDataToParent }) {
                     <img src={postUser?.avatar ? postUser.avatar : profile} alt="profile" />
                     <p>{postUser?.username}</p>
                 </div>
-                <div style={{ overflow: "scroll" }}>
+
+                <div style={{ overflow: "scroll", height: "78%" }}>
                     {data.map((datacomment, index) => {
                         const commentUser = users.find(user => user._id == datacomment.user);
                         return (
-                            <div>
-                                <div className="comment__container" key={index}>
+                            <div style={{ paddingBottom: "15px" }} key={index}>
+                                <div className="comment__container">
                                     <img src={commentUser?.avatar ? commentUser.avatar : profile} alt="profile" />
-                                    <p><strong>{commentUser?.username}</strong><span> {datacomment.content}</span></p>
+                                    <p><strong>{commentUser?.username}</strong>
+                                        {/* <span contentEditable={contactEdit}> {datacomment.content}</span> */}
+                                        <span contentEditable={contactEdit} onBlur={(e) => handleEdit(e, datacomment._id, e.target.innerText)}>
+                                            {datacomment.content}
+                                        </span>
+                                    </p>
                                 </div>
                                 <div className="commentControl__buttons">
                                     <span>{calculateTimeDifference(datacomment.createdAt)}</span>
-                                    <span onClick={(() => { handleLike(datacomment._id) })}>Like</span>
-                                    <span>edit</span>
+                                    <span onClick={(() => { handleLike(datacomment._id) })}>{datacomment.likes ? datacomment.likes.length : ""} Like</span>
+                                    <span onClick={(() => { setContactEdit(!contactEdit) })}>{contactEdit ? "save" : "edit"}</span>
 
                                 </div>
                             </div>

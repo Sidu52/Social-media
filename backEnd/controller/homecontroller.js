@@ -8,7 +8,7 @@ const User = require('../models/user');
 //Create Post
 
 
-createPost = async (req, res) => {
+const createPost = async (req, res) => {
     try {
         const { content, user } = req.body;
         // Upload the image or video to Cloudinary
@@ -69,7 +69,7 @@ createPost = async (req, res) => {
     }
 };
 //Update user Avtar
-updateUser = async (req, res) => {
+const updateUser = async (req, res) => {
     try {
         const { user } = req.body;
 
@@ -103,24 +103,36 @@ updateUser = async (req, res) => {
     }
 }
 //Get All Post
-getPosts = async (req, res) => {
+const getPosts = async (req, res) => {
     try {
-        const likes = await Like.find()
-        const user = await User.find()
-        const posts = await Post.find()
-            .sort('-createdAt')
 
-        return res.status(201).json({ data: posts, user: user, likes: likes });
+        const user = await User.find()
+
+        const { id } = req.query
+        let post = [];
+        const localuser = await User.findById(id);
+        if (!localuser) {
+            post = await Post.find();
+            return res.status(201).json({ data: post, user: user });
+        }
+
+        for (let i = 0; i < localuser.following.length; i++) {
+            const posts = await Post.find({ user: localuser.following[i] })
+            post = [...post, ...posts];
+        }
+        posts = await Post.find({ user: localuser._id });
+        post = [...post, ...posts]
+        return res.status(201).json({ data: post, user: user });
 
     } catch (err) {
+        console.log(err);
         return res.status(500).json({
             message: 'Post Not find',
             error: error
         });
     }
 }
-
-getpostByID = async (req, res) => {
+const getpostByID = async (req, res) => {
     try {
 
         const { Id } = req.body;
@@ -140,8 +152,7 @@ getpostByID = async (req, res) => {
 }
 
 //Get Videos
-
-getReels = async (req, res) => {
+const getReels = async (req, res) => {
     try {
         const user = await User.find()
         const posts = await Post.find({ fileType: "mp4" || "mov" || "avi" || "wmv" }).sort('-createdAt')
@@ -156,7 +167,7 @@ getReels = async (req, res) => {
     }
 }
 
-savepost = async (req, res) => {
+const savepost = async (req, res) => {
     try {
         const { id } = req.body;
         const post = await Post.findById(id);

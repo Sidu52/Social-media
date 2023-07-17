@@ -45,9 +45,9 @@ async function singup(req, res) {
 
                 await newUser.save();
 
-                return res.status(201).json({ message: 'Signup successful!', data: true });
+                return res.status(201).json({ message: 'Signup successful!', action: true, user: newUser });
             }
-            return res.status(200).json({ message: 'User already exists.', data: false });
+            return res.status(200).json({ message: 'User already exists.', action: false });
         }
     } catch (error) {
         res.status(500).json({ error: 'Internal server error.' });
@@ -57,18 +57,6 @@ async function singup(req, res) {
 //SignIn
 async function signin(req, res) {
     try {
-        // const { email, password } = req.body;
-        // // Check if the user exists
-        // const user = await User.findOne({ email });
-        // if (!user) {
-        //     return res.status(401).json({ messge: 'Invalid Emails', data: false });
-        // }
-        // // Validate password
-        // const validPassword = await bcrypt.compare(password, user.password);
-        // if (!validPassword) {
-        //     res.status(401).json({ message: 'Invalid username or password.', data: false });
-        // }
-        // // Store user information in the session
         res.status(200).json({
 
             message: 'Signin successful!',
@@ -85,6 +73,7 @@ async function emailverification(req, res) {
     const { email } = req.body;
     try {
 
+        console.log("object")
         //Genrate OTP
         const otp = Math.floor(100000 + Math.random() * 900000);
         await sendOTP(req.body.email, otp);
@@ -161,33 +150,78 @@ async function otpverification(req, res) {
 }
 
 // SingOut
-// signout = (req, res) => {
-//     req.logout(function (err) {
-//         if (err) { return console.log(err) }
-//         req.session.cookie.originalMaxAge = Date.now()
-//         // req.session.cookie.originalMaxAge = Date.now()
-
-//         return res.status(201).json({ message: "User Logout" })
-//     });
-// }
-signout = async (req, res) => {
-    // req.session.cookie.maxAge = Date.now();;
-
-    // Save the updated session
-    // await req.session.save((err) => {
-    // if (err) {
-    //     return console.log(err);
-    // }
-    // return res.status(201).json({ message: "User Logout" });
-    // });
+signout = (req, res) => {
     req.logout(function (err) {
+        if (err) { return console.log(err) }
+        return res.status(201).json({ message: "User Logout" })
+    });
+}
+signout = async (req, res) => {
+    // Save the updated session
+    await req.session.save((err) => {
         if (err) {
-            console.error(err);
-            return res.status(500).send('An error occurred');
+            return console.log(err);
         }
         return res.status(201).json({ message: "User Logout" });
     });
 };
 
+const follower = async (req, res) => {
+    try {
+        const { userId, localUser } = req.body;
+        const l_User = await User.findById(localUser);
+        const user = await User.findById(userId);
 
-module.exports = { loginpage, singup, signin, emailverification, otpverification, getAlluser, signout }
+        if (l_User.following.includes(userId)) {
+            l_User.following.pull(userId);
+            await l_User.save();
+
+            user.followers.pull(localUser);
+            await user.save();
+            return res.status(201).json({ message: "User Unfollow Successful", user: user, })
+        }
+        l_User.following.push(userId);
+        await l_User.save();
+
+        user.followers.push(localUser);
+        await user.save();
+        res.status(201).json({ message: "User Follow Succesful", user: user, })
+
+    } catch (error) {
+        res.status(500).json({ error: 'Internal server error.' });
+    }
+}
+const getfollowers = async (req, res) => {
+    try {
+        let followers = []
+        const { buttonName, userId } = req.body;
+        const user = await User.findById(userId);
+
+        if (buttonName == "Followrs") {
+
+            for (let i = 0; i < user.followers.length; i++) {
+                let follow = await User.findById(user.followers[i])
+                followers.push(follow)
+            }
+        } else {
+
+            for (let i = 0; i < user.following.length; i++) {
+                let follow = await User.findById(user.following[i])
+                followers.push(follow)
+            }
+        }
+
+        console.log(followers)
+
+
+
+
+        res.status(201).json({ message: "Follower Find", follower: followers });
+    } catch (error) {
+        res.status(500).json({ error: 'Internal server error.' });
+    }
+
+
+}
+
+module.exports = { loginpage, singup, signin, emailverification, otpverification, getAlluser, signout, follower, getfollowers }

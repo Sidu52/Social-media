@@ -6,6 +6,11 @@
     width: 90%;
     height: 90%;
     display: flex;
+    z-index: 500;
+
+    * {
+        margin: 0;
+    }
 
 
     .comment__post {
@@ -40,7 +45,7 @@
         .comment__container {
             color: white;
             display: flex;
-            align-items: center;
+            // align-items: center;
             gap: 10px;
 
             img {

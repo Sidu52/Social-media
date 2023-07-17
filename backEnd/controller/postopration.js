@@ -2,10 +2,9 @@ const Like = require("../models/like");
 const Post = require("../models/post");
 const Comment = require('../models/comments');
 const toggleLike = async function (req, res) {
-    console.log(req.query)
+
     try {
         let likeable;
-        let deleted = false;
 
         if (req.query.type == 'Post') {
             likeable = await Post.findById(req.query.id).populate('likes');
@@ -106,4 +105,39 @@ const getcomments = async (req, res) => {
     }
 }
 
-module.exports = { toggleLike, toggleComment, getcomments };
+const editComment = async (req, res) => {
+    const { id, userid, data } = req.query;
+    try {
+        const comment = await Comment.findById(id);
+
+        if (!comment) {
+            return res.status(404).json({
+                message: 'Comment not found',
+            });
+        }
+
+        if (comment.user.toString() !== userid) {
+            return res.status(403).json({
+                message: 'Unauthorized',
+                success: true,
+            });
+        }
+
+        comment.content = data;
+        await comment.save();
+
+        return res.json({
+            message: 'Comment updated successfully',
+            success: true,
+            data: comment,
+        });
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({
+            message: 'Internal Server Error',
+        });
+    }
+};
+
+
+module.exports = { toggleLike, toggleComment, getcomments, editComment };

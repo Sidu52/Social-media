@@ -6,9 +6,9 @@ const User = require('../models/user');
 
 // tell passport to use a new strategy for google login
 passport.use(new googleStrategy({
-    clientID: '696316736499-35ml676udud4kcsotu584ihvbkqkciv8.apps.googleusercontent.com', // e.g. asdfghjkkadhajsghjk.apps.googleusercontent.com
-    clientSecret: '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', // e.g. _ASDFA%KFJWIASDFASD#FAD-
-    callbackURL: "http://localhost:8000/user/auth/google/callback",
+    clientID: process.env.SECRET_CLIENTID, // e.g. asdfghjkkadhajsghjk.apps.googleusercontent.com
+    clientSecret: process.env.SECRET_CLIENTSECRET, // e.g. _ASDFA%KFJWIASDFASD#FAD-
+    callbackURL: process.env.SECRET_CALLBACKURL,
 },
 
     function (accessToken, refreshToken, profile, done) {
@@ -36,8 +36,6 @@ passport.use(new googleStrategy({
 
         });
     }
-
-
 ));
 
 

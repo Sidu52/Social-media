@@ -1,6 +1,6 @@
+require('dotenv').config()
 const mongoose = require('mongoose');
-const url = 'mongodb://127.0.0.1:27017/socialmedias'
-// const url = 'mongodb+srv://Sidhu:Sidu&7879@cluster0.fca4n63.mongodb.net/As'
+const url = process.env.MONGO_URL;
 
 
 mongoose.connect(url);

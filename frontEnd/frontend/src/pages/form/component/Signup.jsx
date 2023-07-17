@@ -80,9 +80,10 @@ export default function Signup() {
                     password: form.password,
                     conformpassword: form.conformpassword
                 });
-
+                const user = response.data.user
+                localStorage.setItem('Data', JSON.stringify(user));
                 toast.success(response.data.message)
-                if (response.data.data) {
+                if (response.data.action) {
                     navigate("/");
                 }
 

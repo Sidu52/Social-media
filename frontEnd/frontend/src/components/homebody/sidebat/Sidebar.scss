@@ -108,6 +108,22 @@ body {
         gap: 5px;
         margin-bottom: 50%;
 
+        .sidebar__User {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 5px 0;
+            text-decoration: none;
+            color: black;
+
+            img {
+                width: 35px;
+                height: 35px;
+                border-radius: 50%;
+            }
+
+        }
+
         h3 {
             text-align: center;
             background: #2389ff;
@@ -116,17 +132,6 @@ body {
             border-radius: 20px;
         }
 
-        li {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin: 5px 0;
-        }
 
-        img {
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-        }
     }
 }

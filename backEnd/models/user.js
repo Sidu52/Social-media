@@ -18,7 +18,19 @@ const user = new mongoose.Schema({
     },
     avatar: {
         type: String
-    }
+    },
+    followers: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'user'
+        }
+    ],
+    following: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'user'
+        }
+    ]
 }, {
     timestamps: true
 });

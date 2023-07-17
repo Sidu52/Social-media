@@ -56,7 +56,6 @@ export default function Signin() {
             }
         } catch (error) {
             console.log("fail", error);
-            // Handle error cases if the post creation fails
         }
     }
     return (
