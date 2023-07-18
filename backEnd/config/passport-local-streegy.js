@@ -42,7 +42,6 @@ passport.checkAuthentication = (req, res, next) => {
 };
 
 passport.setAuthenticatedUser = (req, res, next) => {
-
     if (req.isAuthenticated()) {
         res.cookie('user', req.user);
     }
@@ -50,4 +49,3 @@ passport.setAuthenticatedUser = (req, res, next) => {
 };
 
 module.exports = passport;
-

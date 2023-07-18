@@ -1,11 +1,9 @@
 require('dotenv').config()
 const mongoose = require('mongoose');
-const url = process.env.MONGO_URL;
+const Url = process.env.MONGO_URL;
 
-
-mongoose.connect(url);
+mongoose.connect(Url);// Connect mongoose using URL
 const db = mongoose.connection;
-
 db.on('error', console.error.bind(console, "Error connecting to MongoDB"));
 
 db.once('open', () => {

@@ -1,5 +1,6 @@
 .post__container {
     width: 50%;
+    height: 85vh;
     padding: 0 5%;
     overflow-y: scroll;
     margin-bottom: 2.4%;
@@ -11,7 +12,7 @@
     }
 
     .create-post {
-        width: 90%;
+        width: 100%;
         margin-top: 1rem;
         border: 1px solid black;
         padding: 1.4rem 5px;
@@ -68,7 +69,7 @@
     }
 
     .feed {
-        width: 90%;
+        width: 100%;
 
         .feed__head>div {
             display: flex;
@@ -105,10 +106,9 @@
                     position: absolute;
                     top: 0;
                     right: 10px;
-                    z-index: 5;
+                    z-index: 500;
                     border-radius: 50%;
-                    border: 1px solid black;
-                    display: flex;
+                    border: 2px solid black;
                     align-items: center;
                     padding: 5px;
                     font-size: 20px;
@@ -127,6 +127,12 @@
                 }
             }
         }
+    }
+}
+
+@media (max-width:750px) {
+    .post__container {
+        width: auto;
     }
 }
 

@@ -2,15 +2,7 @@ import './Navbar.scss'
 import { Link } from 'react-router-dom';
 // import Profile from '../../'
 import profile from '../../assets/image/profile.png';
-function Navbar() {
-
-    const data = localStorage.getItem('Data');
-    let parsedData;
-    if (data) {
-        parsedData = JSON.parse(data);
-    } else {
-        console.log('No data found in localStorage.');
-    }
+function Navbar(userAvtar) {
     return (
         <div className='navbar'>
             <div className="navbar__left">
@@ -19,7 +11,7 @@ function Navbar() {
                 </Link>
             </div>
             <div className="navbar__right">
-                <img src={parsedData ? parsedData.avatar : profile} alt="profile" />
+                <img src={userAvtar ? userAvtar.userAvtar : profile} alt="profile" />
             </div>
         </div >
     )

@@ -1,20 +1,21 @@
 require('dotenv').config()
 const express = require('express');
-const app = express();
-const port = process.env.PORT || 4000;
+const cors = require('cors');
+const dotenv = require('dotenv');
+const nodemailer = require('nodemailer');
+const cookie = require('cookie-parser');
 const db = require('./config/mongoose');
 const bodyParser = require('body-parser');
-const cookie = require('cookie-parser');
 const session = require('express-session');
+const MongoStore = require('connect-mongo');
 const passport = require('passport');
 const passportLocal = require('./config/passport-local-streegy');
 const passportGoogle = require('./config/passport-google-oauth2-strategy');
-const MongoStore = require('connect-mongo');
-const nodemailer = require('nodemailer');
-const cors = require('cors');
-const dotenv = require('dotenv');
-app.use(cors());
+const app = express();
+const port = process.env.PORT || 4000;
 
+
+app.use(cors());
 const corsOptions = {
     origin: 'http://localhost:5173', // Allow only requests from this domain
     optionsSuccessStatus: 200 // Some legacy browsers (IE11, various SmartTVs) choke on 204
@@ -22,11 +23,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-
-// Use cookie-parser middleware
-app.use(cookie());
-
-
+app.use(cookie());// Use cookie-parser middleware
 
 // Initialize Passport and session middleware
 app.use(
@@ -58,6 +55,7 @@ app.use('/user', require('./routes/user'));
 app.use('/', require('./routes/home'));
 app.use('/toggle', require('./routes/post'));
 
+//Set Server
 app.listen(port, (err) => {
     if (err) {
         console.log('Error in server run:', err);

@@ -3,7 +3,6 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { AiOutlineHeart, AiOutlineHome, AiOutlineSearch, AiOutlineMessage } from 'react-icons/ai'
 import { BsPlusCircle, BsChatLeft } from 'react-icons/bs'
-import { BiSolidUserCircle } from 'react-icons/bi';
 import { MdSlowMotionVideo } from 'react-icons/md';
 import { useSelector } from 'react-redux';
 import profile from '../../../assets/image/profile.png'
@@ -58,15 +57,7 @@ export default function Sidebar() {
                         <span className="icon">
                             <AiOutlineHome />
                         </span>
-                        Home
-                    </a>
-                </li>
-                <li>
-                    <a href="#" className="nav-link">
-                        <span className="icon">
-                            <AiOutlineSearch />
-                        </span>
-                        Search
+                        <p>Home</p>
                     </a>
                 </li>
                 <li>
@@ -74,7 +65,7 @@ export default function Sidebar() {
                         <span className="icon">
                             <BsChatLeft />
                         </span>
-                        Chat
+                        <p>Chat</p>
                     </a>
                 </li>
                 <li>
@@ -82,7 +73,7 @@ export default function Sidebar() {
                         <span className="icon">
                             <MdSlowMotionVideo />
                         </span>
-                        Reels
+                        <p>Reels</p>
                     </Link>
                 </li>
                 <li>
@@ -90,7 +81,7 @@ export default function Sidebar() {
                         <span className="icon">
                             <AiOutlineMessage />
                         </span>
-                        Messages
+                        <p>Messages</p>
                     </a>
                 </li>
                 <li>
@@ -98,7 +89,7 @@ export default function Sidebar() {
                         <span className="icon">
                             <AiOutlineHeart />
                         </span>
-                        Notifications
+                        <p>Notifications</p>
                     </a>
                 </li>
                 <li>
@@ -106,17 +97,7 @@ export default function Sidebar() {
                         <span className="icon">
                             <BsPlusCircle />
                         </span>
-                        Setting
-                    </a>
-                </li>
-                <li>
-                    <a href="#" className="nav-link active">
-                        <img
-                            className="icon rounded-circle"
-                            src="https://avatars.githubusercontent.com/u/1743919?v=4"
-                            alt="Profile icon"
-                        />
-                        Profile
+                        <p>Setting</p>
                     </a>
                 </li>
             </ul>
@@ -124,10 +105,8 @@ export default function Sidebar() {
             <ul className="sidebar-menu bottom">
                 <li>
                     <a href="#" className="nav-link">
-                        <span className="icon">
-                            {/* Add the icon component */}
-                        </span>
-                        More
+                        <p>More</p>
+
                     </a>
                 </li>
             </ul>

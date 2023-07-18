@@ -1,31 +1,30 @@
 const Like = require("../models/like");
 const Post = require("../models/post");
 const Comment = require('../models/comments');
-const toggleLike = async function (req, res) {
 
+//Handle Likes
+const toggleLike = async function (req, res) {
     try {
         let likeable;
+        const { type, id, userid } = req.query;
 
-        if (req.query.type == 'Post') {
-            likeable = await Post.findById(req.query.id).populate('likes');
+        if (type == 'Post') {
+            likeable = await Post.findById(id).populate('likes');
         } else {
-            likeable = await Comment.findById(req.query.id).populate('likes');
+            likeable = await Comment.findById(id).populate('likes');
         }
         // check if a like already exists
         let existingLike = await Like.findOne({
-            likeable: req.query.id,
-            onModel: req.query.type,
-            user: req.query.userid
+            likeable: id,
+            onModel: type,
+            user: userid
         })
-
         // if a like already exists then delete it
         if (existingLike) {
             likeable.likes.pull(existingLike._id);
             likeable.save();
-
             Like.findByIdAndDelete(existingLike._id)
                 .then(() => {
-                    // console.log("Existing like removed successfully");
                     deleted = true;
                 })
                 .catch((err) => {
@@ -35,27 +34,23 @@ const toggleLike = async function (req, res) {
             // else make a new like
             let newLike = await Like.create({
                 // req.user._id
-                user: req.query.userid,
-                likeable: req.query.id,
-                onModel: req.query.type
+                user: userid,
+                likeable: id,
+                onModel: type
             });
             likeable.likes.push(newLike._id);
             likeable.save();
         }
 
         const like = await Like.find({
-            likeable: req.query.id
+            likeable: id
         })
-
-
-
-        return res.json(200, {
+        return res.json(201, {
             message: "Request successfulsss!",
             data: "deleted",
             likes: like
 
         })
-
     } catch (err) {
         console.log(err);
         return res.json(500, {
@@ -64,10 +59,10 @@ const toggleLike = async function (req, res) {
     }
 }
 
+//Handle Comment
 const toggleComment = async (req, res) => {
     try {
         const { id, userid, data } = req.query;
-
         const post = await Post.findById(id);
         let comment = await Comment.create({
             content: data,
@@ -76,9 +71,6 @@ const toggleComment = async (req, res) => {
         });
         post.comments.push(comment);
         post.save();
-
-        // const commentsData = await Comment.find({ post: id });
-
         comment = await comment.populate('user', 'username email');
 
         return res.status(201).json({ message: "Comment Created", data: comment })
@@ -101,31 +93,27 @@ const getcomments = async (req, res) => {
         return res.json(500, {
             message: 'Internal Server Error'
         });
-
     }
 }
 
+//Edit Comment
 const editComment = async (req, res) => {
     const { id, userid, data } = req.query;
     try {
         const comment = await Comment.findById(id);
-
         if (!comment) {
             return res.status(404).json({
                 message: 'Comment not found',
             });
         }
-
         if (comment.user.toString() !== userid) {
             return res.status(403).json({
                 message: 'Unauthorized',
                 success: true,
             });
         }
-
         comment.content = data;
         await comment.save();
-
         return res.json({
             message: 'Comment updated successfully',
             success: true,
@@ -138,6 +126,4 @@ const editComment = async (req, res) => {
         });
     }
 };
-
-
 module.exports = { toggleLike, toggleComment, getcomments, editComment };

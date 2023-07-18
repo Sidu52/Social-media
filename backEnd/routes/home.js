@@ -24,13 +24,14 @@ const fileFilter = function (req, file, cb) {
 
 const upload = multer({ storage: storage, fileFilter: fileFilter });
 
-const { createPost, getPosts, getReels, updateUser, getpostByID, savepost } = require('../controller/homecontroller')
+const { createPost, updateUserAvatar, getPosts, getReels, getpostanduserByID, savepost } = require('../controller/homecontroller')
 
 router.post('/createpost', upload.single('img'), createPost);
 router.get('/', getPosts);
 router.get('/reels', getReels);
-router.post('/updatepost', upload.single('img'), updateUser);
-router.post('/getpostbyID', getpostByID);
+router.post('/updatepost', upload.single('img'), updateUserAvatar);
+router.post('/getbyID', getpostanduserByID);
 router.post('/savepost', savepost);
+
 module.exports = router;
 

@@ -128,7 +128,7 @@ export default function Comment({ post, users, localuser, sendDataToParent }) {
                     <p>{postUser?.username}</p>
                 </div>
 
-                <div style={{ overflow: "scroll", height: "78%" }}>
+                <div style={{ overflow: "scroll", height: "78%", paddingBottom: "15%" }}>
                     {data.map((datacomment, index) => {
                         const commentUser = users.find(user => user._id == datacomment.user);
                         return (

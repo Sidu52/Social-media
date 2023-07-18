@@ -11,6 +11,7 @@ export default function Signup() {
 
     useEffect(() => {
         const fetchUserData = async () => {
+
             try {
                 const response = await axios.get("http://localhost:9000/user/login");
                 if (response.data.data) {
@@ -20,79 +21,86 @@ export default function Signup() {
                 console.error("Error fetching user data:", error);
             }
         };
-
         fetchUserData();
     }, []);
 
     //OTP Sent
     const sendOTP = async (e) => {
-        e.preventDefault();
-        try {
+        e.preventDefault(); // Prevent form submission
 
+        try {
             if (form.email) {
                 setOtpform(true);
-                toast.warn("Loading")
-                const response = await axios.post('http://localhost:9000/user/emailverification', {
-                    email: form.email // Include the email in the request body
-                });
+                toast.warn("Loading"); // Display a loading Popup message
 
-                if (response.data) {
-                    toast.success(response.data.message)
-                }
+                // Send a POST request to the server to request email verification
+                const response = await axios.post('http://localhost:9000/user/emailverification', {
+                    email: form.email,
+                });
+                toast.success(response.data.message); // Display success message from the server response
             }
         } catch (error) {
             console.log("fail", error);
             // Handle error cases if the post creation fails
         }
-    }
+    };
+
 
     //OTP Verfied
     const handleOTP = async (e) => {
-        e.preventDefault();
+        e.preventDefault(); // Prevent form submission
+
         try {
             if (form.email) {
-                setOtpform(true);
+                setOtpform(true); // Set otpform state to true
+
+                // Send a POST request to the server to verify the OTP
                 const response = await axios.post('http://localhost:9000/user/otpverification', {
                     email: form.email,
                     otp: form.otp
                 });
+
                 if (response.data) {
                     if (response.data.data) {
-                        setEmailverify(true)
+                        setEmailverify(true);
                     }
-
-                    toast.success(response.data.message)
+                    toast.success(response.data.message);
                 }
             }
         } catch (error) {
             console.log("fail", error);
-            toast.error("Fail")
+            toast.error("Fail"); // Display a generic error message
         }
-    }
+    };
+
     //Signup User
     const onSubmit = async (e) => {
-        e.preventDefault();
+        e.preventDefault(); // Prevent form submission
+
         try {
             if (emailverify) {
+                // Send a POST request to the server for user signup
                 const response = await axios.post('http://localhost:9000/user/signup', {
                     username: form.username,
                     email: form.email,
                     password: form.password,
                     conformpassword: form.conformpassword
                 });
-                const user = response.data.user
-                localStorage.setItem('Data', JSON.stringify(user));
-                toast.success(response.data.message)
-                if (response.data.action) {
-                    navigate("/");
-                }
 
+                const user = response.data.user;
+                localStorage.setItem('Data', JSON.stringify(user)); // Store user data in local storage
+                toast.success(response.data.message); // Display success message from the server response
+
+                if (response.data.action) {
+                    navigate("/"); // Navigate to a specific page if the 'action' property is present in the response
+                }
             }
         } catch (error) {
             console.log("fail", error);
             // Handle error cases if the post creation fails
         }
-    }
+    };
+
     return (
         <div className="formContainer">
             <h2 className='text'>SignUp</h2>

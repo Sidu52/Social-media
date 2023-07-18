@@ -2,14 +2,11 @@ import { useState, useEffect } from 'react'
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { addData, add } from '../../../store/Store';
 
 export default function Signin() {
-
-    const dispatch = useDispatch();
     const navigate = useNavigate();
     const [form, setForm] = useState({ email: "", password: "" });
+
     useEffect(() => {
         const fetchUserData = async () => {
             try {
@@ -23,10 +20,10 @@ export default function Signin() {
                 console.error("Error fetching user data:", error);
             }
         };
-
         fetchUserData();
     }, []);
-    //Signup User
+
+    //Signin User
     const onSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -37,22 +34,10 @@ export default function Signin() {
             const user = response.data.user;
             // Store user data in local storage
             localStorage.setItem('Data', JSON.stringify(user));
-            const data = localStorage.getItem("Data")
-            console.log(data)
+            toast.success(response.data.message)
 
-            const newData = {
-                id: user._id,
-                username: user.username,
-                email: user.email,
-                avatar: '',
-            };
-
-            // dispatch(addData(newData));
-            if (response.data) {
-                toast.success(response.data.message)
-                if (response.data.data) {
-                    navigate("/");
-                }
+            if (response.data.data) {
+                navigate("/");
             }
         } catch (error) {
             console.log("fail", error);
@@ -80,12 +65,8 @@ export default function Signin() {
                         required="" />
                     <label>Password</label>
                 </div>
-                <a className="submit__button btn" onClick={onSubmit}>
-                    Submit
-                </a>
+                <a className="submit__button btn" onClick={onSubmit}>Submit</a>
             </form>
-            {/* <p className='text'>If you visit first time <Link to="signup" > Create Account</Link ></p> */}
-
         </div >
     )
 }

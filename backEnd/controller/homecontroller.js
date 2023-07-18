@@ -1,13 +1,11 @@
 const Post = require('../models/post');
 const Like = require('../models/like');
+const User = require('../models/user');
 const cloudinary = require('../config/cloudinary');
 const fs = require('fs');
 const { error } = require('console');
-const User = require('../models/user');
 
 //Create Post
-
-
 const createPost = async (req, res) => {
     try {
         const { content, user } = req.body;
@@ -32,13 +30,15 @@ const createPost = async (req, res) => {
                 fs.unlinkSync(path); // Delete the local file
                 throw new Error("Invalid file type. Only image and video files are allowed.");
             }
-            // Create a new post instance using the Post model
+            // Create a new post using the Post model
             const newPost = new Post({
                 content: content,
                 fileUrl: uploadedFile.secure_url,
                 fileType: uploadedFile.format,
                 saved: false,
-                user: user
+                user: user,
+                comments: [],
+                likes: [],
             });
             // Save the post to the database
             await newPost.save();
@@ -53,12 +53,12 @@ const createPost = async (req, res) => {
             // No file was uploaded
             const newPost = new Post({
                 content: content,
-                user: user
+                user: user,
+                comments: [],
+                likes: [],
             });
-
             await newPost.save();
-
-            return res.status(201).json({ data: newPost });
+            return res.status(201).json({ message: "Post upload Succesful", data: newPost, user: user });
         }
     } catch (err) {
         console.error(err);
@@ -68,12 +68,12 @@ const createPost = async (req, res) => {
         });
     }
 };
+
 //Update user Avtar
-const updateUser = async (req, res) => {
+const updateUserAvatar = async (req, res) => {
     try {
         const { user } = req.body;
-
-        const { path, mimetype } = req.file;
+        const { path } = req.file;
         let uploadedFile;
 
 
@@ -86,9 +86,7 @@ const updateUser = async (req, res) => {
         const post = await Post.find({ user })
 
         findUser.avatar = uploadedFile.secure_url
-        // Save the post to the database
-        await findUser.save();
-
+        await findUser.save();// Save the post to the database
         // Delete the local file after upload
         fs.unlinkSync(path);
 
@@ -97,7 +95,6 @@ const updateUser = async (req, res) => {
             user: findUser,
             data: post
         });
-
     } catch (err) {
         res.status(500).json({ error: err })
     }
@@ -105,23 +102,31 @@ const updateUser = async (req, res) => {
 //Get All Post
 const getPosts = async (req, res) => {
     try {
-
-        const user = await User.find()
-
-        const { id } = req.query
+        const { id } = req.query;
         let post = [];
-        const localuser = await User.findById(id);
+        const user = await User.find();
+        const localuser = await User.findById(id);//find local User for fillter post according following
+
+        //If user not login than show all Post
         if (!localuser) {
-            post = await Post.find();
+            post = await Post.find();//Find all Post
             return res.status(201).json({ data: post, user: user });
         }
-
+        //filter post according to following
         for (let i = 0; i < localuser.following.length; i++) {
             const posts = await Post.find({ user: localuser.following[i] })
-            post = [...post, ...posts];
+            post = [...post, ...posts]; // Store posts inside post array
         }
-        posts = await Post.find({ user: localuser._id });
-        post = [...post, ...posts]
+
+        const posts = await Post.find({ user: id });
+        post = [...post, ...posts];
+
+        // Randomly shuffle the post array
+        for (let i = post.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [post[i], post[j]] = [post[j], post[i]];
+        }
+
         return res.status(201).json({ data: post, user: user });
 
     } catch (err) {
@@ -132,17 +137,18 @@ const getPosts = async (req, res) => {
         });
     }
 }
-const getpostByID = async (req, res) => {
-    try {
 
+//Find Post according to ID for Profile Page
+const getpostanduserByID = async (req, res) => {
+    try {
         const { Id } = req.body;
         const post = await Post.find({ user: Id });
-
+        const user = await User.findById(Id);
         return res.status(201).json({
             message: "Post find",
-            data: post
+            data: post,
+            user: user,
         })
-
     } catch (err) {
         return res.status(500).json({
             message: 'Post Not find',
@@ -171,14 +177,12 @@ const savepost = async (req, res) => {
     try {
         const { id } = req.body;
         const post = await Post.findById(id);
-
         if (!post) {
             return res.status(404).json({
                 message: "Post not found",
                 id: id
             });
         }
-
         post.saved = true;
         await post.save();
 
@@ -195,4 +199,4 @@ const savepost = async (req, res) => {
 };
 
 
-module.exports = { createPost, getPosts, getReels, updateUser, getpostByID, savepost }
+module.exports = { createPost, updateUserAvatar, getPosts, getReels, getpostanduserByID, savepost }

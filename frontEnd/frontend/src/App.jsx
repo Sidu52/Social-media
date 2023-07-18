@@ -17,8 +17,6 @@ export default function App({ loading }) {
   return (
     <>
       <BrowserRouter>
-
-        {/* <Navbar /> */}
         <Routes>
           <Route path={"/form"} element={<Form />}>
             <Route path="signin" element={<Signin />} />
@@ -26,7 +24,6 @@ export default function App({ loading }) {
           </Route>
           <Route path={'/'} element={<Home />} />
           <Route path={'/reels'} element={<Reels />} />
-          {/* <Route path={'/profile'} element={<Profile />} /> */}
           <Route path={"/profile"} element={<Profile />}>
             <Route path="post" element={<UserPost />} />
             <Route path="reel" element={<UserReels />} />

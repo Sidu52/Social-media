@@ -89,3 +89,9 @@
     font-size: calc(var(--font-size-small) + 3px);
     font-weight: 500;
 }
+
+@media (max-width:750px) {
+    .rightbar {
+        display: none;
+    }
+}

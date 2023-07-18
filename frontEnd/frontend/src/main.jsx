@@ -5,7 +5,6 @@ import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import datareducer from './store/Store.js';
 
-
 const store = configureStore({
   reducer: datareducer
 })

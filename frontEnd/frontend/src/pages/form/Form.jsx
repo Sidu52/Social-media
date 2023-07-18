@@ -8,7 +8,6 @@ const Form = () => {
         <div>
             <Navbar />
             <div className="root-container">
-
                 <div className="container">
                     <div className="sub-container">
                         <h1 className="title">Hello This is title</h1>
@@ -17,11 +16,9 @@ const Form = () => {
                             nam recusandae alias inventore quae ratione ad dolorem, nobis
                             numquam repellendus vero temporibus accusanti!
                         </article>
-                        <div className="dontaion__button btn">Donation</div>
+                        <div className="dontaion__button btn">Upcoming</div>
                     </div>
-
                     <Outlet />
-
                 </div>
                 <div className='loginSingup' >
                     <Link className="link" to="signup">SignUp</Link>
@@ -29,7 +26,6 @@ const Form = () => {
                 </div>
             </div>
         </div>
-
     );
 };
 

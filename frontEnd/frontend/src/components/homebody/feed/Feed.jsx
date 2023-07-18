@@ -29,7 +29,6 @@ export default function Feed() {
                 } else {
                     response = await axios.get(`http://localhost:9000`);
                 }
-                console.log(response.data.data);
                 setPosts(response.data.data);
                 setUsers(response.data.user);
             } catch (error) {
@@ -185,8 +184,8 @@ export default function Feed() {
                                     localuser={data}
                                     sendDataToParent={handleDataFromChild}
                                 />}
-                                <div className='comment__cross' onClick={(e) => { setCommentBoxIndex(null) }}>
-                                    {commentBoxIndex === index && <RxCross1 />}
+                                <div style={{ display: commentBoxIndex != null ? "flex" : "none" }} className='comment__cross' onClick={(e) => { setCommentBoxIndex(null) }}>
+                                    {<RxCross1 />}
                                 </div>
 
                             </div>

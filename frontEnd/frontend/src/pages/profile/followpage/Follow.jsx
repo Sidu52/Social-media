@@ -15,7 +15,6 @@ export default function Follow({ user, toggle, buttonType, handleChange, handleF
     }
 
     const handleFollowClick = (e, id, localId) => {
-
         e.stopPropagation(); // Prevent the click event from propagating to the parent div
         handleFollow(e, id, localId); // Call the handleFollow function in the parent component
     };
@@ -29,7 +28,7 @@ export default function Follow({ user, toggle, buttonType, handleChange, handleF
                             <RxCross2 />
                         </span>
                     </div>
-                    {user.map((data, index) => (
+                    {user?.map((data, index) => (
                         <div className="follow__user" key={index}>
                             <div onClick={((e) => { handleUserProfile(e, data) })}>
                                 <img src={data.avatar} alt="pro" />
