@@ -61,7 +61,6 @@ const createPost = async (req, res) => {
             return res.status(201).json({ message: "Post upload Succesful", data: newPost, user: user });
         }
     } catch (err) {
-        console.error(err);
         return res.status(500).json({
             message: "Error creating post",
             error: err.message
@@ -75,8 +74,6 @@ const updateUserAvatar = async (req, res) => {
         const { user } = req.body;
         const { path } = req.file;
         let uploadedFile;
-
-
         // Upload image file
         uploadedFile = await cloudinary.uploader.upload(path, {
             folder: "samples"

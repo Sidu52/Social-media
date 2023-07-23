@@ -1,0 +1,217 @@
+.contact__container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: url("https://media.istockphoto.com/id/1311934969/photo/contact-us.webp?b=1&s=170667a&w=0&k=20&c=2sJEN1Hhg6heUi1ZxKs6pJDwcyLYXPc4pUGd3hEjOjE=");
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    .contact__sub_container {
+        width: 80%;
+        background: rgb(143 139 139 / 52%);
+        border-radius: 20px;
+        margin: 10px 0;
+        display: flex;
+        align-items: center;
+        gap: 5%;
+
+        .contact_form_container {
+            width: 70%;
+
+
+
+            form {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                grid-gap: 20px;
+
+                .form-input,
+                textarea {
+                    width: 100%;
+                    border: 1px solid #bdbdbd;
+                    border-radius: 5px;
+                    padding: 1em 0;
+
+                    &:focus {
+                        outline: 1.5px solid red;
+                    }
+                }
+
+                p {
+                    margin: 0;
+                }
+
+                .full-width {
+                    grid-column: 1 / 3;
+                }
+            }
+
+            .form-headline:after {
+                content: "";
+                display: block;
+                width: 10%;
+                padding-top: 10px;
+                border-bottom: 3px solid var(--secondary-color);
+            }
+
+            .submit-btn {
+                float: left;
+            }
+
+            .reset-btn {
+                float: right;
+            }
+
+            .highlight-text-grey {
+                font-weight: 500;
+            }
+
+        }
+
+
+        .contacts {
+            width: 30%;
+            color: #212d31;
+
+            ul {
+                list-style-type: none;
+                padding: 0;
+                margin: 0;
+
+                .highlight-text-grey {
+                    font-weight: 500;
+                }
+
+                .hightlight-contact-info {
+                    font-weight: 700;
+                    font-size: var(--large-font-size);
+                    line-height: 1.5;
+
+                    .email-info {
+                        margin-top: var(--large-margin);
+                    }
+
+                    .highlight-text {
+                        color: var(--secondary-color);
+                    }
+
+                }
+            }
+
+            .card {
+                display: flex;
+                padding: 25px 25px;
+                gap: 10px;
+
+                .socialContainer {
+                    color: black;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 5px;
+                    font-size: 40px;
+                    border-radius: 50%;
+
+                    &:hover {
+                        animation: slide-in-top 0.3s both;
+                    }
+
+                }
+
+
+                .instagram:hover {
+                    color: #fff;
+                    background: #f09433;
+                    background: -moz-linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+                    background: -webkit-linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+                    background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+                    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f09433', endColorstr='#bc1888', GradientType=1);
+                    transition-duration: .3s;
+                }
+
+                /* linkdin*/
+                .linkedin:hover {
+                    color: white;
+                    background-color: #00acee;
+                    transition-duration: .3s;
+                }
+
+                /* Youtube*/
+                .youtube:hover {
+                    color: #fff;
+                    background-color: #fd1853;
+                    transition-duration: .3s;
+                }
+
+                /* Whatsapp*/
+                .whatsapp:hover {
+                    color: white;
+                    background-color: rgb(1, 173, 1);
+                    transition-duration: .3s;
+                }
+            }
+
+        }
+
+        button,
+        .submit-btn {
+            background: white;
+            border-radius: 15px;
+            padding: 5px 20px;
+            text-transform: uppercase;
+            border: none;
+            transition: all 0.3s linear;
+
+            &:hover {
+                outline: 0;
+                color: white;
+                border: 1px solid white;
+                background: transparent;
+            }
+        }
+    }
+
+    @media (max-width: 950px) {
+        .contact__sub_container {
+            flex-direction: column;
+            justify-content: normal;
+            gap: 10px;
+
+            .contact_form_container {
+                width: 90%;
+            }
+
+            .contacts {
+                width: 90%;
+            }
+        }
+    }
+}
+
+
+::-webkit-input-placeholder {
+    font-family: 'Roboto', sans-serif;
+}
+
+.error {
+    color: #ec1c24;
+}
+
+@keyframes slide-in-top {
+
+    40% {
+        transform: scale(1.4);
+    }
+
+    60% {
+        transform: scale(0.8);
+    }
+
+    80% {
+        transform: scale(1.2);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}

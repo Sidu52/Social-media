@@ -1,6 +1,5 @@
 .post__container {
     width: 50%;
-    height: 85vh;
     padding: 0 5%;
     overflow-y: scroll;
     margin-bottom: 2.4%;
@@ -14,7 +13,7 @@
     .create-post {
         width: 100%;
         margin-top: 1rem;
-        border: 1px solid black;
+        border: 1px solid var(--color-dark);
         padding: 1.4rem 5px;
         border-radius: 15px;
 
@@ -45,8 +44,15 @@
                 border: none;
                 padding: 5px 20px;
                 border-radius: 10px;
-                color: #fff;
-                background: #816060;
+                color: var(--color-white);
+                background: linear-gradient(45deg, var(--color-light) 0%, var(--color-dark-light) 25%, var(--color-dark-red) 50%, var(--color-primary) 75%, var(--color-primary-secondary) 100%);
+                cursor: pointer;
+
+                &:hover {
+                    background: transparent;
+                    color: var(--color-primary);
+                    border: 1px solid var(--color-primary);
+                }
             }
         }
 
@@ -70,6 +76,7 @@
 
     .feed {
         width: 100%;
+        margin: 15px 0;
 
         .feed__head>div {
             display: flex;
@@ -81,7 +88,7 @@
         video {
             width: 100%;
             height: 430px;
-            background: black;
+            background: var(--color-dark);
         }
 
         .feed__icon {
@@ -103,16 +110,19 @@
                 }
 
                 .comment__cross {
-                    position: absolute;
-                    top: 0;
-                    right: 10px;
+                    position: fixed;
+                    top: 50px;
+                    right: 20px;
                     z-index: 500;
                     border-radius: 50%;
-                    border: 2px solid black;
+                    // border: 2px solid var(--color-dark);
                     align-items: center;
                     padding: 5px;
                     font-size: 20px;
                     cursor: pointer;
+                    background: #7e767645;
+                    color: #ffff;
+                    font-weight: 900;
 
                 }
             }
@@ -135,14 +145,3 @@
         width: auto;
     }
 }
-
-// #create-post {
-//   flex-grow: 1;
-//   margin: 0 1rem;
-//   padding: 0.5rem;
-//   border: none;
-//   outline: none;
-//   color: var(--color-dark);
-//   ;
-//   background-color: transparent;
-// }

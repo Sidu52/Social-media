@@ -1,25 +1,23 @@
 import './Sidebar.scss';
 import axios from 'axios';
-import { useEffect, useState } from 'react';
-import { AiOutlineHeart, AiOutlineHome, AiOutlineSearch, AiOutlineMessage } from 'react-icons/ai'
-import { BsPlusCircle, BsChatLeft } from 'react-icons/bs'
-import { MdSlowMotionVideo } from 'react-icons/md';
 import { useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { MdSlowMotionVideo } from 'react-icons/md';
+import { BsPlusCircle, BsChatLeft } from 'react-icons/bs'
+import { AiOutlineHeart, AiOutlineHome, AiOutlineMessage } from 'react-icons/ai'
 import profile from '../../../assets/image/profile.png'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function Sidebar() {
-    const cart = useSelector((state) => state.user);
+    const navigate = useNavigate();
+    const toggle = useSelector((state) => state.sidebartoggle);
+
     const [user, setUser] = useState([]);
 
-    const data = localStorage.getItem('Data');
-    let parsedData;
-    if (data) {
-        parsedData = JSON.parse(data);
-    } else {
-        console.log("No data found in localStorage.");
-    }
+    // Get user data from local storage
+    const data = JSON.parse(localStorage.getItem('Data'));
 
+    // Fetch user data from the server using Axios
     useEffect(() => {
         const fetchUserData = async () => {
             try {
@@ -33,27 +31,30 @@ export default function Sidebar() {
         fetchUserData();
     }, []);
 
+    // Handle click on user profile link
     const handleUserProfile = async (e, data) => {
         e.preventDefault();
         try {
             localStorage.setItem('userData', JSON.stringify(data));
             // Redirect to the profile page
-            window.location.href = '../../../profile/post';
+            navigate('/profile/post');
         } catch (error) {
             console.log('fail', error);
         }
     }
 
     return (
-        <div className="sidebar">
-            <div className="user__profile">
-                <img src={parsedData ? parsedData.avatar : profile} />
-                <h4>{parsedData && parsedData.avatar ? parsedData.username : "Alston"}</h4>
+        <div className="sidebar" style={{ display: window.innerWidth <= 450 && toggle ? "none" : "block" }}>
+            <div className="user__profile" onClick={((e) => { handleUserProfile(e, data) })}>
+                <img src={data ? data.avatar : profile} />
+                <h4>{data && data.avatar ? data.username : "Alston"}</h4>
             </div>
             <div className="logo-wrapper"></div>
             <ul className="sidebar-menu">
                 <li>
-                    <a href="#" className="nav-link">
+                    <a href="#" className="nav-link"
+                        onClick={(() => { window.location.reload() })}
+                    >
                         <span className="icon">
                             <AiOutlineHome />
                         </span>

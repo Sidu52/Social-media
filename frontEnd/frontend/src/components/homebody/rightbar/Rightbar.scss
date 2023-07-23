@@ -28,22 +28,19 @@
 
 .rightbarAd {
     width: 100%;
+    height: 250px;
     border-radius: 10px;
     margin: 30px 0;
+    box-shadow: 0 0 10px var(--color-light),
+        5px 5px 10px var(--color-dark-red);
+    // box-shadow: linear-gradient(45deg, var(--color-light) 0%, var(--color-dark-light) 25%, var(--color-dark-red) 50%, var(--color-primary) 75%, var(--color-primary-secondary) 100%);
+    // ;
 }
 
 .rightbarTitle {
-    // text-align: center;
-    // font-size: calc(var(--font-size-small) + 10px);
-    // font-weight: 600;
-    // margin-bottom: 10px;
-    // word-spacing: 3px;
-    // padding: 5px;
-    // color: var(--color-white);
-    // background-color: var(--color-primary);
     text-align: center;
-    background: #2389ff;
-    color: white;
+    background: linear-gradient(45deg, var(--color-light) 0%, var(--color-dark-light) 25%, var(--color-dark-red) 50%, var(--color-primary) 75%, var(--color-primary-secondary) 100%);
+    color: var(--color-white);
     padding: 10px 0;
     border-radius: 20px;
     font-weight: 600;
@@ -77,11 +74,11 @@
     width: 12px;
     height: 12px;
     border-radius: 50%;
-    background-color: limegreen;
+    background-color: var(--color-online);
     position: absolute;
     top: -2px;
     right: 0;
-    border: 2px solid white;
+    border: 2px solid var(--color-white);
 }
 
 .rightbarUserName {

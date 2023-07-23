@@ -1,7 +1,9 @@
 import React from 'react'
 import { useSelector } from 'react-redux';
 export default function UserPost() {
+    // Access the 'posts' state from the Redux store using the 'useSelector' hook
     const post = useSelector((state) => state.posts);
+
     return (
         <div className="row">
             {post.map((data, index) => (

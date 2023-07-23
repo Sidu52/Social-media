@@ -10,6 +10,7 @@
   "author": "Sidhu",
   "license": "ISC",
   "dependencies": {
+    "axios": "^1.4.0",
     "bcrypt": "^5.1.0",
     "body-parser": "^1.20.2",
     "cloudinary": "^1.37.3",
@@ -17,9 +18,9 @@
     "connect-mongodb-session": "^3.1.1",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "express-session": "^1.17.3",
-    "flickrapi": "^0.6.2",
     "mongoose": "^7.3.2",
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.9.3",
@@ -27,6 +28,7 @@
     "passport": "^0.6.0",
     "passport-google-oauth": "^2.0.0",
     "passport-jwt": "^4.0.1",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "socket.io": "^4.7.1"
   }
 }

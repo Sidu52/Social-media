@@ -1,9 +1,10 @@
 import React from 'react'
 import { useSelector } from 'react-redux';
 
-
 export default function UserReels() {
+    // Access the 'video post' state from the Redux store using the 'useSelector' hook
     const post = useSelector((state) => state.reels);
+
     return (
         <div className="row">
             {post.map((data, index) => (

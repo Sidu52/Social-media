@@ -10,11 +10,11 @@ const Form = () => {
             <div className="root-container">
                 <div className="container">
                     <div className="sub-container">
-                        <h1 className="title">Hello This is title</h1>
+                        <h1 className="title">Connect with Us</h1>
                         <article className="description">
-                            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ipsa culpa
-                            nam recusandae alias inventore quae ratione ad dolorem, nobis
-                            numquam repellendus vero temporibus accusanti!
+                            Welcome to social chat. Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                            Follow us for the latest updates, news, and exciting content. Don't miss out on any of our
+                            posts!
                         </article>
                         <div className="dontaion__button btn">Upcoming</div>
                     </div>

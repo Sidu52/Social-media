@@ -25,6 +25,14 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookie());// Use cookie-parser middleware
 
+
+// setup the chat server to be used with socket.io
+const chatServer = require('http').createServer(app);
+const chatSockets = require('./config/socket').chatSockets(chatServer);
+chatServer.listen(5000);
+console.log('chat server is listening on port 5000');
+
+
 // Initialize Passport and session middleware
 app.use(
     session({
@@ -37,7 +45,7 @@ app.use(
         },
 
         store: MongoStore.create({
-            mongoUrl: "mongodb://127.0.0.1:27017/socialmedias",
+            mongoUrl: process.env.MONGO_URL,
             autoRemove: 'disabled'
         },
             (err) => {

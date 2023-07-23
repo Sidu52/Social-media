@@ -2,14 +2,14 @@ nav {
     position: sticky;
     top: 0;
     width: 100%;
-    z-index: 999;
+    z-index: 9;
 }
 
 /* Topnavbar styles and hover styles starts */
 .topnavbar {
     display: flex;
     justify-content: space-between;
-    background-color: white;
+    background-color: var(--color-white);
     align-items: center;
     padding: 20px;
     font-family: "Arbutus Slab";
@@ -24,13 +24,13 @@ nav {
         left: 0;
         width: 100%;
         height: 2px;
-        background-color: #004d00;
+        background: linear-gradient(45deg, var(--color-light) 0%, var(--color-dark-light) 25%, var(--color-dark-red) 50%, var(--color-primary) 75%, var(--color-primary-secondary) 100%);
         transform: scaleX(0);
         transition: transform 0.3s ease-in-out;
     }
 
     &:hover {
-        border-bottom-color: #004d00;
+        border-bottom-color: var(--color-dark-red);
     }
 
     &:hover:before {
@@ -69,7 +69,7 @@ nav {
                     position: relative;
                     display: inline-block;
                     text-decoration: none;
-                    color: #000;
+                    color: var(--color-dark);
                     transition: transform 0.3s ease-in-out;
 
                     &:before {
@@ -79,7 +79,7 @@ nav {
                         left: 0;
                         width: 0;
                         height: 2px;
-                        background-color: #000;
+                        background-color: var(--color-dark);
                         transition: width 0.5s ease-in-out;
                     }
 
@@ -129,7 +129,7 @@ nav {
 
             .search_box {
                 position: absolute;
-                background: white;
+                background: var(--color-white);
                 width: 100%;
                 box-shadow: 0 15px 25px 5px lightblue;
 
@@ -179,27 +179,26 @@ nav {
 
 
 
-
 /* logo (image) styles and hover styles start */
 @keyframes border-animation {
     0% {
-        border-color: #b3ffb3;
+        border-color: var(--color-light);
     }
 
     25% {
-        border-color: #66ff66;
+        border-color: var(--color-dark-light);
     }
 
     50% {
-        border-color: #00cc00;
+        border-color: var(--color-dark-red);
     }
 
     75% {
-        border-color: #006600;
+        border-color: var(--color-primary);
     }
 
     100% {
-        border-color: #001a00;
+        border-color: var(--color-primary-secondary);
     }
 }
 
@@ -236,18 +235,18 @@ nav {
 
 @keyframes border-animation {
     0% {
-        border-color: #004d00;
-        box-shadow: 0 0 5px #004d00;
+        border-color: var(--color-light);
+        box-shadow: 0 0 5px var(--color-light);
     }
 
     50% {
-        border-color: #00cc00;
-        box-shadow: 0 0 5px #00cc00;
+        border-color: var(--color-dark-red);
+        box-shadow: 0 0 5px var(--color-dark-red);
     }
 
     100% {
-        border-color: #004d00;
-        box-shadow: 0 0 5px #004d00;
+        border-color: var(--color-primary);
+        box-shadow: 0 0 5px var(--color-primary);
     }
 }
 

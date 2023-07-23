@@ -1,16 +1,21 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import './Comment.scss'
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 import profile from '../../../../assets/image/profile.png';
-export default function Comment({ post, users, localuser, sendDataToParent }) {
+export default function Comment({ post, users, localuser }) {
+    const navigate = useNavigate();
+    // State variables
     const [comment, setComment] = useState("");
     const [data, setData] = useState([]);
     const [contactEdit, setContactEdit] = useState(false);
+
+    // Find the user who created the post
     const postUser = users.find(user => user._id == post.user);
 
 
-    // Calculate Time
+    // Calculate time difference between current time and the time the comment was uploaded
     const calculateTimeDifference = (uploadTime) => {
         const currentTime = new Date();
         const uploadTimestamp = new Date(uploadTime);
@@ -31,14 +36,16 @@ export default function Comment({ post, users, localuser, sendDataToParent }) {
         }
     };
 
+    // Fetch comments for the post from the backend when the component mounts or postUser changes
     useEffect(() => {
         const fetchData = async () => {
             const response = await axios.get(`http://localhost:9000/toggle?id=${post._id}`);
             setData(response.data.data);
         };
         fetchData();
-    }, [setData, , postUser]);
+    }, [setData, , postUser, , post._id]);
 
+    // Handle adding a new comment to the post
     const handleComment = async (e) => {
         try {
             e.preventDefault();
@@ -51,11 +58,10 @@ export default function Comment({ post, users, localuser, sendDataToParent }) {
         }
     }
 
-    //Handle Comment Like
+    // Handle liking a comment
     const handleLike = async (id) => {
         try {
             const response = await axios.post(`http://localhost:9000/toggle/like?id=${id}&type=Comment&userid=${localuser._id}`);
-            // console.log(response.data)
             if (response.data) {
                 // Find the comment in the data state and update its like count
                 const updatedData = data.map(comment => {
@@ -69,12 +75,11 @@ export default function Comment({ post, users, localuser, sendDataToParent }) {
                 });
                 setData(updatedData);
             }
-
         } catch (error) {
             console.log('fail', error);
         }
     }
-
+    // Handle editing a comment
     const handleEdit = async (e, id, editedContent) => {
         e.preventDefault();
         try {
@@ -100,7 +105,17 @@ export default function Comment({ post, users, localuser, sendDataToParent }) {
         } catch (error) {
             console.log('Error editing comment:', error);
         }
-
+    }
+    //Handle Profile Page
+    const handleUserProfile = async (e, data) => {
+        e.preventDefault();
+        try {
+            localStorage.setItem('userData', JSON.stringify(data));
+            // Redirect to the profile page
+            navigate('/profile/post');
+        } catch (error) {
+            console.log('fail', error);
+        }
     }
 
     return (
@@ -123,7 +138,7 @@ export default function Comment({ post, users, localuser, sendDataToParent }) {
                     ) : null)}
             </div>
             <div className='comment__data'>
-                <div className="comment__head">
+                <div className="comment__head" onClick={((e) => { handleUserProfile(e, data) })}>
                     <img src={postUser?.avatar ? postUser.avatar : profile} alt="profile" />
                     <p>{postUser?.username}</p>
                 </div>

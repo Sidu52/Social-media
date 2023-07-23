@@ -1,0 +1,58 @@
+:root {
+    --color-primary:#cc2366 ;
+    --color-primary-secondary:#bc1888 ;
+    --color-dark-red: #dc2743;
+    --color-light:#f09433 ;
+    --color-dark-light: #e6683c;
+    --color-black: #161617;
+    --color-white: #fff;
+    --color-danger: #fb5151;
+    --color-online: #32cd32;
+    
+
+    --border-radius: 2rem;
+    --card-border-radius: 1rem;
+    --btn-padding: 0.6rem 2rem;
+    --search-padding: 0.6rem 1rem;
+    --card-padding: 1rem;
+
+    --sticky-top-left: 5.4rem;
+    --sticky-top-right: -18rem;
+}
+
+.loader {
+    width: 100%;
+    height:4px;
+    border-radius: 30px;
+    background-color: #f1a14b;
+    position: absolute;
+    top: 92px;
+    z-index: 1000;
+}
+          
+.loader::before {
+    content: "";
+    position: absolute;
+    background: var(--color-lite);
+    background: -moz-linear-gradient(45deg, var(--color-light) 0%, var(--color-dark-light) 25%, var(--color-dark-red) 50%, var(--color-primary) 75%, var(--color-primary-secondary) 100%);
+    background: -webkit-linear-gradient(45deg, var(--color-light) 0%, var(--color-dark-light) 25%, var(--color-dark-red) 50%, var(--color-primary) 75%, var(--color-primary-secondary) 100%);
+    background: linear-gradient(45deg, var(--color-light) 0%, var(--color-dark-light) 25%, var(--color-dark-red) 50%, var(--color-primary) 75%, var(--color-primary-secondary) 100%);
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 100%;
+    border-radius: 30px;
+    animation: moving 2.5s ease-in-out infinite;
+}
+          
+@keyframes moving {
+50% {
+    width: 100%;
+}
+          
+100% {
+    width: 0;
+    right: 0;
+    left: unset;
+}
+}

@@ -1,17 +1,19 @@
 import './Navbar.scss'
 import { Link } from 'react-router-dom';
-// import Profile from '../../'
 import profile from '../../assets/image/profile.png';
-function Navbar(userAvtar) {
+function Navbar() {
+    // Get user data from local storage
+    const data = JSON.parse(localStorage.getItem('Data'));
+
     return (
         <div className='navbar'>
             <div className="navbar__left">
                 <Link to="/" style={{ textDecoration: "none" }}>
-                    <span>Alston</span>
+                    <span>Social Chat</span>
                 </Link>
             </div>
             <div className="navbar__right">
-                <img src={userAvtar ? userAvtar.userAvtar : profile} alt="profile" />
+                <img src={data ? data.avatar : profile} alt="profile" />
             </div>
         </div >
     )

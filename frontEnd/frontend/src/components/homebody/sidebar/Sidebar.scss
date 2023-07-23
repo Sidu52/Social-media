@@ -10,12 +10,14 @@ body {
     display: flex;
     align-items: center;
     gap: 10px;
-    border: 1px solid black;
+    border: 1px solid var(--color-dark);
     border-radius: 35px;
     margin: 10px;
     margin-bottom: 0;
+    color: var(--color-white);
     padding: 0 15px;
-    background: #e5dacb;
+    background: linear-gradient(45deg, var(--color-dark-red) 50%, var(--color-primary)100%);
+
 
     img {
         width: 35px;
@@ -28,7 +30,6 @@ body {
 .sidebar {
     background-color: #ffffff;
     position: sticky;
-    height: 100vh;
     width: 15%;
     border-right: 1px solid rgb(var(--ig-separator));
     display: flex;
@@ -130,7 +131,7 @@ body {
 
         h3 {
             text-align: center;
-            background: #2389ff;
+            background: linear-gradient(45deg, var(--color-light) 0%, var(--color-dark-light) 25%, var(--color-dark-red) 50%, var(--color-primary) 75%, var(--color-primary-secondary) 100%);
             color: white;
             padding: 10px 0;
             border-radius: 20px;
@@ -171,7 +172,33 @@ body {
 }
 
 @media (max-width:450px) {
+    .user__profile {
+        flex-direction: row;
+        gap: 2px;
+    }
+
+    a.nav-link {
+        justify-content: normal;
+        gap: 5px;
+
+        span {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        p {
+            display: block;
+        }
+
+        ;
+
+    }
+
     .sidebar {
-        display: none;
+        position: absolute;
+        left: 0;
+        width: 55%;
+        height: calc(100% - 55px);
+        z-index: 5;
     }
 }

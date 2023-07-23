@@ -1,108 +1,72 @@
-// import React, { useState, useEffect, useRef } from 'react';
-// import axios from 'axios';
-// import { FaPlay, FaPause } from 'react-icons/fa';
+import React, { useState, useEffect, useRef } from 'react';
+import axios from 'axios';
+import './Reels.scss';
+import { FaPlay, FaPause } from 'react-icons/fa';
 
-// const Reels = () => {
-//     const [reels, setReels] = useState([]);
-//     const [active, setActive] = useState(0);
-//     const [isPlaying, setIsPlaying] = useState(false); // State for video playing status
-//     const videoRef = useRef(null);
+const Reels = () => {
+    const [reels, setReels] = useState([]);
+    const [active, setActive] = useState(0);
+    const [isPlaying, setIsPlaying] = useState(false); // State for video playing status
+    const videoRef = useRef(null);
 
-//     useEffect(() => {
-//         axios
-//             .get('http://localhost:9000/reels')
-//             .then(response => {
-//                 setReels(response.data.data);
-//             })
-//             .catch(error => {
-//                 console.log(error);
-//             });
-//     }, []);
+    useEffect(() => {
+        axios
+            .get('https://socail-media-backend.onrender.com/reels')
+            .then(response => {
+                setReels(response.data.data);
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }, []);
 
-//     useEffect(() => {
-//         if (videoRef.current) {
-//             if (isPlaying) {
-//                 videoRef.current.play();
-//             } else {
-//                 videoRef.current.pause();
-//             }
-//         }
-//     }, [isPlaying, active]);
+    useEffect(() => {
+        if (videoRef.current) {
+            if (isPlaying) {
+                videoRef.current.play();
+            } else {
+                videoRef.current.pause();
+            }
+        }
+    }, [isPlaying, active]);
 
-//     const toggleVideoPlay = () => {
-//         setIsPlaying(prevIsPlaying => !prevIsPlaying);
-//     };
+    const toggleVideoPlay = () => {
+        setIsPlaying(prevIsPlaying => !prevIsPlaying);
+    };
 
-//     const goPrev = () => {
-//         setActive(prevActive => (prevActive === 0 ? reels.length - 1 : prevActive - 1));
-//     };
+    const handleScroll = e => {
+        const delta = Math.sign(e.deltaY);
 
-//     const goNext = () => {
-//         setActive(prevActive => (prevActive === reels.length - 1 ? 0 : prevActive + 1));
-//     };
+        if (delta === -1) {
+            goPrev();
+        } else if (delta === 1) {
+            goNext();
+        }
+    };
 
-//     return (
-//         <div className="reel__container">
-//             {/* Reels */}
-//             {reels.map((reel, index) => {
-//                 return (
-//                     <div
-//                         className={`reel__feed ${index === active ? 'active' : ''}`}
-//                         key={index}
-//                     >
-//                         <div className={`video__controller ${index === active ? 'active' : ''}`}>
-//                             <video ref={videoRef} src={reel.fileUrl} loop></video>
-//                             {/* Scroll-based video play functionality */}
-//                             {index === active && (
-//                                 <div
-//                                     className={`video__overlay ${isPlaying ? 'hidden' : ''}`}
-//                                     onClick={toggleVideoPlay}
-//                                 >
-//                                     <FaPlay className="play__icon" />
-//                                 </div>
-//                             )}
-//                             {/* Video controller */}
-//                             <div className={`video__controller ${index === active ? 'active' : ''}`}>
-//                                 <div className="form__data">
-//                                     <div className="feed__data">
-//                                         <h3>{reel.username}</h3>
-//                                         <p>{reel.content}</p>
-//                                         <p>none</p>
-//                                     </div>
-//                                 </div>
-//                                 <div className="video__controls">
-//                                     <button onClick={toggleVideoPlay}>
-//                                         {isPlaying ? <FaPause /> : <FaPlay />}
-//                                     </button>
-//                                 </div>
-//                             </div>
-//                         </div>
-//                     </div>
-//                 );
-//             })}
+    const goPrev = () => {
+        setActive(prevActive => (prevActive === 0 ? reels.length - 1 : prevActive - 1));
+    };
 
-//             <div className="buttons">
-//                 <button onClick={goPrev} disabled={reels.length <= 1}>
-//                     &uarr; Previous Slide
-//                 </button>
-//                 <button onClick={goNext} disabled={reels.length <= 1}>
-//                     Next Slide &darr;
-//                 </button>
-//             </div>
-//         </div>
-//     );
-// };
+    const goNext = () => {
+        setActive(prevActive => (prevActive === reels.length - 1 ? 0 : prevActive + 1));
+    };
 
-// export default Reels;
-
-
-import React from 'react'
-
-export default function Reels() {
     return (
-        <div>
-            Reel
+        <div className="reels-container" onWheel={handleScroll}>
+            {reels.map((reel, index) => (
+                <video
+                    key={index}
+                    ref={videoRef}
+                    className={`reel-video ${index === active ? 'active' : ''}`}
+                    src={reel.url}
+                />
+            ))}
+            <div className="play-toggle" onClick={toggleVideoPlay}>
+                {isPlaying ? <FaPause /> : <FaPlay />}
+            </div>
         </div>
-    )
-}
+    );
+};
 
+export default Reels;

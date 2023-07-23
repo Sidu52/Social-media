@@ -1,27 +1,32 @@
 
 import './Profile.scss';
-import profile from '../../assets/image/profile.png';
-import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { toast } from 'react-toastify';
+import { useState, useEffect } from 'react';
 import { MdOutlineDataSaverOn } from 'react-icons/md';
-import Navbar from "../../components/navbar/Navbar";
-import Follow from './followpage/Follow';
 import { Outlet, Link } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
-import { addtopost, addtoreel, savePost } from '../../store/Store';
+import { addtopost, addtoreel, savePost, setLoading } from '../../store/Store';
+import Follow from './followpage/Follow';
+import profile from '../../assets/image/profile.png';
+import Navbar from "../../components/navbar/Navbar";
 
 export default function Profile() {
+    // Redux state and dispatch
     const posts = useSelector((state) => state.posts);
     const dispatch = useDispatch();
+
+    // State variables for user profile data and interactions
     const [avatar, setAvatar] = useState("");
     const [user, setUser] = useState({});
     const [toggle, setToggle] = useState(false);
     const [followers, setFollowers] = useState([]);
     const [buttonType, setButtonType] = useState("");
-    const userData = JSON.parse(localStorage.getItem('userData'));
-    const data = JSON.parse(localStorage.getItem('Data'));
 
+    // Get user data from local storage
+    const data = JSON.parse(localStorage.getItem('Data'));
+    const userData = JSON.parse(localStorage.getItem('userData'));
+
+    // Fetch user data and posts from the server on component mount
     useEffect(() => {
         if (userData) {
             axios.post('http://localhost:9000/getbyID', { Id: userData._id })
@@ -38,27 +43,31 @@ export default function Profile() {
         }
     }, []);
 
-    //Profile update
+    // Profile update function for changing avatar
     const handleSubmit = async (e) => {
         e.preventDefault();
         const formData = new FormData();
-
         formData.append('img', avatar);
         formData.append('user', userData._id);
-        toast.warn("Loading");
         try {
+            dispatch(setLoading(true));
             const response = await axios.post('http://localhost:9000/updatepost', formData);
             if (response.data) {
-                toast.success(response.data.message);
                 const updatedUser = response.data.user; // New user data received from the server
                 setUser(updatedUser); // Update the user state with the new user data
                 localStorage.setItem('userData', JSON.stringify(updatedUser));
+                if (updatedUser.email === data.email) {
+                    console.log(updatedUser)
+                    localStorage.setItem('Data', JSON.stringify(updatedUser));
+                }
+                dispatch(setLoading(false));
             }
         } catch (error) {
             console.log('fail', error);
         }
     };
 
+    // Function to handle follow/unfollow actions
     const handleFollow = async (e, id, localId) => {
         e.preventDefault();
         try {
@@ -76,6 +85,7 @@ export default function Profile() {
         }
     };
 
+    // Function to handle follower/following button clicks and get followers/following data
     const handleChange = (newToggle) => {
         setToggle(newToggle);
     };
@@ -84,22 +94,20 @@ export default function Profile() {
         setToggle(true);
         setButtonType(buttonName);
         try {
-            // Make sure to define and assign a value to `user` before using it here
             const response = await axios.post('http://localhost:9000/user/getfollowers', {
                 buttonName: buttonName,
                 userId: user._id,
             });
-            const followers = response.data.followers; // Corrected the property name to 'followers'
+            const followers = response.data.followers;
             setFollowers(followers);
         } catch (error) {
             console.log('Error:', error);
         }
     };
 
-
     return (
         <div>
-            <Navbar userAvtar={user?.avatar} />
+            <Navbar />
             <div className="container">
                 <div className='subContainer'>
                     <div className="user">

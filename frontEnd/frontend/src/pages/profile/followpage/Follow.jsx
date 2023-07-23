@@ -1,19 +1,26 @@
-
 import './Follow.scss';
 import { RxCross2 } from 'react-icons/rx';
+import { useNavigate } from 'react-router-dom';
 
 export default function Follow({ user, toggle, buttonType, handleChange, handleFollow }) {
+    const navigate = useNavigate();
+
+    // Retrieving data from localStorage
     const locaaluser = JSON.parse(localStorage.getItem('Data'));
+
     const handleWindow = () => {
         handleChange(!toggle);
     };
 
+    //Function for handle user profile
     const handleUserProfile = (e, data) => {
         e.preventDefault();
+        //Set user data in local server
         localStorage.setItem('userData', JSON.stringify(data));
         window.location.href = '../../../profile/post';
     }
 
+    //Function for handle follow Click
     const handleFollowClick = (e, id, localId) => {
         e.stopPropagation(); // Prevent the click event from propagating to the parent div
         handleFollow(e, id, localId); // Call the handleFollow function in the parent component

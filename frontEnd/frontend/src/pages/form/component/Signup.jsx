@@ -2,20 +2,30 @@ import { useState, useEffect } from 'react'
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setLoading } from '../../../store/Store'
 
 export default function Signup() {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    // State variables to manage form data, OTP, and email verification  
     const [form, setForm] = useState({ username: "", email: "", otp: "", password: "", conformpassword: "" });
     const [otpform, setOtpform] = useState(false);
     const [emailverify, setEmailverify] = useState(false);
 
+    // Check if the user is already logged in using useEffect
     useEffect(() => {
         const fetchUserData = async () => {
 
             try {
                 const response = await axios.get("http://localhost:9000/user/login");
                 if (response.data.data) {
+                    // If the user is already logged in, navigate to the home page
                     navigate("/");
+                } else {
+                    // If the user is not logged in, show the signup form
+                    navigate("/form/signup");
                 }
             } catch (error) {
                 console.error("Error fetching user data:", error);
@@ -24,20 +34,22 @@ export default function Signup() {
         fetchUserData();
     }, []);
 
-    //OTP Sent
+    // Function to send OTP for email verification
     const sendOTP = async (e) => {
         e.preventDefault(); // Prevent form submission
 
         try {
             if (form.email) {
                 setOtpform(true);
-                toast.warn("Loading"); // Display a loading Popup message
-
+                //setLoading 'true' in Redux for show loading bar
+                dispatch(setLoading(true));
                 // Send a POST request to the server to request email verification
                 const response = await axios.post('http://localhost:9000/user/emailverification', {
                     email: form.email,
                 });
-                toast.success(response.data.message); // Display success message from the server response
+                //setLoading 'false' in Redux for hide loading bar
+                dispatch(setLoading(false));
+                toast.success(response.data.message);
             }
         } catch (error) {
             console.log("fail", error);
@@ -46,20 +58,18 @@ export default function Signup() {
     };
 
 
-    //OTP Verfied
+    // Function to handle OTP verification
     const handleOTP = async (e) => {
         e.preventDefault(); // Prevent form submission
-
         try {
             if (form.email) {
+                console.log("object")
                 setOtpform(true); // Set otpform state to true
-
                 // Send a POST request to the server to verify the OTP
                 const response = await axios.post('http://localhost:9000/user/otpverification', {
                     email: form.email,
                     otp: form.otp
                 });
-
                 if (response.data) {
                     if (response.data.data) {
                         setEmailverify(true);
@@ -73,12 +83,13 @@ export default function Signup() {
         }
     };
 
-    //Signup User
+    // Function to handle user signup
     const onSubmit = async (e) => {
-        e.preventDefault(); // Prevent form submission
+        e.preventDefault();
 
         try {
             if (emailverify) {
+                dispatch(setLoading(true));
                 // Send a POST request to the server for user signup
                 const response = await axios.post('http://localhost:9000/user/signup', {
                     username: form.username,
@@ -89,7 +100,7 @@ export default function Signup() {
 
                 const user = response.data.user;
                 localStorage.setItem('Data', JSON.stringify(user)); // Store user data in local storage
-                toast.success(response.data.message); // Display success message from the server response
+                dispatch(setLoading(false));
 
                 if (response.data.action) {
                     navigate("/"); // Navigate to a specific page if the 'action' property is present in the response
