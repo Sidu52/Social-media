@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import './Feed.scss';
 import axios from 'axios';
+import { URL } from '../../../../endepointURL';
 import { useNavigate } from 'react-router-dom';
 import { RxCross1 } from 'react-icons/rx';
 import { FaRegThumbsUp } from 'react-icons/fa';
@@ -52,9 +53,9 @@ export default function Feed() {
             try {
                 let response;
                 if (data) {
-                    response = await axios.get(`http://localhost:9000?id=${data._id}`);
+                    response = await axios.get(`${URL}?id=${data._id}`);
                 } else {
-                    response = await axios.get(`http://localhost:9000`);
+                    response = await axios.get(URL);
                 }
                 setPosts(response.data.data);
                 setUsers(response.data.user);
@@ -79,7 +80,7 @@ export default function Feed() {
 
         try {
             dispatch(setLoading(true));
-            const response = await axios.post('http://localhost:9000/createpost', formData);
+            const response = await axios.post(`${URL}/createpost`, formData);
             if (response.data) {
                 toast.success(response.data.message);
             }
@@ -97,7 +98,7 @@ export default function Feed() {
     // Function to save a post on the profile
     const handleSave = async (id) => {
         if (data) {
-            const response = await axios.post('http://localhost:9000/savepost', {
+            const response = await axios.post(`${URL}/savepost`, {
                 id: id
             });
             if (response.data) {
@@ -111,7 +112,7 @@ export default function Feed() {
         try {
             setClick(false)
             if (click) {
-                const response = await axios.post(`http://localhost:9000/toggle/like?id=${id}&type=Post&userid=${data._id}`);
+                const response = await axios.post(`${URL}/toggle/like?id=${id}&type=Post&userid=${data._id}`);
                 if (response.data) {
                     // Find the post in the posts state and update its like count
                     const updatedPosts = posts.map(post => {
@@ -214,7 +215,14 @@ export default function Feed() {
                         <div className="feed__icon">
                             <div className='like__box'>
 
-                                <span className='like' onClick={() => handleLike(post._id)}><FaRegThumbsUp style={{ color: userLikedPost ? "#6666ff" : "", animation: post.likes && post.likes.length > 0 ? "splash 0.6s linear" : "" }} />
+                                <span className='like' onClick={() => handleLike(post._id)}>
+                                    <label class="ui-like">
+                                        <input type="checkbox" checked={userLikedPost ? true : false} />
+                                        <div class="like">
+                                            <svg style={{ fill: userLikedPost ? "#e61a1a" : "" }} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g stroke-width="0" id="SVGRepo_bgCarrier"></g><g stroke-linejoin="round" stroke-linecap="round" id="SVGRepo_tracerCarrier"></g><g id="SVGRepo_iconCarrier"><path d="M20.808,11.079C19.829,16.132,12,20.5,12,20.5s-7.829-4.368-8.808-9.421C2.227,6.1,5.066,3.5,8,3.5a4.444,4.444,0,0,1,4,2,4.444,4.444,0,0,1,4-2C18.934,3.5,21.773,6.1,20.808,11.079Z"></path></g></svg>
+                                        </div>
+                                    </label>
+                                    {/* <FaRegThumbsUp style={{ color: userLikedPost ? "#6666ff" : "", animation: post.likes && post.likes.length > 0 ? "splash 0.6s linear" : "" }} /> */}
                                 </span>
                                 <AiOutlineComment onClick={() => setCommentBoxIndex(index)} />
                                 {commentBoxIndex === index && <Comment

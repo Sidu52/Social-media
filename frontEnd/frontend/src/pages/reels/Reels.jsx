@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
+import { URL } from '../../../endepointURL';
 import './Reels.scss';
 import { FaPlay, FaPause } from 'react-icons/fa';
 
@@ -11,7 +12,7 @@ const Reels = () => {
 
     useEffect(() => {
         axios
-            .get('https://socail-media-backend.onrender.com/reels')
+            .get(`${URL}/reels`)
             .then(response => {
                 setReels(response.data.data);
             })

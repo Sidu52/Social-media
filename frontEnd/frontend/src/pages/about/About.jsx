@@ -1,11 +1,8 @@
 
 import './About.scss';
-import Topbar from '../../components/homebody/topbar/Topbar';
-
 export default function About() {
     return (
         <div>
-            <Topbar />
             <div className="company">
                 <div className="img">
                     <img src="https://raw.githubusercontent.com/pico-india/main-django/main/static/about-team.jpg" alt="" />

@@ -1,6 +1,7 @@
 
 import './Profile.scss';
 import axios from 'axios';
+import { URL } from '../../../endepointURL';
 import { useState, useEffect } from 'react';
 import { MdOutlineDataSaverOn } from 'react-icons/md';
 import { Outlet, Link } from "react-router-dom";
@@ -29,7 +30,7 @@ export default function Profile() {
     // Fetch user data and posts from the server on component mount
     useEffect(() => {
         if (userData) {
-            axios.post('http://localhost:9000/getbyID', { Id: userData._id })
+            axios.post(`${URL}/getbyID`, { Id: userData._id })
                 .then(response => {
                     const { data, user } = response.data;
                     setUser(user)
@@ -51,7 +52,7 @@ export default function Profile() {
         formData.append('user', userData._id);
         try {
             dispatch(setLoading(true));
-            const response = await axios.post('http://localhost:9000/updatepost', formData);
+            const response = await axios.post(`${URL}/updatepost`, formData);
             if (response.data) {
                 const updatedUser = response.data.user; // New user data received from the server
                 setUser(updatedUser); // Update the user state with the new user data
@@ -71,7 +72,7 @@ export default function Profile() {
     const handleFollow = async (e, id, localId) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:9000/user/followers', {
+            const response = await axios.post(`${URL}/user/followers`, {
                 userId: id,
                 localUser: localId,
             });
@@ -94,7 +95,7 @@ export default function Profile() {
         setToggle(true);
         setButtonType(buttonName);
         try {
-            const response = await axios.post('http://localhost:9000/user/getfollowers', {
+            const response = await axios.post(`${URL}/user/getfollowers`, {
                 buttonName: buttonName,
                 userId: user._id,
             });

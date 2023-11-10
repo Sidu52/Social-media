@@ -1,5 +1,6 @@
 import './Sidebar.scss';
 import axios from 'axios';
+import { URL } from '../../../../endepointURL';
 import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { MdSlowMotionVideo } from 'react-icons/md';
@@ -21,7 +22,7 @@ export default function Sidebar() {
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                const response = await axios.get("http://localhost:9000/user");
+                const response = await axios.get(`${URL}/user`);
                 setUser(response.data.data);
             } catch (error) {
                 console.error("Error fetching user data:", error);
@@ -70,7 +71,7 @@ export default function Sidebar() {
                     </a>
                 </li>
                 <li>
-                    <Link to="/reels" className="nav-link">
+                    <Link to="/home/reels" className="nav-link">
                         <span className="icon">
                             <MdSlowMotionVideo />
                         </span>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import './Comment.scss'
 import axios from 'axios';
+import { URL } from '../../../../../endepointURL';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import profile from '../../../../assets/image/profile.png';
@@ -39,7 +40,7 @@ export default function Comment({ post, users, localuser }) {
     // Fetch comments for the post from the backend when the component mounts or postUser changes
     useEffect(() => {
         const fetchData = async () => {
-            const response = await axios.get(`http://localhost:9000/toggle?id=${post._id}`);
+            const response = await axios.get(`${URL}/toggle?id=${post._id}`);
             setData(response.data.data);
         };
         fetchData();
@@ -49,7 +50,7 @@ export default function Comment({ post, users, localuser }) {
     const handleComment = async (e) => {
         try {
             e.preventDefault();
-            const response = await axios.post(`http://localhost:9000/toggle/comment?id=${post._id}&userid=${localuser._id}&data=${comment}`);
+            const response = await axios.post(`${URL}/toggle/comment?id=${post._id}&userid=${localuser._id}&data=${comment}`);
             if (response.data) {
                 setData(prevState => [...prevState, response.data.data]);
             }
@@ -61,7 +62,7 @@ export default function Comment({ post, users, localuser }) {
     // Handle liking a comment
     const handleLike = async (id) => {
         try {
-            const response = await axios.post(`http://localhost:9000/toggle/like?id=${id}&type=Comment&userid=${localuser._id}`);
+            const response = await axios.post(`${URL}/toggle/like?id=${id}&type=Comment&userid=${localuser._id}`);
             if (response.data) {
                 // Find the comment in the data state and update its like count
                 const updatedData = data.map(comment => {
@@ -83,7 +84,7 @@ export default function Comment({ post, users, localuser }) {
     const handleEdit = async (e, id, editedContent) => {
         e.preventDefault();
         try {
-            const response = await axios.put(`http://localhost:9000/toggle/comment?id=${id}&userid=${localuser._id}&data=${editedContent}`);
+            const response = await axios.put(`${URL}/toggle/comment?id=${id}&userid=${localuser._id}&data=${editedContent}`);
             if (response.data.success) {
                 toast.success(response.data.message);
             } else {

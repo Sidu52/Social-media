@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios';
+import { URL } from '../../../../endepointURL';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setLoading } from '../../../store/Store'
@@ -15,10 +16,10 @@ export default function Signin() {
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                const response = await axios.get("http://localhost:9000/user/login");
+                const response = await axios.get(`${URL}/user/login`);
                 if (response.data.data) {
                     // If the user is already logged in, navigate to the home page
-                    navigate("/");
+                    navigate("/home");
                 } else {
                     // If the user is not logged in, show the signin form
                     navigate("/form/signin")
@@ -35,7 +36,7 @@ export default function Signin() {
         e.preventDefault();
         dispatch(setLoading(true));
         try {
-            const response = await axios.post('http://localhost:9000/user/signin', {
+            const response = await axios.post(`${URL}/user/signin`, {
                 email: form.email,
                 password: form.password
             });

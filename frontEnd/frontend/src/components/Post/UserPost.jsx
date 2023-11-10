@@ -1,9 +1,9 @@
 import React from 'react'
 import { useSelector } from 'react-redux';
+import { URL } from '../../../endepointURL';
 export default function UserPost() {
     // Access the 'posts' state from the Redux store using the 'useSelector' hook
     const post = useSelector((state) => state.posts);
-
     return (
         <div className="row">
             {post.map((data, index) => (

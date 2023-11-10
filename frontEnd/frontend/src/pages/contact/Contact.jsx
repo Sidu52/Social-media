@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { BsFillTelephoneForwardFill } from 'react-icons/bs'
 import { BiLogoLinkedin, BiLogoYoutube, BiLogoInstagram, BiLogoWhatsapp, } from 'react-icons/bi';
 import { MdEmail } from 'react-icons/md';
-import Topbar from '../../components/homebody/topbar/Topbar';
 import './Contact.scss'
 import axios from 'axios';
 import { toast } from 'react-toastify';
@@ -62,7 +61,6 @@ export default function Contact() {
 
     return (
         <>
-            <Topbar />
             <div id='Contact' className="contact__container">
                 <div className="contact__sub_container">
                     <div className="contact_form_container">

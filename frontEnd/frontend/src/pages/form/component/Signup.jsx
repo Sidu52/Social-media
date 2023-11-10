@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios';
+import { URL } from '../../../../endepointURL';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -19,7 +20,7 @@ export default function Signup() {
         const fetchUserData = async () => {
 
             try {
-                const response = await axios.get("http://localhost:9000/user/login");
+                const response = await axios.get(`${URL}/user/login`);
                 if (response.data.data) {
                     // If the user is already logged in, navigate to the home page
                     navigate("/");
@@ -44,7 +45,7 @@ export default function Signup() {
                 //setLoading 'true' in Redux for show loading bar
                 dispatch(setLoading(true));
                 // Send a POST request to the server to request email verification
-                const response = await axios.post('http://localhost:9000/user/emailverification', {
+                const response = await axios.post(`${URL}/user/emailverification`, {
                     email: form.email,
                 });
                 //setLoading 'false' in Redux for hide loading bar
@@ -66,7 +67,7 @@ export default function Signup() {
                 console.log("object")
                 setOtpform(true); // Set otpform state to true
                 // Send a POST request to the server to verify the OTP
-                const response = await axios.post('http://localhost:9000/user/otpverification', {
+                const response = await axios.post(`${URL}/user/otpverification`, {
                     email: form.email,
                     otp: form.otp
                 });
@@ -91,7 +92,7 @@ export default function Signup() {
             if (emailverify) {
                 dispatch(setLoading(true));
                 // Send a POST request to the server for user signup
-                const response = await axios.post('http://localhost:9000/user/signup', {
+                const response = await axios.post(`${URL}/user/signup`, {
                     username: form.username,
                     email: form.email,
                     password: form.password,

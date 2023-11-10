@@ -1,6 +1,7 @@
 //Working on this function Component 
 
 import React, { useEffect, useState } from 'react';
+import { URL } from '../../../endepointURL';
 import socketIOClient from 'socket.io-client';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -9,7 +10,7 @@ const Notifications = () => {
     const [notifications, setNotifications] = useState([]);
 
     useEffect(() => {
-        const socket = socketIOClient('http://localhost:9000'); // Connect to the server
+        const socket = socketIOClient(URL); // Connect to the server
 
         socket.on('connect', () => {
             console.log('Connected to the Socket.IO server.');

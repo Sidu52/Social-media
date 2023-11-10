@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import './Topbar.scss';
 import axios from 'axios';
-
+import { URL } from '../../../../endepointURL';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 import { AiOutlineBars } from 'react-icons/ai';
@@ -37,7 +37,7 @@ const Topbar = () => {
 
         const fetchUserData = async () => {
             try {
-                const response = await axios.get("http://localhost:9000/user");
+                const response = await axios.get(`${URL}/user`);
                 const userData = response.data.data;
                 setUser(userData);
 
@@ -56,7 +56,7 @@ const Topbar = () => {
     const userSignout = async () => {
         try {
             // toast.warn('Loading');
-            const response = await axios.post('http://localhost:9000/user/signout');
+            const response = await axios.post(`${URL}/user/signout`);
             if (response.data) {
                 localStorage.clear();// Clear user data from local storage
                 toast.success(response.data.message);// Show success message using toast
@@ -91,7 +91,6 @@ const Topbar = () => {
         e.preventDefault();
         dispatch(setsideToggle(value));
     };
-
     return (
         <nav >
             <div className="topnavbar">
@@ -100,23 +99,22 @@ const Topbar = () => {
                         {sidbartoggle
                             ? <AiOutlineBars onClick={((e) => handleIconClick(e, false))} />
                             : <RxCross1 onClick={((e) => handleIconClick(e, true))} />}
-
                     </div>
                     <Link className="topnavbar__brand">
                         <img src={Logo} alt="SS Logo" className="logo-img" style={{ width: '50px' }} />
                     </Link>
                     <ul className="topnavbar__nav">
                         <li className="topnavbar__nav-item">
-                            <Link to='/' className="topnavbar__nav-link">Home</Link>
+                            <Link to='/home' className="topnavbar__nav-link">Home</Link>
                         </li>
                         <li className="topnavbar__nav-item">
-                            <Link to='/about' className="topnavbar__nav-link">About</Link>
+                            <Link to='/home/about' className="topnavbar__nav-link">About</Link>
                         </li>
                         <li className="topnavbar__nav-item">
                             <Link className="topnavbar__nav-link">Vision</Link>
                         </li>
                         <li className="topnavbar__nav-item">
-                            <Link to="/contact" className="topnavbar__nav-link">Contact</Link>
+                            <Link to="/home/contact" className="topnavbar__nav-link">Contact</Link>
                         </li>
                     </ul>
                 </div>
@@ -145,13 +143,20 @@ const Topbar = () => {
 
                         </button>
                         <ul className="dropdown-menu" style={{ display: toggle ? "flex" : "none" }}>
-                            <li><Link className="dropdown-item" to="/form/signup">Register</Link></li>
-                            <li><Link className="dropdown-item" to="/form/signin">Sign in</Link></li>
-                            <li><Link className="dropdown-item" to="/profile/post" onClick={handleLinkClick} >Profile</Link></li>
-                            <li>
-                                <hr className="dropdown-divider" />
-                            </li>
-                            <li><Link className="dropdown-item" onClick={userSignout}>Logout</Link></li>
+                            {!data ?
+                                <>
+                                    <li><Link className="dropdown-item" to="/form/signup">Register</Link></li>
+                                    <li><Link className="dropdown-item" to="/form/signin">Sign in</Link></li>
+                                </> :
+                                <>
+                                    <li><Link className="dropdown-item" to="/profile/post" onClick={handleLinkClick} >Profile</Link></li>
+                                    <li>
+                                        <hr className="dropdown-divider" />
+                                    </li>
+                                    <li><Link className="dropdown-item" onClick={userSignout}>Logout</Link></li>
+                                </>}
+
+
                         </ul>
                     </div>
                 </div>
