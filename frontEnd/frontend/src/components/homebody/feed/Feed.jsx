@@ -186,7 +186,7 @@ export default function Feed() {
                 const postUser = users.find(user => user._id == post.user);//Find for which user upload post 
                 const userLikedPost = post.likes && data && post.likes.some(like => like.user === data.id);//Find for user exist or not inside post like array
                 return (
-                    <daiv className="feed" key={index}>
+                    <div className="feed" key={index}>
                         <div className="feed__head">
                             <div className="head__detail" onClick={((e) => handleProfileClick(e, postUser))}>
                                 <img src={postUser?.avatar ? postUser.avatar : profile} className="feed__profile" alt="Profile" />
@@ -242,7 +242,7 @@ export default function Feed() {
                             </div>
                         </div>
                         <span>{post.likes ? post.likes.length : "0"} likes and {post.comments ? post.comments.length : "0"} comments</span>
-                    </daiv>
+                    </div>
                 );
             })}
         </div>

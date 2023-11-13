@@ -7,7 +7,7 @@ const initialState = {
     saved: [],
     user: {},
     loading: false,
-    sidebartoggle: true,
+    sidebartoggle: false,
     error: null,
 };
 

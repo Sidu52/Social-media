@@ -26,11 +26,11 @@ app.use(bodyParser.json());
 app.use(cookie());// Use cookie-parser middleware
 
 
-// setup the chat server to be used with socket.io
-const chatServer = require('http').createServer(app);
-const chatSockets = require('./config/socket').chatSockets(chatServer);
-chatServer.listen(5000);
-console.log('chat server is listening on port 5000');
+// // setup the chat server to be used with socket.io
+// const chatServer = require('http').createServer(app);
+// const chatSockets = require('./config/socket').chatSockets(chatServer);
+// chatServer.listen(5000);
+// console.log('chat server is listening on port 6000');
 
 
 // Initialize Passport and session middleware

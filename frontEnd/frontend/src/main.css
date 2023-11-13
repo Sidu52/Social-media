@@ -19,6 +19,9 @@
     --sticky-top-left: 5.4rem;
     --sticky-top-right: -18rem;
 }
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 .loader {
     width: 100%;

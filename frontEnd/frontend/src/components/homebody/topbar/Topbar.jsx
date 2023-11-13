@@ -96,9 +96,9 @@ const Topbar = () => {
             <div className="topnavbar">
                 <div className="topnavbar__left">
                     <div style={{ display: windowWidth <= 450 ? "block" : "none" }}>
-                        {sidbartoggle
-                            ? <AiOutlineBars onClick={((e) => handleIconClick(e, false))} />
-                            : <RxCross1 onClick={((e) => handleIconClick(e, true))} />}
+                        {!sidbartoggle
+                            ? <AiOutlineBars onClick={((e) => handleIconClick(e, true))} />
+                            : <RxCross1 onClick={((e) => handleIconClick(e, false))} />}
                     </div>
                     <Link className="topnavbar__brand">
                         <img src={Logo} alt="SS Logo" className="logo-img" style={{ width: '50px' }} />
@@ -121,7 +121,7 @@ const Topbar = () => {
                 <div className="topnavbar__right">
                     <form className="topnavbar__form">
                         <div className="search-wrapper">
-                            <input className="form-control" type="text" placeholder="Search" value={searchValue} onChange={((e) => { handleSerach(e) })} />
+                            <input className="form-control" type="text" placeholder="Search" value={searchValue} onChange={((e) => { handleSerach(e) })} style={{ padding: "5px 10px" }} />
                             <button type="submit" className="search-button">
                                 <BsSearch />
                             </button>
@@ -133,16 +133,13 @@ const Topbar = () => {
                                     </div>
                                 ))}
                             </div>
-
-
                         </div>
                     </form>
                     <div className="dropdown nav-item">
-                        <button type="button" className="btn dropdown-toggle" data-bs-toggle="dropdown" onClick={((e) => { setToggle(!toggle) })}>
+                        <button type="button" className="btn dropdown-toggle" data-bs-toggle="dropdown" onMouseEnter={(e) => setToggle(true)} onMouseLeave={(e) => setToggle(false)}>
                             <img src={data && data.avatar ? data.avatar : profile} style={{ width: "40px", height: "40px", borderRadius: "50%" }} />
-
                         </button>
-                        <ul className="dropdown-menu" style={{ display: toggle ? "flex" : "none" }}>
+                        <ul className="dropdown-menu" style={{ display: toggle ? "flex" : "none", borderRadius: "20px" }} onMouseEnter={(e) => setToggle(true)} onMouseLeave={(e) => setToggle(false)}>
                             {!data ?
                                 <>
                                     <li><Link className="dropdown-item" to="/form/signup">Register</Link></li>
@@ -155,8 +152,6 @@ const Topbar = () => {
                                     </li>
                                     <li><Link className="dropdown-item" onClick={userSignout}>Logout</Link></li>
                                 </>}
-
-
                         </ul>
                     </div>
                 </div>

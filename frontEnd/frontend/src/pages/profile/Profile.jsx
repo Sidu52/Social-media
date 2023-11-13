@@ -3,13 +3,14 @@ import './Profile.scss';
 import axios from 'axios';
 import { URL } from '../../../endepointURL';
 import { useState, useEffect } from 'react';
-import { MdOutlineDataSaverOn } from 'react-icons/md';
+import { AiOutlineCloseCircle } from 'react-icons/ai';
 import { Outlet, Link } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
 import { addtopost, addtoreel, savePost, setLoading } from '../../store/Store';
 import Follow from './followpage/Follow';
 import profile from '../../assets/image/profile.png';
 import Navbar from "../../components/navbar/Navbar";
+import { djvu } from '@cloudinary/url-gen/qualifiers/format';
 
 export default function Profile() {
     // Redux state and dispatch
@@ -20,6 +21,7 @@ export default function Profile() {
     const [avatar, setAvatar] = useState("");
     const [user, setUser] = useState({});
     const [toggle, setToggle] = useState(false);
+    const [profiletogglle, setProfiletoggle] = useState(false);
     const [followers, setFollowers] = useState([]);
     const [buttonType, setButtonType] = useState("");
 
@@ -47,10 +49,12 @@ export default function Profile() {
     // Profile update function for changing avatar
     const handleSubmit = async (e) => {
         e.preventDefault();
+
         const formData = new FormData();
         formData.append('img', avatar);
         formData.append('user', userData._id);
         try {
+            setProfiletoggle(false)
             dispatch(setLoading(true));
             const response = await axios.post(`${URL}/updatepost`, formData);
             if (response.data) {
@@ -114,15 +118,24 @@ export default function Profile() {
                     <div className="user">
                         <div className="img_profile">
                             <img src={user?.avatar || profile} className="img-circle img-fluid" alt="Profile" />
-                            <form onSubmit={handleSubmit}>
-                                <input
-                                    type="file"
-                                    encType="multipart/form-data"
-                                    onChange={e => setAvatar(e.target.files[0])}
-                                    id="file"
-                                />
-                                <button><MdOutlineDataSaverOn /></button>
-                            </form>
+                            {
+                                profiletogglle ?
+                                    <div style={{ position: "absolute", top: 0, padding: "15px", borderRadius: "20px", backgroundColor: "#f1f1f1", lineHeight: 2, width: "100%", height: "100%" }}>
+                                        <form onSubmit={handleSubmit} style={{ position: "relative" }}>
+                                            <AiOutlineCloseCircle onClick={() => setProfiletoggle(false)} style={{ position: "absolute", top: "10px", right: "10px" }} />
+                                            <label style={{ fontSize: '0.875rem', color: '#718096', fontWeight: '500', lineHeight: '1.25rem' }}>
+                                                Picture
+                                            </label>
+                                            <input type="file" />
+                                            <button type='submit'>Submit</button>
+                                        </form>
+                                    </div>
+                                    :
+                                    <div className='profile_button_box' onClick={() => setProfiletoggle(true)}>
+                                        <button className='profile_add_btn'>Edit Profile</button>
+                                    </div>
+                            }
+
                         </div>
                         <div className="user_data">
                             <h2>{user ? user.username : "Alston"}

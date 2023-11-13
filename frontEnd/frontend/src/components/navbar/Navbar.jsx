@@ -8,7 +8,7 @@ function Navbar() {
     return (
         <div className='navbar'>
             <div className="navbar__left">
-                <Link to="/" style={{ textDecoration: "none" }}>
+                <Link to="/home" style={{ textDecoration: "none" }}>
                     <span>Social Chat</span>
                 </Link>
             </div>

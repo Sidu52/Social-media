@@ -12,11 +12,25 @@ import { Link, useNavigate } from 'react-router-dom';
 export default function Sidebar() {
     const navigate = useNavigate();
     const toggle = useSelector((state) => state.sidebartoggle);
-
     const [user, setUser] = useState([]);
+    const [stoggle, setSToggle] = useState(false);
+    const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
     // Get user data from local storage
     const data = JSON.parse(localStorage.getItem('Data'));
+
+    useEffect(() => {
+        // Function to update windowWidth state when the window is resized
+        const handleResize = () => {
+            setWindowWidth(window.innerWidth);
+        };
+        // Listen for window resize events and update the windowWidth state
+        window.addEventListener('resize', handleResize);
+        // Clean up the event listener when the component unmounts
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
 
     // Fetch user data from the server using Axios
     useEffect(() => {
@@ -45,7 +59,12 @@ export default function Sidebar() {
     }
 
     return (
-        <div className="sidebar" style={{ display: window.innerWidth <= 450 && toggle ? "none" : "block" }}>
+        <div className="sidebar"
+            style={{
+                display: windowWidth > 450 || toggle ? "block" : "none",
+                // style={{ display: window.innerWidth <= 450 && stoggle ? "none" : "block",
+                overflowX: "hidden"
+            }}>
             <div className="user__profile" onClick={((e) => { handleUserProfile(e, data) })}>
                 <img src={data ? data.avatar : profile} />
                 <h4>{data && data.avatar ? data.username : "Alston"}</h4>
@@ -53,22 +72,20 @@ export default function Sidebar() {
             <div className="logo-wrapper"></div>
             <ul className="sidebar-menu">
                 <li>
-                    <a href="#" className="nav-link"
-                        onClick={(() => { window.location.reload() })}
-                    >
+                    <Link to='/home' className="nav-link">
                         <span className="icon">
                             <AiOutlineHome />
                         </span>
                         <p>Home</p>
-                    </a>
+                    </Link>
                 </li>
                 <li>
-                    <a href="#" className="nav-link">
+                    <Link to="about" className="nav-link">
                         <span className="icon">
                             <BsChatLeft />
                         </span>
-                        <p>Chat</p>
-                    </a>
+                        <p>About</p>
+                    </Link>
                 </li>
                 <li>
                     <Link to="/home/reels" className="nav-link">
@@ -114,7 +131,7 @@ export default function Sidebar() {
             </ul>
             <hr style={{ width: "90%" }} />
             <div className="sidebarFriend">
-                <h3>Friends</h3>
+                <h3 style={{ width: "90%" }}>Friends</h3>
                 {user.map((data, index) => (
                     <li className='sidebar__User' key={index} onClick={((e) => { handleUserProfile(e, data) })} >
                         <img src={data.avatar ? data.avatar : profile} />
