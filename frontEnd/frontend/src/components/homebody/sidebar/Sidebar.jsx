@@ -59,18 +59,14 @@ export default function Sidebar() {
     }
 
     return (
-        <div className="sidebar"
-            style={{
-                display: windowWidth > 450 || toggle ? "block" : "none",
-                // style={{ display: window.innerWidth <= 450 && stoggle ? "none" : "block",
-                overflowX: "hidden"
-            }}>
-            <div className="user__profile" onClick={((e) => { handleUserProfile(e, data) })}>
-                <img src={data ? data.avatar : profile} />
+        <div className="sidebar bg-white top-0 h-full border-r border-ig-separator flex flex-col overflow-y-scroll overflow-x-hidden mb-50 text-white"
+            style={{ width: windowWidth > 450 || toggle ? "80%" : "0", position: windowWidth > 450 ? "sticky" : "absolute", }} >
+            <div className="user__profile flex items-center gap-5 m-4 mb-0 py-2 px-4 rounded-3xl" onClick={((e) => { handleUserProfile(e, data) })}>
+                <img className='w-9 h-9 rounded-full' src={data ? data.avatar : profile} />
                 <h4>{data && data.avatar ? data.username : "Alston"}</h4>
             </div>
             <div className="logo-wrapper"></div>
-            <ul className="sidebar-menu">
+            <ul className="sidebar-menu font-1rem list-none p-0 pl-8 flex flex-col">
                 <li>
                     <Link to='/home' className="nav-link">
                         <span className="icon">
@@ -121,7 +117,7 @@ export default function Sidebar() {
                 </li>
             </ul>
 
-            <ul className="sidebar-menu bottom">
+            <ul className="sidebar-menu font-1rem list-none p-0 pl-8 flex flex-col bottom">
                 <li>
                     <a href="#" className="nav-link">
                         <p>More</p>
@@ -130,11 +126,11 @@ export default function Sidebar() {
                 </li>
             </ul>
             <hr style={{ width: "90%" }} />
-            <div className="sidebarFriend">
-                <h3 style={{ width: "90%" }}>Friends</h3>
+            <div className="sidebarFriend flex flex-col gap-2.5">
+                <h3 className=' text-center text-white p-5 rounded-2xl' style={{ width: "90%" }}>Friends</h3>
                 {user.map((data, index) => (
-                    <li className='sidebar__User' key={index} onClick={((e) => { handleUserProfile(e, data) })} >
-                        <img src={data.avatar ? data.avatar : profile} />
+                    <li className='sidebar__User flex items-center my-1 gap-2.5 no-underline text-black' key={index} onClick={((e) => { handleUserProfile(e, data) })} >
+                        <img className='w-9 h-9 rounded-full' src={data.avatar ? data.avatar : profile} />
                         <span className="sidebarFrindName">{data.username}</span>
                     </li>
                 ))}

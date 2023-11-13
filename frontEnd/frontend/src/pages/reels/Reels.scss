@@ -1,15 +1,8 @@
 .reels-container {
-    // position: relative;
-    // overflow: hidden;
-    // background: #fff;
     display: inline-flex;
-    align-items: center;
     justify-content: center;
     height: 95vh;
-    width: 50%;
-    // padding: 0 5%;
-    // overflow-y: hidden;
-    // margin-bottom: 2.4%;
+    // width: 50%;
 }
 
 .reels-wrapper {
@@ -17,7 +10,6 @@
     display: flex;
     flex-direction: column;
     transition: transform 0.5s ease;
-    width: 45%;
     height: 95%;
     transition: all 0.5s linear;
     overflow: hidden;
@@ -99,12 +91,12 @@
     }
 }
 
-@media (max-width: 750px) {
-    .reels-container {
-        width: 100%;
+// @media (max-width: 750px) {
+//     .reels-container {
+//         width: 100%;
 
-        .reels-wrapper {
-            width: 58%;
-        }
-    }
-}
+//         .reels-wrapper {
+//             width: 58%;
+//         }
+//     }
+// }

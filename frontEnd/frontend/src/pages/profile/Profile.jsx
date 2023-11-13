@@ -111,9 +111,9 @@ export default function Profile() {
     };
 
     return (
-        <div>
+        <div style={{ height: "100vh", overflowY: "scroll", marginTop: "20px" }}>
             <Navbar />
-            <div className="container">
+            <div className="profile_container">
                 <div className='subContainer'>
                     <div className="user">
                         <div className="img_profile">
@@ -126,7 +126,10 @@ export default function Profile() {
                                             <label style={{ fontSize: '0.875rem', color: '#718096', fontWeight: '500', lineHeight: '1.25rem' }}>
                                                 Picture
                                             </label>
-                                            <input type="file" />
+                                            <input
+                                                type="file"
+                                                onChange={e => setAvatar(e.target.files[0])}
+                                            />
                                             <button type='submit'>Submit</button>
                                         </form>
                                     </div>

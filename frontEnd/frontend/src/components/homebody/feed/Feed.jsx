@@ -4,7 +4,6 @@ import axios from 'axios';
 import { URL } from '../../../../endepointURL';
 import { useNavigate } from 'react-router-dom';
 import { RxCross1 } from 'react-icons/rx';
-import { FaRegThumbsUp } from 'react-icons/fa';
 import { AiOutlinePlusCircle, AiOutlineComment, AiTwotoneSave, AiOutlineCloudDownload } from 'react-icons/ai';
 import { useDispatch } from 'react-redux';
 import { setLoading } from '../../../store/Store'
@@ -152,7 +151,7 @@ export default function Feed() {
 
 
     return (
-        <div className="post__container">
+        <div className="post__container px-10 mb-5 overflow-y-scroll">
             <form className="create-post" onSubmit={handleSubmit}>
                 <div className="profile__photo" >
                     <img src={data ? data.avatar : profile} className="feed__profile" alt="Profile" onClick={((e) => handleProfileClick(e, data))} />

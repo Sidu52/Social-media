@@ -7,36 +7,10 @@ body {
 }
 
 .user__profile {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    border: 1px solid var(--color-dark);
-    border-radius: 35px;
-    margin: 10px;
-    margin-bottom: 0;
-    color: var(--color-white);
-    padding: 0 15px;
     background: linear-gradient(45deg, var(--color-dark-red) 50%, var(--color-primary)100%);
-
-
-    img {
-        width: 35px;
-        height: 35px;
-        border-radius: 50%;
-    }
-
 }
 
 .sidebar {
-    background-color: #ffffff;
-    position: sticky;
-    width: 15%;
-    border-right: 1px solid rgb(var(--ig-separator));
-    display: flex;
-    flex-direction: column;
-    overflow-y: scroll;
-    margin-bottom: 50px;
-
     .logo-wrapper {
         width: 100%;
         padding: 5px 25px;
@@ -48,14 +22,6 @@ body {
     }
 
     .sidebar-menu {
-        font-size: 1rem;
-        list-style-type: none;
-        padding: 0 12px 20px 8px;
-        margin: 0;
-        display: flex;
-        flex-direction: column;
-        // flex-grow: 3;
-
         &.bottom {
             flex-grow: 0;
             margin-bottom: 40px;
@@ -107,34 +73,11 @@ body {
     }
 
     .sidebarFriend {
-        display: flex;
-        flex-direction: column;
         margin-left: 10px;
-        gap: 5px;
         margin-bottom: 50%;
 
-        .sidebar__User {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin: 5px 0;
-            text-decoration: none;
-            color: black;
-
-            img {
-                width: 35px;
-                height: 35px;
-                border-radius: 50%;
-            }
-
-        }
-
         h3 {
-            text-align: center;
             background: linear-gradient(45deg, var(--color-light) 0%, var(--color-dark-light) 25%, var(--color-dark-red) 50%, var(--color-primary) 75%, var(--color-primary-secondary) 100%);
-            color: white;
-            padding: 10px 0;
-            border-radius: 20px;
         }
 
 
@@ -158,20 +101,24 @@ body {
         p {
             display: none;
         }
-
-        ;
-
     }
 }
 
 @media (max-width:750px) {
     .sidebar {
+        position: absolute;
         width: 25%;
-        min-width: 80px;
+        // min-width: 80px;
     }
 }
 
 @media (max-width:450px) {
+    .sidebar {
+        position: absolute;
+        top: 75px;
+        width: 80%;
+    }
+
     .user__profile {
         flex-direction: row;
         gap: 2px;

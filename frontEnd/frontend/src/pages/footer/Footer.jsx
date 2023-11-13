@@ -1,4 +1,3 @@
-
 import './Footer.scss'
 import { Link } from 'react-router-dom';
 import { BiLogoLinkedin, BiLogoInstagram, } from 'react-icons/bi';

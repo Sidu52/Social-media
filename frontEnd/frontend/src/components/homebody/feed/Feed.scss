@@ -1,8 +1,8 @@
 .post__container {
-    width: 50%;
-    padding: 0 5%;
-    overflow-y: scroll;
-    margin-bottom: 2.4%;
+    // width: 50%;
+    // padding: 0 5%;
+    // overflow-y: scroll;
+    // margin-bottom: 2.4%;
 
     .feed__profile {
         width: 40px;
@@ -335,10 +335,6 @@
         opacity: 0;
     }
 }
-
-
-
-
 
 @media (max-width:750px) {
     .post__container {

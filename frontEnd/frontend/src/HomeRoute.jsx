@@ -4,11 +4,11 @@ import Topbar from './components/homebody/topbar/Topbar';
 import Footer from "./pages/footer/Footer";
 export default function HomeRoute() {
     return (
-        <>
+        <div>
             <Topbar />
             <Outlet />
-            <Footer />
-        </>
+            {/* <Footer /> */}
+        </div>
 
 
     )

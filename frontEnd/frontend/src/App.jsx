@@ -15,8 +15,6 @@ import UserPost from './components/Post/UserPost';
 import UserReels from './components/Post/UserReels';
 import UserSave from './components/Post/UserSave';
 import Feed from "./components/homebody/feed/Feed";
-
-
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -32,18 +30,11 @@ export default function App({ }) {
             <Route path="signup" element={<Signup />} />
           </Route>
           <Route path={'/'} element={<Welcome />} />
-          {/* <Route path={'/home'} element={<HomeRoute />}>
-            <Route index element={<Home />} />
-            <Route path={'reels'} element={<Reels />} />
-            <Route path={'about'} element={<About />} />
-            <Route path={'contact'} element={<Contact />} />
-          </Route > */}
-           <Route path="/home" element={<HomeRoute />}>
+          <Route path="/home" element={<HomeRoute />}>
             <Route path='' element={<Home />}>
               <Route index element={<Feed />} />
               <Route path="reels" element={<Reels />} />
             </Route>
-
             <Route path="about" element={<About />} />
             <Route path="contact" element={<Contact />} />
           </Route>
@@ -52,9 +43,7 @@ export default function App({ }) {
             <Route path="reel" element={<UserReels />} />
             <Route path="save" element={<UserSave />} />
           </Route>
-
         </Routes >
-
       </ BrowserRouter>
       <ToastContainer />
     </>

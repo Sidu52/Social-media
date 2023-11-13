@@ -71,6 +71,8 @@ const createPost = async (req, res) => {
 //Update user Avtar
 const updateUserAvatar = async (req, res) => {
     try {
+        console.log("ENter1", req.body)
+        console.log("ENter2", req.file)
         const { user } = req.body;
         const { path } = req.file;
         let uploadedFile;
