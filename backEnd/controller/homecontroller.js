@@ -111,6 +111,7 @@ const getPosts = async (req, res) => {
             post = await Post.find();//Find all Post
             return res.status(201).json({ data: post, user: user });
         }
+        const like = await Like.find({ user: id });
         //filter post according to following
         for (let i = 0; i < localuser.following.length; i++) {
             const posts = await Post.find({ user: localuser.following[i] })
@@ -126,7 +127,7 @@ const getPosts = async (req, res) => {
             [post[i], post[j]] = [post[j], post[i]];
         }
 
-        return res.status(201).json({ data: post, user: user });
+        return res.status(201).json({ data: post, user, like });
 
     } catch (err) {
         console.log(err);

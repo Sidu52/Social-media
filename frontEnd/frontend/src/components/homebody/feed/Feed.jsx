@@ -20,6 +20,7 @@ export default function Feed() {
     const [refreshCount, setRefreshCount] = useState(0);
     const [click, setClick] = useState(true);
     const [commentBoxIndex, setCommentBoxIndex] = useState(null);
+    const [localUserLike, setLocalUserLike] = useState(null);
 
     // Redux dispatch hook
     const dispatch = useDispatch();
@@ -56,6 +57,7 @@ export default function Feed() {
                 } else {
                     response = await axios.get(URL);
                 }
+                setLocalUserLike(response.data.like);
                 setPosts(response.data.data);
                 setUsers(response.data.user);
             } catch (error) {
@@ -71,7 +73,6 @@ export default function Feed() {
     const handleSubmit = async e => {
         e.preventDefault();
         const formData = new FormData();
-
         formData.append('content', form.content);
         formData.append('img', form.imgurl);
         formData.append('user', data._id);
@@ -109,29 +110,40 @@ export default function Feed() {
     // Function to handle post like
     const handleLike = async (id) => {
         try {
-            setClick(false)
-            if (click) {
-                const response = await axios.post(`${URL}/toggle/like?id=${id}&type=Post&userid=${data._id}`);
-                if (response.data) {
-                    // Find the post in the posts state and update its like count
-                    const updatedPosts = posts.map(post => {
-                        if (post._id === id) {
-                            return {
-                                ...post,
-                                likes: response.data.likes
-                            };
-                        }
-                        return post;
-                    });
-                    setClick(true)
-                    setPosts(updatedPosts);
+            // Remove setClick(false) and if (click) condition, as it's not necessary
+
+            const response = await axios.post(`${URL}/toggle/like?id=${id}&type=Post&userid=${data._id}`);
+
+            if (response.data) {
+                // Find the post in the posts state and update its like count
+                const updatedPosts = posts.map(post => {
+                    if (post._id === id) {
+                        return {
+                            ...post,
+                            likes: response.data.likes
+                        };
+                    }
+                    return post;
+                });
+
+                if (response.data.data === "deleted") {
+                    // Filter out the like to be deleted from localUserLike
+                    const updatedUserLike = localUserLike.filter(like => like.id !== response.data.like_id);
+                    setLocalUserLike(updatedUserLike);
+                } else {
+                    // Use setLocalUserLike with the updated localUserLike array
+                    setLocalUserLike([...localUserLike, response.data.likes]);
                 }
+
+                // Remove setClick(true) as it's not needed here
+                setPosts(updatedPosts);
             }
 
         } catch (error) {
             console.log('fail', error);
         }
     }
+
     // Function to receive data from the child component (Comment)
     const handleDataFromChild = (data) => {
         setDataFromChild(data);
@@ -148,8 +160,7 @@ export default function Feed() {
             console.log('fail', error);
         }
     }
-
-
+    console.log("data", localUserLike)
     return (
         <div className="post__container px-10 mb-5 overflow-y-scroll">
             <form className="create-post" onSubmit={handleSubmit}>
@@ -183,7 +194,9 @@ export default function Feed() {
             {/* Feed */}
             {posts && posts.map((post, index) => {
                 const postUser = users.find(user => user._id == post.user);//Find for which user upload post 
-                const userLikedPost = post.likes && data && post.likes.some(like => like.user === data.id);//Find for user exist or not inside post like array
+                // const userLikedPost = post.likes && data && post.likes.some(like => like.user === data.id);//Find for user exist or not inside post like array
+                const userLikedPost = localUserLike && data && localUserLike?.some(like => like.likeable === post._id);//Find for user exist or not inside post like array
+                console.log("objectlike", userLikedPost)
                 return (
                     <div className="feed" key={index}>
                         <div className="feed__head">
@@ -221,7 +234,6 @@ export default function Feed() {
                                             <svg style={{ fill: userLikedPost ? "#e61a1a" : "" }} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g stroke-width="0" id="SVGRepo_bgCarrier"></g><g stroke-linejoin="round" stroke-linecap="round" id="SVGRepo_tracerCarrier"></g><g id="SVGRepo_iconCarrier"><path d="M20.808,11.079C19.829,16.132,12,20.5,12,20.5s-7.829-4.368-8.808-9.421C2.227,6.1,5.066,3.5,8,3.5a4.444,4.444,0,0,1,4,2,4.444,4.444,0,0,1,4-2C18.934,3.5,21.773,6.1,20.808,11.079Z"></path></g></svg>
                                         </div>
                                     </label>
-                                    {/* <FaRegThumbsUp style={{ color: userLikedPost ? "#6666ff" : "", animation: post.likes && post.likes.length > 0 ? "splash 0.6s linear" : "" }} /> */}
                                 </span>
                                 <AiOutlineComment onClick={() => setCommentBoxIndex(index)} />
                                 {commentBoxIndex === index && <Comment

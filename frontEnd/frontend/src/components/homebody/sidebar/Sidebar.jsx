@@ -14,23 +14,23 @@ export default function Sidebar() {
     const toggle = useSelector((state) => state.sidebartoggle);
     const [user, setUser] = useState([]);
     const [stoggle, setSToggle] = useState(false);
-    const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+    // const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
     // Get user data from local storage
     const data = JSON.parse(localStorage.getItem('Data'));
 
-    useEffect(() => {
-        // Function to update windowWidth state when the window is resized
-        const handleResize = () => {
-            setWindowWidth(window.innerWidth);
-        };
-        // Listen for window resize events and update the windowWidth state
-        window.addEventListener('resize', handleResize);
-        // Clean up the event listener when the component unmounts
-        return () => {
-            window.removeEventListener('resize', handleResize);
-        };
-    }, []);
+    // useEffect(() => {
+    //     // Function to update windowWidth state when the window is resized
+    //     const handleResize = () => {
+    //         setWindowWidth(window.innerWidth);
+    //     };
+    //     // Listen for window resize events and update the windowWidth state
+    //     window.addEventListener('resize', handleResize);
+    //     // Clean up the event listener when the component unmounts
+    //     return () => {
+    //         window.removeEventListener('resize', handleResize);
+    //     };
+    // }, []);
 
     // Fetch user data from the server using Axios
     useEffect(() => {
@@ -60,7 +60,7 @@ export default function Sidebar() {
 
     return (
         <div className="sidebar bg-white top-0 h-full border-r border-ig-separator flex flex-col overflow-y-scroll overflow-x-hidden mb-50 text-white"
-            style={{ width: windowWidth > 450 || toggle ? "80%" : "0", position: windowWidth > 450 ? "sticky" : "absolute", }} >
+            style={{ width: window.innerWidth > 450 || toggle ? "80%" : "0", position: window.innerWidth > 450 ? "sticky" : "absolute", }} >
             <div className="user__profile flex items-center gap-5 m-4 mb-0 py-2 px-4 rounded-3xl" onClick={((e) => { handleUserProfile(e, data) })}>
                 <img className='w-9 h-9 rounded-full' src={data ? data.avatar : profile} />
                 <h4>{data && data.avatar ? data.username : "Alston"}</h4>

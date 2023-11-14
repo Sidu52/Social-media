@@ -19,7 +19,7 @@ const Topbar = () => {
     const [user, setUser] = useState([]);// To store the user data fetched from the server
     const [searchValue, setSearchValue] = useState("");// To hold the value of the search input
     const [searchItem, setSearchItem] = useState([]); // To store the search results
-    const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+    // const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
     // Redux dispatch hook
     const dispatch = useDispatch();
@@ -29,11 +29,11 @@ const Topbar = () => {
     // Fetch user list from the server on component mount
     useEffect(() => {
         // Function to update windowWidth state when the window is resized
-        const handleResize = () => {
-            setWindowWidth(window.innerWidth);
-        };
-        // Listen for window resize events and update the windowWidth state
-        window.addEventListener('resize', handleResize);
+        // const handleResize = () => {
+        //     setWindowWidth(window.innerWidth);
+        // };
+        // // Listen for window resize events and update the windowWidth state
+        // window.addEventListener('resize', handleResize);
 
         const fetchUserData = async () => {
             try {
@@ -47,9 +47,9 @@ const Topbar = () => {
         };
         fetchUserData();
         // Clean up the event listener when the component unmounts
-        return () => {
-            window.removeEventListener('resize', handleResize);
-        };
+        // return () => {
+        //     window.removeEventListener('resize', handleResize);
+        // };
     }, []);
 
     // Function to sign out the user
@@ -95,7 +95,7 @@ const Topbar = () => {
         <nav >
             <div className="topnavbar">
                 <div className="topnavbar__left">
-                    <div style={{ display: windowWidth <= 450 ? "block" : "none" }}>
+                    <div style={{ display: window.innerWidth <= 450 ? "block" : "none" }}>
                         {!sidbartoggle
                             ? <AiOutlineBars onClick={((e) => handleIconClick(e, true))} />
                             : <RxCross1 onClick={((e) => handleIconClick(e, false))} />}

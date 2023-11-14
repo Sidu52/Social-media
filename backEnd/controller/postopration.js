@@ -45,12 +45,21 @@ const toggleLike = async function (req, res) {
         const like = await Like.find({
             likeable: id
         })
+        if (existingLike) {
+            return res.json(201, {
+                message: "Request successfulsss!",
+                data: "deleted",
+                likes: like
+
+            })
+        }
         return res.json(201, {
             message: "Request successfulsss!",
-            data: "deleted",
+            data: "success",
             likes: like
 
         })
+
     } catch (err) {
         console.log(err);
         return res.json(500, {
@@ -58,6 +67,85 @@ const toggleLike = async function (req, res) {
         });
     }
 }
+
+// const toggleLike = async function (req, res) {
+//     try {
+//         let likeable;
+//         const { type, id, userid } = req.query;
+
+//         if (type === 'Post') {
+//             likeable = await Post.findById(id).populate('likes');
+//         } else {
+//             likeable = await Comment.findById(id).populate('likes');
+//         }
+
+//         // check if a like already exists
+//         let existingLike = await Like.findOne({
+//             likeable: id,
+//             onModel: type,
+//             user: userid
+//         });
+
+//         // if a like already exists then delete it
+//         if (existingLike) {
+//             const session = await mongoose.startSession();
+//             session.startTransaction();
+
+//             try {
+//                 likeable.likes.pull(existingLike._id);
+//                 await likeable.save();
+
+//                 await Like.findByIdAndDelete(existingLike._id);
+
+//                 await session.commitTransaction();
+//                 session.endSession();
+//             } catch (error) {
+//                 await session.abortTransaction();
+//                 session.endSession();
+//                 throw error;
+//             }
+//         } else {
+//             // else make a new like
+//             const session = await mongoose.startSession();
+//             session.startTransaction();
+
+//             try {
+//                 let newLike = await Like.create({
+//                     user: userid,
+//                     likeable: id,
+//                     onModel: type
+//                 });
+
+//                 likeable.likes.push(newLike._id);
+//                 await likeable.save();
+
+//                 await session.commitTransaction();
+//                 session.endSession();
+//             } catch (error) {
+//                 await session.abortTransaction();
+//                 session.endSession();
+//                 throw error;
+//             }
+//         }
+
+//         const likes = await Like.find({
+//             likeable: id
+//         });
+
+//         return res.json(201, {
+//             message: "Request successful",
+//             data: existingLike ? "deleted" : "success",
+//             likes: likes
+//         });
+
+//     } catch (err) {
+//         console.log(err);
+//         return res.json(500, {
+//             message: 'Internal Server Error'
+//         });
+//     }
+// };
+
 
 //Handle Comment
 const toggleComment = async (req, res) => {
