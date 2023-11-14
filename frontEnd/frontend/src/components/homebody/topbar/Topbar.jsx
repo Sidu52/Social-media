@@ -29,11 +29,15 @@ const Topbar = () => {
     // Fetch user list from the server on component mount
     useEffect(() => {
         // Function to update windowWidth state when the window is resized
-        // const handleResize = () => {
-        //     setWindowWidth(window.innerWidth);
-        // };
-        // // Listen for window resize events and update the windowWidth state
-        // window.addEventListener('resize', handleResize);
+        const handleResize = () => {
+            if (window.innerWidth <= 450) {
+                dispatch(setsideToggle(false));
+            } else {
+                dispatch(setsideToggle(true));
+            }
+        };
+        // Listen for window resize events and update the windowWidth state
+        window.addEventListener('resize', handleResize);
 
         const fetchUserData = async () => {
             try {

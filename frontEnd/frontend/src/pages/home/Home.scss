@@ -1,20 +1,27 @@
 ::-webkit-scrollbar {
     width: 0px;
 }
+
 .homeController {
     display: grid;
-    grid-template-columns: 18% 60% 20%;
+    grid-template-columns: 20% 55% 25%;
 }
 
 @media (max-width:750px) {
     .homeController {
-        grid-template-columns: 15% 85%;
+        grid-template-columns: 30% 70%;
     }
 }
 
 @media (max-width:450px) {
     .homeController {
-        position: relative;
         grid-template-columns: 100%;
     }
+
+    // .sidebar_container {
+    //     position: absolute;
+    //     top: 0;
+    //     z-index: 1;
+    //     width: 70%;
+    // }
 }

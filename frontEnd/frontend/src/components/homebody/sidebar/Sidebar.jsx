@@ -20,17 +20,17 @@ export default function Sidebar() {
     const data = JSON.parse(localStorage.getItem('Data'));
 
     // useEffect(() => {
-    //     // Function to update windowWidth state when the window is resized
-    //     const handleResize = () => {
-    //         setWindowWidth(window.innerWidth);
-    //     };
-    //     // Listen for window resize events and update the windowWidth state
-    //     window.addEventListener('resize', handleResize);
-    //     // Clean up the event listener when the component unmounts
-    //     return () => {
-    //         window.removeEventListener('resize', handleResize);
-    //     };
-    // }, []);
+    //     // // Function to update windowWidth state when the window is resized
+    //     // const handleResize = () => {
+    //     //     setWindowWidth(window.innerWidth);
+    //     // };
+    //     // // Listen for window resize events and update the windowWidth state
+    //     // window.addEventListener('resize', handleResize);
+    //     // // Clean up the event listener when the component unmounts
+    //     // return () => {
+    //     //     window.removeEventListener('resize', handleResize);
+    //     // };
+    // }, [window.innerWidth]);
 
     // Fetch user data from the server using Axios
     useEffect(() => {
@@ -59,14 +59,13 @@ export default function Sidebar() {
     }
 
     return (
-        <div className="sidebar bg-white top-0 h-full border-r border-ig-separator flex flex-col overflow-y-scroll overflow-x-hidden mb-50 text-white"
-            style={{ width: window.innerWidth > 450 || toggle ? "80%" : "0", position: window.innerWidth > 450 ? "sticky" : "absolute", }} >
-            <div className="user__profile flex items-center gap-5 m-4 mb-0 py-2 px-4 rounded-3xl" onClick={((e) => { handleUserProfile(e, data) })}>
+        <div className="sidebar bg-white h-screen overflow-y-scroll overflow-x-hidden z-10 text-white" style={{ display: toggle ? "block" : "none" }}>
+            <div div className="user__profile flex items-center gap-5 m-4 mb-2 py-2 px-4 rounded-3xl" onClick={((e) => { handleUserProfile(e, data) })}>
                 <img className='w-9 h-9 rounded-full' src={data ? data.avatar : profile} />
                 <h4>{data && data.avatar ? data.username : "Alston"}</h4>
-            </div>
-            <div className="logo-wrapper"></div>
-            <ul className="sidebar-menu font-1rem list-none p-0 pl-8 flex flex-col">
+            </div >
+            {/* <div className="logo-wrapper"></div> */}
+            <ul className="sidebar-menu font-1rem list-none  flex flex-col">
                 <li>
                     <Link to='/home' className="nav-link">
                         <span className="icon">
@@ -121,7 +120,6 @@ export default function Sidebar() {
                 <li>
                     <a href="#" className="nav-link">
                         <p>More</p>
-
                     </a>
                 </li>
             </ul>
@@ -137,5 +135,7 @@ export default function Sidebar() {
             </div>
 
         </div >
+
+
     );
 }

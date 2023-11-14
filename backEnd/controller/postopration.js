@@ -2,7 +2,7 @@ const Like = require("../models/like");
 const Post = require("../models/post");
 const Comment = require('../models/comments');
 
-//Handle Likes
+// //Handle Likes
 const toggleLike = async function (req, res) {
     try {
         let likeable;
@@ -33,7 +33,6 @@ const toggleLike = async function (req, res) {
         } else {
             // else make a new like
             let newLike = await Like.create({
-                // req.user._id
                 user: userid,
                 likeable: id,
                 onModel: type
@@ -68,7 +67,8 @@ const toggleLike = async function (req, res) {
     }
 }
 
-// const toggleLike = async function (req, res) {
+
+
 //     try {
 //         let likeable;
 //         const { type, id, userid } = req.query;

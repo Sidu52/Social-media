@@ -21,7 +21,7 @@ import 'react-toastify/dist/ReactToastify.css';
 export default function App({ }) {
   const loading = useSelector((state) => state.loading);
   return (
-    <>
+    <div className="h-[calc(99vh-50px)] overflow-y-scroll">
       <div className="loader" style={{ display: loading ? "block" : "none" }}></div>
       <BrowserRouter>
         <Routes>
@@ -46,6 +46,6 @@ export default function App({ }) {
         </Routes >
       </ BrowserRouter>
       <ToastContainer />
-    </>
+    </div>
   )
 }

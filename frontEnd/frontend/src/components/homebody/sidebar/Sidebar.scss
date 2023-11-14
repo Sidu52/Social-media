@@ -15,6 +15,7 @@ body {
         width: 100%;
         padding: 5px 25px;
         margin-bottom: 20px;
+        transition: all 0.5s linear;
 
         img {
             width: 105px;
@@ -90,6 +91,16 @@ body {
         gap: 0;
     }
 
+    .sidebar__User {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .sidebarFrindName {
+        display: none;
+    }
+
     a.nav-link {
         justify-content: center;
 
@@ -104,29 +115,30 @@ body {
     }
 }
 
+
 @media (max-width:750px) {
     .sidebar {
-        position: absolute;
-        width: 25%;
-        // min-width: 80px;
-    }
-}
-
-@media (max-width:450px) {
-    .sidebar {
-        position: absolute;
-        top: 75px;
-        width: 80%;
+        position: static;
+        top: 0;
     }
 
     .user__profile {
         flex-direction: row;
-        gap: 2px;
+        gap: 0;
+    }
+
+    .sidebar__User {
+        display: flex;
+        align-items: center;
+        justify-content: start;
+    }
+
+    .sidebarFrindName {
+        display: block;
     }
 
     a.nav-link {
-        justify-content: normal;
-        gap: 5px;
+        justify-content: start;
 
         span {
             font-size: 1.5rem;
@@ -136,16 +148,65 @@ body {
         p {
             display: block;
         }
-
-        ;
-
     }
 
+
+
+
+    // .user__profile {
+    //     flex-direction: row;
+    //     gap: 2px;
+    // }
+
+    // a.nav-link {
+    //     justify-content: normal;
+    //     gap: 5px;
+
+    //     span {
+    //         font-size: 1.5rem;
+    //         font-weight: bold;
+    //     }
+
+    //     p {
+    //         display: block;
+    //     }
+    // }
+
+    // // .sidebar {
+    // //     position: absolute;
+    // //     left: 0;
+    // //     width: 55%;
+    // //     height: calc(100% - 55px);
+    // //     z-index: 5;
+    // // }
+
+    // .sidebar__User {
+    //     display: flex;
+    //     align-items: center;
+    //     justify-content: start;
+    // }
+
+    // .sidebarFrindName {
+    //     display: block;
+    // }
+
+}
+
+@media (max-width:600px) {
+    .user__profile {
+        flex-direction: column;
+        gap: 0;
+    }
+}
+
+@media (max-width:450px) {
     .sidebar {
         position: absolute;
-        left: 0;
-        width: 55%;
-        height: calc(100% - 55px);
-        z-index: 5;
+        width: 60%;
+    }
+
+    .user__profile {
+        flex-direction: row;
+        gap: 0;
     }
 }
