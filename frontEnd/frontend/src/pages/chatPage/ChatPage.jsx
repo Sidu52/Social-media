@@ -181,8 +181,7 @@ export default function ChatPage() {
 
                 {/* <img src={profile} alt="" /> */}
                 <div className='relative w-full flex flex-col items-center justify-center pt-10 pb-5 max-sm:py-2'>
-                    <IoArrowBackCircleOutline className='text-3xl text-gray-500 absolute top-3 left-3' onClick={() => navigate("/home/chat")} />
-
+                    <IoArrowBackCircleOutline className='text-3xl text-gray-500 absolute top-3 left-3 sm:hidden' onClick={() => navigate("/home/chat")} />
                     <div className='flex items-center justify-between w-2/4 rounded-full px-5 my-5 bg-blue-50 max-sm:w-auto'>
                         <span className='flex items-center gap-2 w-2/4 rounded-full px-5 my-5 bg-blue-50 max-sm:w-auto'>
                             <img className='w-8 h-8 rounded-full' src={reciverUser?.receiverUser?.avatar || profile} alt="" />

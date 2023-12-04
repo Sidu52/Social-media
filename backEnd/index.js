@@ -20,7 +20,7 @@ const Conversation = require('./models/Conversation');
 const { Socket } = require('socket.io');
 const io = require('socket.io')(8000, {
     cors: {
-        origin: 'https://alston-social-media-jyyt.onrender.com', // Allow only requests from this domainorigin: FrontendURL,
+        origin: 'https://siddhantsharmasocialmedia.netlify.app', // Allow only requests from this domainorigin: FrontendURL,
         // origin: 'http://192.168.139.176:5173', // Allow only requests from this domain
         // origin: 'http://192.168.29.91:5173', // Allow only requests from this domain
     }
@@ -28,7 +28,7 @@ const io = require('socket.io')(8000, {
 
 app.use(cors());
 const corsOptions = {
-    origin: 'https://alston-social-media-jyyt.onrender.com', // Allow only requests from this domain
+    origin: 'https://siddhantsharmasocialmedia.netlify.app', // Allow only requests from this domain
     // origin: 'http://192.168.139.176:5173', // Allow only requests from this domain
     // origin: 'http://192.168.29.91:5173', // Allow only requests from this domain
 
