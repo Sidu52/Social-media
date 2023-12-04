@@ -1,16 +1,17 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import axios from 'axios';
-import { URL } from '../../../endepointURL';
 import './Reels.scss';
-import { FaPlay, FaPause } from 'react-icons/fa';
+import { FaPlay } from 'react-icons/fa';
 import debounce from 'lodash/debounce';
 import Profile from '../profile/Profile';
+import { MyContext } from '../../Context/Mycontext';
 
 const Reels = () => {
     const [reels, setReels] = useState([]);
     const [active, setActive] = useState(0);
     const [isPlaying, setIsPlaying] = useState(true);
     const videoRefs = useRef([]);
+    const { URL } = useContext(MyContext);
     const user = JSON.parse(localStorage.getItem('Data'));
 
     useEffect(() => {

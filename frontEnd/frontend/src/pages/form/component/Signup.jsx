@@ -1,15 +1,16 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import axios from 'axios';
-import { URL } from '../../../../endepointURL';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setLoading } from '../../../store/Store'
 import signup from '../../../assets/image/videoSignup.mp4'
+import { MyContext } from '../../../Context/Mycontext';
 
 export default function Signup() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const { URL } = useContext(MyContext);
 
     // State variables to manage form data, OTP, and email verification  
     const [form, setForm] = useState({ username: "", email: "", otp: "", password: "", conformpassword: "" });

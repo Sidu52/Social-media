@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import "./Comment.scss";
 import axios from "axios";
-import { URL } from "../../../../../endepointURL";
+import { MyContext } from "../../../../Context/Mycontext";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import profile from "../../../../assets/image/profile.png";
@@ -10,6 +10,7 @@ import EmojiPicker from 'emoji-picker-react';
 
 export default function Comment({ post, users, localuser, localUserLike }) {
     const navigate = useNavigate();
+    const { URL } = useContext(MyContext);
     const [commentinput, setCommentInput] = useState("");
     const [data, setData] = useState([]);
     const [comment, setComment] = useState([]);

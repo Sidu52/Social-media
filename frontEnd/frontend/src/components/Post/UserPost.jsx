@@ -1,8 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { useSelector } from 'react-redux';
-import { URL } from '../../../endepointURL';
 import { FaHeart, FaCommentAlt } from "react-icons/fa";
+import { MyContext } from '../../Context/Mycontext';
 export default function UserPost() {
+    const { URL } = useContext(MyContext);
+
     // Access the 'posts' state from the Redux store using the 'useSelector' hook
     const post = useSelector((state) => state.posts);
     const [hoverIndex, setHoverIndex] = useState(null);

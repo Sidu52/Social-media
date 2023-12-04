@@ -1,11 +1,12 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useContext } from 'react'
 import { useNavigate } from 'react-router-dom';
 import './welcome.scss'; // Don't forget to import your CSS file
-import { URL } from '../../../endepointURL';
+import { MyContext } from '../../Context/Mycontext';
 import axios from 'axios';
 
 export default function welcome() {
     const navigate = useNavigate();
+    const { URL } = useContext(MyContext);
 
     useEffect(() => {
         axios.get(URL);

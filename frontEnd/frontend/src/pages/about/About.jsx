@@ -1,8 +1,10 @@
 
 import './About.scss';
+import Navbar from '../../components/navbar/Navbar'
 export default function About() {
     return (
         <div>
+            <Navbar />
             <div className="company">
                 <div className="img">
                     <img src="https://raw.githubusercontent.com/pico-india/main-django/main/static/about-team.jpg" alt="" />

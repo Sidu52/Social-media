@@ -140,8 +140,8 @@ export default function ChatPage() {
     }, [id, onlineUser])
 
     return (
-        <div className='chatbox_Container grid h-screen' >
-            <div className='sideBox p-5 bg-blue-50 max-sm:h-screen' style={{ display: window.innerWidth > 500 || !id ? 'grid' : 'none' }}>
+        <div className='chatbox_Container grid h-screen content-baseline' >
+            <div className='sideBox p-5 bg-blue-50 max-sm:h-screen flex-col h-screen' style={{ display: window.innerWidth > 500 || !id ? 'flex' : 'none' }}>
                 <div className='flex items-center gap-2'>
                     <IoArrowBackCircleOutline className='text-3xl text-gray-500' onClick={() => navigate("/home")} />
                     <img className='w-10 h-10 rounded-full cursor-pointer' src={localuser?.avatar || profile} alt="" onClick={((e) => { handleUserProfile(e, localuser) })} />
@@ -151,7 +151,7 @@ export default function ChatPage() {
                     </span>
                 </div>
                 <hr className='my-5' />
-                <div>
+                <div className='flex-1'>
                     <p className=' text-blue-500 font-semibold mb-5'>Messages</p>
                     <div className=' relative pb-5'>
                         <input type="search" placeholder='Search users...' className='w-full rounded-full border p-2 outline-none pl-9' value={searchValue} onChange={((e) => { handleSerach(e) })} />
@@ -177,7 +177,7 @@ export default function ChatPage() {
                     ))}
                 </div>
             </div>
-            <div className='h-full overflow-y-scroll'>
+            <div className='h-full overflow-y-scroll flex flex-col'>
 
                 {/* <img src={profile} alt="" /> */}
                 <div className='relative w-full flex flex-col items-center justify-center pt-10 pb-5 max-sm:py-2'>
