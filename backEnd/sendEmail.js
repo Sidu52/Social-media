@@ -15,6 +15,7 @@ const transporter = nodemailer.createTransport({
     }
 });
 const sendOTP = async (type, toEmail, name, companyName, message) => {
+    console.log(type, toEmail, name, companyName, message)
     try {
         if (type === "OTP") {
             const mailOptions = {

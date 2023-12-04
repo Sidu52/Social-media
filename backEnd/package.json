@@ -29,6 +29,7 @@
     "passport-google-oauth": "^2.0.0",
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
-    "socket.io": "^4.7.1"
+    "react-multistep": "^5.5.9",
+    "socket.io": "^4.7.2"
   }
 }

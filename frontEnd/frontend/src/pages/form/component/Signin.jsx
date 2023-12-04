@@ -1,35 +1,35 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import axios from 'axios';
-import { URL } from '../../../../endepointURL';
+import { MyContext } from "../../../Context/Mycontext";
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setLoading } from '../../../store/Store'
+import login from '../../../assets/image/videologin.mp4'
 
 export default function Signin() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const { setOnlineUser, URL, socket } = useContext(MyContext);
+    const data = JSON.parse(localStorage.getItem('Data'));
 
     // State variables to manage form data
     const [form, setForm] = useState({ email: "", password: "" });
 
     // Check if the user is already logged in using useEffect
-    useEffect(() => {
-        const fetchUserData = async () => {
-            try {
-                const response = await axios.get(`${URL}/user/login`);
-                if (response.data.data) {
-                    // If the user is already logged in, navigate to the home page
-                    navigate("/home");
-                } else {
-                    // If the user is not logged in, show the signin form
-                    navigate("/form/signin")
-                }
-            } catch (error) {
-                console.error("Error fetching user data:", error);
-            }
-        };
-        fetchUserData();
-    }, []);
+    // useEffect(() => {
+    //     if (data) {
+    //         socket.emit('userLogin', data);
+    //     }
+    // }, []);
+
+    // socket.on('updateUsers', async () => {
+    //     try {
+    //         const { data } = await axios.get(`${URL}/user/Onlineuser`);
+    //         setOnlineUser(data.data);
+    //     } catch (error) {
+    //         console.error("Error fetching user data:", error);
+    //     }
+    // });
 
     // Function to handle user signin
     const onSubmit = async (e) => {
@@ -45,37 +45,49 @@ export default function Signin() {
             localStorage.setItem('Data', JSON.stringify(user));
             if (response.data.data) {
                 dispatch(setLoading(false));
-                // If signin is successful, navigate to the home page
                 navigate("/");
+                // socket.emit('userLogin', response.data.user);
             }
         } catch (error) {
             console.log("fail", error);
         }
     }
+
     return (
-        <div className="formContainer">
-            <h2 className='text'>Login</h2>
-            <form>
-                <div className="user-box">
-                    <input
-                        type="text"
-                        onChange={((e) => { setForm({ ...form, email: e.target.value }) })}
-                        name="email"
-                        value={form.email}
-                        required="" />
-                    <label>Email</label>
-                </div>
-                <div className="user-box">
-                    <input
-                        type="password"
-                        onChange={((e) => { setForm({ ...form, password: e.target.value }) })}
-                        name="password"
-                        value={form.password}
-                        required="" />
-                    <label>Password</label>
-                </div>
-                <a className="submit__button btn" onClick={onSubmit}>Submit</a>
-            </form>
-        </div >
+        <div className='bg-white h-fit  max-w-3xl flex max-sm:flex-col mx-2 rounded-xl'>
+            <div className=' w-3/4 h-full max-sm:h-2/6 max-sm:w-full'>
+                <video className='w-full h-full object-cover' src={login} loop autoPlay muted />
+            </div>
+
+            <div className='w-full'>
+                <p className='text-center mt-3'>SignIn</p>
+                <form className='LoginForm  flex flex-col justify-center'>
+
+                    <div className='relative mt-2 mx-4'>
+                        <input
+                            className='w-full bg-transparent p-1 text-base mb-4 border-b-2 outline-none'
+                            type="text"
+                            onChange={((e) => { setForm({ ...form, email: e.target.value }) })}
+                            name="email"
+                            value={form.email}
+                            required />
+                        <label className='absolute -top-1 left-0 transition-all duration-300 ease-linear '>Email</label>
+                    </div>
+                    <div className='relative mx-4 mt-2'>
+                        <input
+                            className='w-full bg-transparent p-1 text-base mb-4 border-b-2 outline-none'
+                            type="password"
+                            onChange={((e) => { setForm({ ...form, password: e.target.value }) })}
+                            name="password"
+                            value={form.password}
+                            required />
+                        <label className='absolute -top-1 left-0 transition-all duration-300 ease-linear '>Password</label>
+                    </div>
+                    <a className="px-4 py-2 mx-4 mb-5 w-24 rounded-xl bg-neutral-100 cursor-pointer" onClick={onSubmit}>
+                        Submit
+                    </a>
+                </form>
+            </div>
+        </div>
     )
 }

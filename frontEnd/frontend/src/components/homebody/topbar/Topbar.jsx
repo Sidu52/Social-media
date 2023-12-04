@@ -56,24 +56,6 @@ const Topbar = () => {
         // };
     }, []);
 
-    // Function to sign out the user
-    const userSignout = async () => {
-        try {
-            // toast.warn('Loading');
-            const response = await axios.post(`${URL}/user/signout`);
-            if (response.data) {
-                localStorage.clear();// Clear user data from local storage
-                toast.success(response.data.message);// Show success message using toast
-                window.location.reload();// Refresh the page after sign out
-                // Remove session cookies
-                document.cookie = 'connect.sidhu; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-
-            }
-
-        } catch (error) {
-            console.log('fail', error);
-        }
-    }
 
     // Set local storage data for profile show
     const handleLinkClick = () => {
@@ -154,7 +136,7 @@ const Topbar = () => {
                                     <li>
                                         <hr className="dropdown-divider" />
                                     </li>
-                                    <li><Link className="dropdown-item" onClick={userSignout}>Logout</Link></li>
+                                   
                                 </>}
                         </ul>
                     </div>

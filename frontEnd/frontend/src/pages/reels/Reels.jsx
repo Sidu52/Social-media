@@ -55,6 +55,28 @@ const Reels = () => {
         }
     }, 200);
 
+    let touchStartY = null;
+    let touchEndY = null;
+    const handleTouchStart = (e) => {
+        touchStartY = e.touches[0].clientY;
+    };
+    const handleTouchMove = debounce((e) => {
+        if (touchStartY === null) {
+            return;
+        }
+        touchEndY = e.touches[0].clientY;
+        const touchDiff = touchEndY - touchStartY;
+
+        if (touchDiff > 0) {
+            goNext();
+        } else if (touchDiff < 0) {
+            goPrev();
+        }
+        touchStartY = null;
+        touchEndY = null;
+    }, 200);
+
+
     const goPrev = () => {
         setIsPlaying(false); // Pause current video
         videoRefs.current[active].current.pause(); // Explicitly pause the current video
@@ -73,15 +95,19 @@ const Reels = () => {
 
 
     return (
-        <div className="post__container reels-container" onWheel={handleScroll} >
+        <div className="reels-container h-screen  max-sm:h-[80vh]"
+            onWheel={handleScroll}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+        >
             <div className="reels-wrapper">
                 {reels.map((reel, index) => (
-                    <div key={index} style={{ position: 'relative',height:"100%" }}>
+                    <div key={index} className=' relative h-full'>
                         <video
                             onClick={toggleVideoPlay}
                             autoPlay={index === active}
                             loop={index === active}
-                            className={`reel-video ${index === active ? 'active' : ''}`}
+                            className={`reel-video ${index === active ? 'active' : ''} rounded-lg h-full`}
                             src={reel.fileUrl}
                             ref={videoRefs.current[index]}
                         />
@@ -92,19 +118,18 @@ const Reels = () => {
                                         src={user && user.avatar ? user.avatar : Profile}
                                         style={{ width: "40px", height: "40px", borderRadius: "50%" }}
                                     />
-                                    <h3>{user.username}</h3>
+                                    <h3>{user?.username}</h3>
                                 </div>
-                                <p>{reel.content}</p>
+                                <p className='text-xs'>{reel.content}</p>
                             </div>
                         )}
                     </div>
                 ))}
             </div>
-            <div className="play-toggle" onClick={toggleVideoPlay}>
-                {isPlaying ? null : <FaPlay className={!isPlaying ? "svgPause" : ""} />}
+            <div className="absolute top-2/4 left-[47%] origin-center cursor-pointer text-white text-4xl" onClick={toggleVideoPlay}>
+                {isPlaying ? null : <FaPlay />}
             </div>
         </div>
     );
 };
-
 export default Reels;

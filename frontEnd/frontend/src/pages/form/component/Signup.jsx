@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setLoading } from '../../../store/Store'
+import signup from '../../../assets/image/videoSignup.mp4'
 
 export default function Signup() {
     const navigate = useNavigate();
@@ -114,73 +115,154 @@ export default function Signup() {
     };
 
     return (
-        <div className="formContainer">
-            <h2 className='text'>SignUp</h2>
-            <form>
-                <div className="user-box">
-                    <input
-                        type="text"
-                        onChange={((e) => { setForm({ ...form, username: e.target.value }) })}
-                        name="username"
-                        value={form.username}
-                        required />
-                    <label>Username</label>
-                </div>
-                <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                    <div className="user-box" style={{ width: "60%" }}>
+        // <div className="formContainer">
+        //     <h2 className='text'>SignUp</h2>
+        //     <form>
+        //         <div className="user-box">
+        //             <input
+        //                 type="text"
+        //                 onChange={((e) => { setForm({ ...form, username: e.target.value }) })}
+        //                 name="username"
+        //                 value={form.username}
+        //                 required />
+        //             <label>Username</label>
+        //         </div>
+        //         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+        //             <div className="user-box" style={{ width: "60%" }}>
+        //                 <input
+        //                     type="email"
+        //                     readOnly={emailverify}
+        //                     onChange={((e) => { setForm({ ...form, email: e.target.value }) })}
+        //                     name="email"
+        //                     value={form.email}
+        //                     required
+        //                 />
+        //                 <label>Email</label>
+        //             </div>{
+        //                 emailverify ?
+        //                     <button className='button1' style={{ background: "green", color: "#fff" }}>Verify</button> :
+        //                     <button className='button1' onClick={sendOTP}>Genrate OTP</button>
+        //             }
+        //         </div>
+        //         {/* OTP VERIFICATION */}
+        //         <div
+        //             style={{ display: otpform && !emailverify ? "flex" : "none", alignItems: "center", gap: "10px" }}>
+        //             <div className="user-box" style={{ width: "60%" }}>
+        //                 <input
+        //                     type="Number"
+        //                     onChange={((e) => { setForm({ ...form, otp: e.target.value }) })}
+        //                     name="otp"
+        //                     value={form.otp}
+        //                     min="1000"
+        //                     max="9999"
+        //                     required />
+        //                 <label>Enter OTP</label>
+        //             </div>
+        //             <button className='button1' onClick={handleOTP}>Verify</button>
+        //         </div>
+        //         <div className="user-box">
+        //             <input
+        //                 type="password"
+        //                 onChange={((e) => { setForm({ ...form, password: e.target.value }) })}
+        //                 name="password"
+        //                 value={form.password}
+        //                 required="" />
+        //             <label>Password</label>
+        //         </div>
+        //         <div className="user-box">
+        //             <input
+        //                 type="password"
+        //                 onChange={((e) => { setForm({ ...form, conformpassword: e.target.value }) })}
+        //                 name="Conform_password"
+        //                 value={form.conformpassword}
+        //                 required="" />
+        //             <label>Conform-Password</label>
+        //         </div>
+        //         <a className="submit__button btn" onClick={onSubmit}>
+        //             Submit
+        //         </a>
+        //     </form>
+        // </div>
+
+        <div className='bg-white h-4/6  max-w-3xl flex max-sm:flex-col mx-2 rounded-xl'>
+            <div className=' w-3/4 h-full max-sm:h-2/6 max-sm:w-full'>
+                <video className='w-full h-full object-cover' src={signup} loop autoPlay />
+            </div>
+
+            <div className='w-full'>
+                <p className='text-center mt-3'>SignUp</p>
+                <form className='LoginForm  flex flex-col justify-center'>
+                    <div className='relative mx-4 mt-2'>
                         <input
-                            type="email"
-                            readOnly={emailverify}
-                            onChange={((e) => { setForm({ ...form, email: e.target.value }) })}
-                            name="email"
-                            value={form.email}
-                            required
-                        />
-                        <label>Email</label>
-                    </div>{
-                        emailverify ?
-                            <button className='button1' style={{ background: "green", color: "#fff" }}>Verify</button> :
-                            <button className='button1' onClick={sendOTP}>Genrate OTP</button>
-                    }
-                </div>
-                {/* OTP VERIFICATION */}
-                <div
-                    style={{ display: otpform && !emailverify ? "flex" : "none", alignItems: "center", gap: "10px" }}>
-                    <div className="user-box" style={{ width: "60%" }}>
-                        <input
-                            type="Number"
-                            onChange={((e) => { setForm({ ...form, otp: e.target.value }) })}
-                            name="otp"
-                            value={form.otp}
-                            min="1000"
-                            max="9999"
+                            className=' w-full bg-transparent p-1 text-base mb-6 border-b-2 outline-none'
+                            type="text"
+                            onChange={((e) => { setForm({ ...form, username: e.target.value }) })}
+                            name="username"
+                            value={form.username}
                             required />
-                        <label>Enter OTP</label>
+                        <label className='absolute -top-1 left-0 transition-all duration-300'>Username</label>
                     </div>
-                    <button className='button1' onClick={handleOTP}>Verify</button>
-                </div>
-                <div className="user-box">
-                    <input
-                        type="password"
-                        onChange={((e) => { setForm({ ...form, password: e.target.value }) })}
-                        name="password"
-                        value={form.password}
-                        required="" />
-                    <label>Password</label>
-                </div>
-                <div className="user-box">
-                    <input
-                        type="password"
-                        onChange={((e) => { setForm({ ...form, conformpassword: e.target.value }) })}
-                        name="Conform_password"
-                        value={form.conformpassword}
-                        required="" />
-                    <label>Conform-Password</label>
-                </div>
-                <a className="submit__button btn" onClick={onSubmit}>
-                    Submit
-                </a>
-            </form>
+                    <div className='flex items-center gap-2 mx-4 '>
+                        <div className='relative mt-2'>
+                            <input
+                                className='w-full bg-transparent p-1 text-base mb-4 border-b-2 outline-none'
+                                type="email"
+                                readOnly={emailverify}
+                                onChange={((e) => { setForm({ ...form, email: e.target.value }) })}
+                                name="email"
+                                value={form.email}
+                                required />
+                            <label className='absolute -top-1 left-0 transition-all duration-300 ease-linear '>Email</label>
+                        </div> {emailverify ?
+                            <button className='p-2 border-none rounded-md font-medium min-w-fit' style={{ background: "green", color: "#fff" }}>Verify</button> :
+                            <button className='p-2 border-none rounded-md font-medium min-w-fit bg-gray-100 cursor-pointer' onClick={sendOTP}>Genrate OTP</button>
+                        }
+                    </div>
+                    {/* OTP VERIFICATION */}
+                    <div
+                        style={{ display: otpform && !emailverify ? "flex" : "none", alignItems: "center", gap: "10px" }}>
+                        <div className='relative mt-2 mx-4' style={{ width: "60%" }}>
+                            <input
+                                className='w-full bg-transparent p-1 text-base mb-4 border-b-2 outline-none'
+                                type="Number"
+                                onChange={((e) => { setForm({ ...form, otp: e.target.value }) })}
+                                name="otp"
+                                value={form.otp}
+                                min="1000"
+                                max="9999"
+                                required />
+                            <label className='absolute -top-1 left-0 transition-all duration-300 ease-linear'>Enter OTP</label>
+                        </div>
+                        <button className='p-2 border-none rounded-md font-medium min-w-fit cursor-pointer' onClick={handleOTP}>Verify</button>
+                    </div>
+                    <div className='relative mx-4 mt-2'>
+                        <input
+                            className='w-full bg-transparent p-1 text-base mb-4 border-b-2 outline-none'
+                            type="password"
+                            onChange={((e) => { setForm({ ...form, password: e.target.value }) })}
+                            name="password"
+                            value={form.password}
+                            required />
+                        <label className='absolute -top-1 left-0 transition-all duration-300 ease-linear '>Password</label>
+                    </div>
+                    <div className='relative mx-4 mt-2'>
+                        <input
+                            className='w-full bg-transparent p-1 text-base mb-4 border-b-2 outline-none'
+                            type="password"
+                            onChange={((e) => { setForm({ ...form, conformpassword: e.target.value }) })}
+                            name="Conform_password"
+                            value={form.conformpassword}
+                            required />
+                        <label className='absolute -top-1 left-0 transition-all duration-300 ease-linear '>Conform-Password</label>
+                    </div>
+                    <a className="px-4 py-2 mx-4 w-24 rounded-xl bg-neutral-100 cursor-pointer" onClick={onSubmit}>
+                        Submit
+                    </a>
+                </form>
+            </div>
         </div>
+
+
+
     )
 }

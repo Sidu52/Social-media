@@ -16,7 +16,17 @@ const user = new mongoose.Schema({
         type: String,
         required: true
     },
+    bio: {
+        type: String,
+    },
+    online: {
+        type: Boolean,
+        default: false
+    },
     avatar: {
+        type: String
+    },
+    gender: {
         type: String
     },
     followers: [

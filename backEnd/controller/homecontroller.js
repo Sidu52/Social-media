@@ -67,37 +67,92 @@ const createPost = async (req, res) => {
         });
     }
 };
-
-//Update user Avtar
-const updateUserAvatar = async (req, res) => {
+// Delete post
+const deltePost = async (req, res) => {
     try {
-        console.log("ENter1", req.body)
-        console.log("ENter2", req.file)
-        const { user } = req.body;
-        const { path } = req.file;
-        let uploadedFile;
-        // Upload image file
-        uploadedFile = await cloudinary.uploader.upload(path, {
-            folder: "samples"
-        });
-
-        const findUser = await User.findByIdAndUpdate(user);
-        const post = await Post.find({ user })
-
-        findUser.avatar = uploadedFile.secure_url
-        await findUser.save();// Save the post to the database
-        // Delete the local file after upload
-        fs.unlinkSync(path);
-
-        return res.status(201).json({
-            message: "Post upload Succesful",
-            user: findUser,
-            data: post
-        });
+        const { PostID } = req.body;
+        const data = await Post.findByIdAndDelete(PostID);
+        res.status(200).json({ message: "Post Delete Successful", data: data });
     } catch (err) {
-        res.status(500).json({ error: err })
+        res.status(500).json({ message: "Server Error", error: err });
     }
 }
+
+//Update Post Content
+const updatePost = async (req, res) => {
+    try {
+        const { PostID } = req.body;
+        console.log(req.body);
+        const data = await Post.findByIdAndUpdate(PostID, { ...req.body });
+        res.status(200).jsonjson({ message: "Post Upddate Succesful", data: data });
+    } catch (err) {
+        res.status(500).jsonjson({ message: "Server Error", err });
+    }
+}
+
+
+const updateUserAvatar = async (req, res) => {
+    try {
+        const { id } = req.body;
+        let uploadedFileUrl = null;
+
+        if (req.file) {
+            const { path } = req.file;
+            const uploadedFile = await cloudinary.uploader.upload(path, {
+                folder: "samples"
+            });
+            uploadedFileUrl = uploadedFile.secure_url;
+
+            fs.unlinkSync(path); // Remove the temporary file after upload
+        }
+
+        // Prepare data for update, considering whether req.file exists
+        const updateData = req.file ? { avatar: uploadedFileUrl } : { ...req.body };
+
+        // Update user data in the database based on the condition
+        const data = await User.findByIdAndUpdate(id, updateData, { new: true });
+
+        return res.status(201).json({
+            message: "User update successful",
+            user: data,
+        });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
+
+
+// const updateUserAvatar = async (req, res) => {
+//     try {
+//         const { id, ...updateData } = req.body;
+//         const { path } = req.file;
+//         let uploadedFile;
+//         // Upload image file
+//         uploadedFile = await cloudinary.uploader.upload(path, {
+//             folder: "samples"
+//         });
+
+//         // const findUser = await User.findByIdAndUpdate(id);
+//         const data = await User.findByIdAndUpdate(id,
+//             {
+//                 updateData,
+//                 avatar: uploadedFile.secure_url
+//             },
+//             { new: true }); // Use updateData separately for updates
+//         // findUser.avatar = uploadedFile.secure_url
+//         // await findUser.save();// Save the post to the database
+//         // Delete the local file after upload
+//         fs.unlinkSync(path);
+
+//         return res.status(201).json({
+//             message: "User update Succesful",
+//             user: data,
+//             // data: post
+//         });
+//     } catch (err) {
+//         res.status(500).json({ error: err })
+//     }
+// }
 //Get All Post
 const getPosts = async (req, res) => {
     try {
@@ -199,4 +254,4 @@ const savepost = async (req, res) => {
 };
 
 
-module.exports = { createPost, updateUserAvatar, getPosts, getReels, getpostanduserByID, savepost }
+module.exports = { createPost, updateUserAvatar, getPosts, getReels, getpostanduserByID, savepost, deltePost, updatePost }

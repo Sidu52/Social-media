@@ -1,0 +1,17 @@
+.chatbox_Container {
+    grid-template-columns: 30% 70%;
+}
+
+@media (max-width:640px) {
+    .chatbox_Container {
+        grid-template-columns: 100%;
+    }
+}
+
+@media (min-width:640px) {
+    .chatbox_Container {
+        .sideBox {
+            display: grid !important;
+        }
+    }
+}

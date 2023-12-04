@@ -22,6 +22,26 @@ async function getAlluser(req, res) {
     }
 }
 
+async function updateUser(req, res) {
+    try {
+        const { id, ...updateData } = req.body;
+        const data = await User.findByIdAndUpdate(id, updateData, { new: true }); // Use updateData separately for updates
+        return res.status(201).json({ message: "User update successful", data });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+}
+
+
+const getOnlineuser = async (req, res) => {
+    try {
+        const user = await User.find({ online: true });//find Onlineuser from data
+        return res.status(201).json({ message: "user find sucessfull", data: user })
+    } catch (error) {
+        res.status(500).json({ error: error })
+    }
+}
+
 //Create User
 async function singup(req, res) {
     try {
@@ -40,6 +60,7 @@ async function singup(req, res) {
                     username,
                     email,
                     password: hashedPassword,
+                    bio: ""
                 });
                 await newUser.save();
                 return res.status(201).json({ message: 'Signup successful!', action: true, user: newUser });
@@ -217,4 +238,4 @@ const contactMail = (req, res) => {
 }
 
 
-module.exports = { loginpage, singup, signin, emailverification, otpverification, getAlluser, signout, follower, getfollowers, contactMail }
+module.exports = { updateUser, loginpage, singup, signin, emailverification, otpverification, getAlluser, getOnlineuser, signout, follower, getfollowers, contactMail }

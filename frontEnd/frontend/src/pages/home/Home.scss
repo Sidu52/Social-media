@@ -1,27 +1,44 @@
-::-webkit-scrollbar {
-    width: 0px;
+// ::-webkit-scrollbar {
+//     width: 0px;
+// }
+
+// .homeController {
+//     display: grid;
+//     grid-template-columns: 20% 55% 25%;
+// }
+
+// @media (max-width:750px) {
+//     .homeController {
+//         grid-template-columns: 30% 70%;
+//     }
+// }
+
+// @media (max-width:450px) {
+//     .homeController {
+//         grid-template-columns: 100%;
+//     }
+
+//     // .sidebar_container {
+//     //     position: absolute;
+//     //     top: 0;
+//     //     z-index: 1;
+//     //     width: 70%;
+//     // }
+// }
+
+
+.home_container {
+    grid-template-columns: 20% 55% 20%;
 }
 
-.homeController {
-    display: grid;
-    grid-template-columns: 20% 55% 25%;
-}
-
-@media (max-width:750px) {
-    .homeController {
-        grid-template-columns: 30% 70%;
+@media (max-width:1024px) {
+    .home_container {
+        grid-template-columns: 20% 80%;
     }
 }
 
-@media (max-width:450px) {
-    .homeController {
+@media (max-width:640px) {
+    .home_container {
         grid-template-columns: 100%;
     }
-
-    // .sidebar_container {
-    //     position: absolute;
-    //     top: 0;
-    //     z-index: 1;
-    //     width: 70%;
-    // }
 }

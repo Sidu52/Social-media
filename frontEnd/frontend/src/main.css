@@ -1,3 +1,4 @@
+ @import url('https://fonts.googleapis.com/css2?family=Black+And+White+Picture&family=Caveat:wght@700&family=Dancing+Script:wght@500&family=Inter:wght@300;400;500;600;800&display=swap');
 :root {
     --color-primary:#cc2366 ;
     --color-primary-secondary:#bc1888 ;
@@ -22,6 +23,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+::-webkit-scrollbar {
+    width: 0;
+  }
 
 .loader {
     width: 100%;
