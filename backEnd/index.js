@@ -15,18 +15,19 @@ const passportGoogle = require('./config/passport-google-oauth2-strategy');
 const app = express();
 const port = process.env.PORT || 4000;
 const User = require("./models/user");
+const FrontendURL = process.env.FRONTEND_URL;
 const Notification = require("./models/notification");
 const Conversation = require('./models/Conversation');
 const { Socket } = require('socket.io');
 const io = require('socket.io')(8000, {
     cors: {
-        origin: 'http://localhost:5173',
+        origin: FrontendURL,
     }
 });
 
 app.use(cors());
 const corsOptions = {
-    origin: 'http://localhost:5173', // Allow only requests from this domain
+    origin: FrontendURL, // Allow only requests from this domain
     // origin: 'http://192.168.139.176:5173', // Allow only requests from this domain
     // origin: 'http://192.168.29.91:5173', // Allow only requests from this domain
 
