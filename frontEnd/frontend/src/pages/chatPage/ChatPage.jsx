@@ -139,6 +139,7 @@ export default function ChatPage() {
         fetchConversionData()
     }, [id, onlineUser])
 
+    console.log(conversation)
     return (
         <div className='chatbox_Container grid h-screen content-baseline' >
             <div className='sideBox p-5 bg-blue-50 max-sm:h-screen flex-col h-screen' style={{ display: window.innerWidth > 500 || !id ? 'flex' : 'none' }}>
@@ -151,14 +152,14 @@ export default function ChatPage() {
                     </span>
                 </div>
                 <hr className='my-5' />
-                <div className='flex-1'>
+                <div className='flex-1 h-screen overflow-y-scroll'>
                     <p className=' text-blue-500 font-semibold mb-5'>Messages</p>
                     <div className=' relative pb-5'>
                         <input type="search" placeholder='Search users...' className='w-full rounded-full border p-2 outline-none pl-9' value={searchValue} onChange={((e) => { handleSerach(e) })} />
                         <IoSearchOutline className=' absolute top-3 left-3' />
                     </div>
                     {searchItem?.map(({ user }, index) => (
-                        <div key={index} className='h-screen overflow-y-scroll'>
+                        <div key={index} >
                             <div className='flex items-center gap-2 relative'>
                                 <img className='w-8 h-8 rounded-full cursor-pointer' src={user?.avatar || profile} alt="profile"
                                     onClick={() => {

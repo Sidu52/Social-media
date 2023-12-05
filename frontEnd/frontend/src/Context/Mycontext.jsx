@@ -11,21 +11,15 @@ function MyProvider(props) {
   const [chatWindow, setChatWindow] = useState(true);
 
   useEffect(() => (
-    // setSocket(io('http://localhost:8000'))
-    setSocket(io('https://socail-media-backend.onrender.com'))
+    // setSocket(io('http://localhost:9000'))
+    // setSocket(io("http://192.168.139.176:9000"))
+    setSocket(io(`https://alston-social-media-jyyt.onrender.com`))
   ), [])
-  // const Token = "W4lyaidIGicUCR1gCtaC2JEbn4D2AvzyRwRAHCCcUjvWOx6Epe";
 
   // const URL = "http://localhost:9000";
   // const URL = "http://192.168.29.91:9000"
   // const URL = "http://192.168.139.176:9000"
-  const URL = "https://socail-media-backend.onrender.com";
-
-  // const socket = io("http://localhost:9000"); // Replace with your server URL
-  // const socket = io("http://192.168.29.91:9000"); // Replace with your server URL
-  // const socket = io("http://192.168.139.176:9000"); // Replace with your server URL
-  // const socket = io("https://socail-media-backend.onrender.com"); // Replace with your server URL
-  // const socket = ""
+  const URL = "https://alston-social-media-jyyt.onrender.com";
 
   return (
     <MyContext.Provider value={{ onlineUser, posts, setPosts, notification, setNotifications, setOnlineUser, chatWindow, setChatWindow, URL, socket }}>
