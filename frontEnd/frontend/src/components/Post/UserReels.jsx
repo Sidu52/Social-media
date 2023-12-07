@@ -1,22 +1,33 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { useSelector } from 'react-redux';
 import { FaHeart, FaCommentAlt } from "react-icons/fa";
-
+import { MyContext } from '../../Context/Mycontext';
 export default function UserReels() {
     // Access the 'video post' state from the Redux store using the 'useSelector' hook
-    const post = useSelector((state) => state.reels);
+    // const post = useSelector((state) => state.reels);
+    const { URL, posts } = useContext(MyContext);
+    const data = JSON.parse(localStorage.getItem('Data'));
+    const post = posts.filter((item) => {
+        // Check if the fileType is one of the specified types and the user matches data._id
+        return (
+            (item.fileType === 'mp4' || item.fileType === 'avi' ||
+                item.fileType === 'mov' || item.fileType === 'wmv') &&
+            item.user === data._id
+        );
+    });
+
     const [hoverIndex, setHoverIndex] = useState(null);
 
     return (
-        <div className="profile_post_contaienr h-80 overflow-y-scroll flex flex-col justify-center max-lg:h-96">
-            <div className='grid grid-cols-3 items-center w-full h-full gap-2'>
+        <div>
+            <div className='grid grid-cols-3 items-center w-full gap-2'>
                 {post.map((data, index) => (
                     data.fileUrl ? (
-                        <div className='relative h-64 max-lg:h-52 max-md:h-40 max-sm:h-28'
+                        <div className='relativef-full'
                             onMouseEnter={() => setHoverIndex(index)}
                             onMouseLeave={() => setHoverIndex(null)}
                             key={index}>
-                            <div className="relative flex items-center w-full h-full">
+                            <div className="relative flex items-center max-w-80 h-64">
                                 {data.fileType === 'png' || data.fileType === 'jpg' || data.fileType === 'jpeg' ||
                                     data.fileType === 'gif' || data.fileType === 'webp' || data.fileType === 'jfif' ? (
                                     <img src={data.fileUrl} className="w-full h-full" alt="Post" />

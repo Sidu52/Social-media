@@ -7,6 +7,8 @@ export default {
   theme: {
     extend: {
       width: ['important'],
+      smmax: { max: '540px' }, // Define a custom breakpoint 'sm-max' for max-width: 400px
+
     },
   },
   plugins: [],

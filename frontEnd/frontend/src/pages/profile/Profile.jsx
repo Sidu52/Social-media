@@ -158,9 +158,8 @@ export default function Profile() {
         }
         setCurrentStep(1)
     };
-    // console.log(data?.followers.includes(user?.id))
     return (
-        <div className='profile_container grid mx-4 ' >
+        <div className='profile_container grid mx-4 justify-between '>
             {profiletoggle ?
                 <div className='absolute top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center z-10'>
                     <MdClose className='absolute top-0 max-sm:top-16 right-2 bg-gray-100 rounded-full text-4xl' onClick={() => setProfiletoggle(false)} />
@@ -173,9 +172,7 @@ export default function Profile() {
                                     <p className='cursor-pointer text-blue-400'>Change_profile</p>
                                     <input type="file" id="file" onChange={handleImageUpload} accept="image/*" style={{ display: "none" }} />
                                 </label>
-
                             </span>
-
                         </div>
                         <hr className='mb-2' />
                         <span className='flex gap-2'>
@@ -190,14 +187,11 @@ export default function Profile() {
                                         onClick={(e) => setForm({ ...form, gender: e.target.value })} />
                                     <label>Male </label>
                                 </span>
-
                                 <span className="radio_span">
                                     <input type="radio" name="Gender" value="female" defaultChecked={form.gender === "female"}
                                         onClick={(e) => setForm({ ...form, gender: e.target.value })} />
                                     <label>Female </label>
                                 </span>
-
-
                                 <span className="radio_span">
                                     <input type="radio" name="Gender" value="other" defaultChecked={form.gender === "other"}
                                         onClick={(e) => setForm({ ...form, gender: e.target.value })} />
@@ -205,11 +199,9 @@ export default function Profile() {
                                 </span>
                             </div>
                         </span>
-
                         <button className=' bottom-1 rounded-lg py-2 px-4 my-2 bg-gray-100 cursor-pointer' onClick={handleSubmit}>Submit</button>
                     </div>
                 </div> : null}
-
             {settingToggle ?
                 <div className='absolute top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center z-10'>
                     <div className=" w-40 h-fit bg-white rounded-lg">
@@ -221,7 +213,6 @@ export default function Profile() {
                         </ul>
                     </div>
                 </div> : null}
-
             {followUnfollowToggle !== "" ?
                 <div className='absolute top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center z-10'>
                     <div className=" w-96 h-80 bg-white rounded-lg">
@@ -251,28 +242,26 @@ export default function Profile() {
                                     }}>
                                         {data?.following?.includes(user?._id) ? "Unfollow" : "Follow"}
                                     </p>
-
                                 </div>
                             ))}
-
                         </div>
                     </div>
                 </div> : null}
             <Sidebar />
-            <div className='max-lg:flex max-lg:flex-col max-lg:content-center h-screen'>
-                <div className='flex gap-20 max-md:gap-10 max-sm:gap-6 my-5 leading-6'>
+            <div className="h-screen flex flex-col">
+                <div className="p-4 overflow-y-auto flex gap-4">
                     <div >
                         <img src={userData?.avatar || profile} className=" w-48 h-48 max-md:w-28 max-md:h-28 rounded-full" alt="Profile" />
                     </div>
                     <div>
                         <span className='relative flex items-center gap-6 max-sm:gap-2 max-sm:items-start max-sm:flex-col'>
                             <p className='font-bold'>{userData ? userData.username : "Alston"}</p>
-                            {data?._id === userData?._id ? <p className=' bg-gray-100 px-3 py-1 rounded-lg cursor-pointer' onClick={() => setProfiletoggle(true)}>Edit Profile</p>
+                            {data?._id === userData?._id ? <p className='px-3 py-1 rounded-lg cursor-pointer' onClick={() => setProfiletoggle(true)}>Edit Profile</p>
                                 : <p className=' bg-gray-100 px-3 py-1 rounded-lg cursor-pointer' onClick={() => navigate(`/home/chat/${userData._id}`)}>Message</p>}
                             <p
-                                className={`${userData?.followers && userData.followers.includes(data?._id) ? "bg-gray-100" : "bg-blue-500"} 
-                                text-${userData?.followers && userData.followers.includes(data?._id) ? "black" : "white"}
-                                 ${userData?._id === data?._id ? "hidden" : "block"} px-3 py-1 rounded-lg`}
+                                className={`${userData?.followers && userData.followers.includes(data?._id) ? "bg-gray-100" : "bg-blue-500"}
+                                    text-${userData?.followers && userData.followers.includes(data?._id) ? "black" : "white"}
+                                     ${userData?._id === data?._id ? "hidden" : "block"} px-3 py-1 rounded-lg`}
                                 onClick={() => { handleFollow(userData?._id, data?._id) }}
                             >
                                 {userData?.followers && userData.followers.includes(data?._id) ? "Unfollow" : "Follow"}
@@ -305,59 +294,67 @@ export default function Profile() {
                         </span>
                     </div>
                 </div>
+
                 <hr />
-                <div className='h-full'>
-                    <div className='hidden max-sm:flex items-center justify-around gap-5'>
-                        <span className='flex flex-col items-center justify-center'>
-                            <p className=''>{posts.length}</p>
-                            <p>posts</p>
-                        </span>
-                        <span className='flex flex-col items-center justify-center'
-                            onClick={() => {
-                                setFollowUnfollowToggle("followers")
-                                handleButtonClick("Followers")
-                            }}>
-                            <p className=''>{userData?.followers?.length || 0}</p>
-                            <p>followers</p>
-                        </span>
-                        <span className='flex flex-col items-center justify-center'
-                         onClick={() => {
-                            setFollowUnfollowToggle("following")
-                            handleButtonClick("Following")
-                        }}>
-                            <p className=''>{userData?.following?.length || 0}</p>
-                            <p>following</p>
-                        </span>
+                <div className="flex-1 overflow-y-scroll relative">
+                    <div className=' sticky top-0 z-10 bg-white'>
+                        <div className="flex flex-wrap justify-center p-4">
+                            <div className='hidden max-sm:flex items-center justify-around gap-8'>
+                                <span className='flex flex-col items-center justify-center'>
+                                    <p className=''>{posts.length}</p>
+                                    <p>posts</p>
+                                </span>
+                                <span className='flex flex-col items-center justify-center'
+                                    onClick={() => {
+                                        setFollowUnfollowToggle("followers")
+                                        handleButtonClick("Followers")
+                                    }}>
+                                    <p className=''>{userData?.followers?.length || 0}</p>
+                                    <p>followers</p>
+                                </span>
+                                <span className='flex flex-col items-center justify-center'
+                                    onClick={() => {
+                                        setFollowUnfollowToggle("following")
+                                        handleButtonClick("Following")
+                                    }}>
+                                    <p className=''>{userData?.following?.length || 0}</p>
+                                    <p>following</p>
+                                </span>
+                            </div>
+                            <hr />
+                        </div>
+                        <div className='flex items-center justify-center max-sm:justify-around pb-5 gap-20 max-md:gap-14 max-sm:gap-5'>
+                            <span><Link to="/profile/post" className='flex items-center gap-2'>
+                                <LuGrid className='text-md max-sm:text-3xl' />
+                                <p className='max-sm:hidden'>Post</p>
+                            </Link></span>
+                            <span><Link to="/profile/reel" className='flex items-center gap-2'>
+                                <MdOutlineSlowMotionVideo className='text-md max-sm:text-3xl' />
+                                <p className='max-sm:hidden'>Reel</p>
+                            </Link></span>
+                            <span><Link
+                                to="/profile/save"
+                                className='flex items-center gap-2'>
+                                <LiaSave className='text-md max-sm:text-3xl' />
+                                <p className='max-sm:hidden'>Saved</p>
+                            </Link></span>
+                            <span><Link to="#" className='flex items-center gap-2'>
+                                <IoPricetagsOutline className='text-md max-sm:text-3xl' onClick={() => toast.success("Coming Soon")} />
+                                <p className='max-sm:hidden' onClick={() => toast.success("Coming Soon")}>Tagged</p>
+                            </Link></span>
+                        </div>
+
+
                     </div>
-                    <hr />
-                    <div className='flex items-center justify-center max-sm:justify-around py-5 gap-20 max-md:gap-14 max-sm:gap-5'>
-                        <span><Link to="/profile/post" className='flex items-center gap-2'>
-                            <LuGrid className='text-md max-sm:text-3xl' />
-                            <p className='max-sm:hidden'>Post</p>
-                        </Link></span>
-                        <span><Link to="/profile/reel" className='flex items-center gap-2'>
-                            <MdOutlineSlowMotionVideo className='text-md max-sm:text-3xl' />
-                            <p className='max-sm:hidden'>Reel</p>
-                        </Link></span>
-                        <span><Link
-                            // to="/profile/save"
-                            to={"#"}
-                            onClick={() => toast.success("Coming soon")}
-                            className='flex items-center gap-2'>
-                            <LiaSave className='text-md max-sm:text-3xl' />
-                            <p className='max-sm:hidden'>Saved</p>
-                        </Link></span>
-                        <span><Link to="#" className='flex items-center gap-2'>
-                            <IoPricetagsOutline className='text-md max-sm:text-3xl' onClick={() => toast.success("Coming Soon")} />
-                            <p className='max-sm:hidden' onClick={() => toast.success("Coming Soon")}>Tagged</p>
-                        </Link></span>
-                    </div>
+                    <hr className='mb-2' />
                     <div className=' flex-1 overflow-y-scroll'>
                         <Outlet />
                     </div>
-
                 </div>
+                {/* Image gallery component */}
+
             </div>
         </div >
+
     );
 }

@@ -43,13 +43,22 @@ const datareducer = createSlice({
         },
         addtoreel: (state, action) => {
             const data = action.payload;
-            data.forEach((item) => {
-                // Check if item.id already exists in state.items
-                const isItemExist = state.reels.some((existingItem) => existingItem.id == item.id);
-                if (!isItemExist && item.fileType == "mp4") {
-                    state.reels.push(item);
-                }
+            const post = data.filter((item) => {
+                // Check if the fileType is one of the specified types and the user matches data._id
+                return (
+                    (item.fileType === 'mp4' || item.fileType === 'avi' ||
+                        item.fileType === 'mov' || item.fileType === 'wmv') &&
+                    item.user === data._id
+                );
             });
+            state.reels.push(item);
+            // data.forEach((item) => {
+            //     // Check if item.id already exists in state.items
+            //     const isItemExist = state.reels.some((existingItem) => existingItem.id == item.id);
+            //     if (!isItemExist && item.fileType == "mp4") {
+            //         state.reels.push(item);
+            //     }
+            // });
         },
     },
 });

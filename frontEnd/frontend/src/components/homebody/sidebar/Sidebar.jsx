@@ -272,12 +272,12 @@ export default function Sidebar() {
                     <>
                         <p className='font-extrabold text-4xl my-10'>Search</p>
                         <div>
-                            <input className="w-full outline-none bg-gray-300 rounded-lg" type="text" placeholder="Search" value={searchValue} onChange={((e) => { handleSerach(e) })} style={{ padding: "5px 10px" }} />
+                            <input className="flex-1 border rounded-full py-2 w-full mr-5 px-4 focus:outline-none sm-max:px-5" type="text" placeholder="Search" value={searchValue} onChange={((e) => { handleSerach(e) })} style={{ padding: "5px 10px" }} />
                         </div>
                         <hr className='my-4' />
                         <div>
                             {searchItem.map((user, index) => (
-                                <div key={index} className='relative flex items-center justify-between mb-5'>
+                                <div key={index} className='relative flex items-center justify-between mb-5' onClick={((e) => { handleUserProfile(e, user) })}>
                                     <span className='flex items-center gap-2'>
                                         <img src={user.avatar} alt="profile" className='w-8 h-8 rounded-full cursor-pointer' onClick={((e) => { handleUserProfile(e, user) })} />
                                         <span className='cursor-pointer' onClick={((e) => { handleUserProfile(e, user) })}>

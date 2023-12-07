@@ -6,10 +6,13 @@ const MyContext = React.createContext();
 function MyProvider(props) {
   const [onlineUser, setOnlineUser] = useState([]);
   const [posts, setPosts] = useState([]);
+  const [users, setUsers] = useState([]);
   const [notification, setNotifications] = useState([]);
   const [socket, setSocket] = useState(null);
   const [chatWindow, setChatWindow] = useState(true);
   const IPTYPE = "production"
+  // const IPTYPE = "home"
+  // const IPTYPE = "office"
   const allowedOrigins =
     IPTYPE === 'production'
       ? 'https://alston-social-media-jyyt.onrender.com'
@@ -29,7 +32,7 @@ function MyProvider(props) {
   // const URL = "https://alston-social-media-jyyt.onrender.com";
 
   return (
-    <MyContext.Provider value={{ onlineUser, posts, setPosts, notification, setNotifications, setOnlineUser, chatWindow, setChatWindow, URL, socket }}>
+    <MyContext.Provider value={{ users, setUsers, onlineUser, posts, setPosts, notification, setNotifications, setOnlineUser, chatWindow, setChatWindow, URL, socket }}>
       {props.children}
     </MyContext.Provider>
   );

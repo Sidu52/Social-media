@@ -12,10 +12,9 @@ import { AiOutlinePlusCircle } from 'react-icons/ai';
 
 export default function Feed() {
     const navigate = useNavigate();
-    const { URL, posts, setPosts, socket } = useContext(MyContext);
+    const { URL, posts, setPosts, socket, users, setUsers } = useContext(MyContext);
     // State variables
     const [form, setForm] = useState({ content: "", imgurl: "" });
-    const [users, setUsers] = useState([]);
     const [refreshCount, setRefreshCount] = useState(0);
     const [videoAutoPlay, setVideoAutoPlay] = useState([]);
     const [likeCount, setLikeCount] = useState([]);
@@ -318,7 +317,7 @@ export default function Feed() {
                 <span style={{ padding: '0 50px' }}>{form.imgurl ? form.imgurl.name : ''}</span>
                 <hr className="mt-2" />
             </form>
-            <div className="max-sm:mb-20 flex items-center flex-col">
+            <div className="max-sm:mb-10 flex items-center flex-col">
                 {posts?.map((post, index) => {
                     const postUser = users.find((user) => user._id == post.user); //Find for which user upload post
                     return (

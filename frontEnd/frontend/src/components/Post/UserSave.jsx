@@ -6,11 +6,14 @@ export default function UserSave() {
     const post = useSelector((state) => state.saved);
 
     return (
-        <div className="row">
-            {post.map((data, index) => (
-                data.fileUrl ? (
-                    <div className="img_data" key={index}>
-                        <div className="view-overlay">
+        <div>
+            <div className='grid grid-cols-3 items-center w-full gap-2'>
+                {post.map((data, index) => (
+                    data.fileUrl ? (
+                        <div key={index} className='relative h-full'
+                            onMouseEnter={() => setHoverIndex(index)}
+                            onMouseLeave={() => setHoverIndex(null)}
+                        >
                             {data.fileType === 'png' || data.fileType === 'jpg' || data.fileType === 'jpeg' ||
                                 data.fileType === 'gif' || data.fileType === 'webp' || data.fileType === 'jfif' ? (
                                 <img src={data.fileUrl} className="img-fluid" alt="Post" />
@@ -18,21 +21,22 @@ export default function UserSave() {
                                 data.fileType === 'wmv' ? (
                                 <video src={data.fileUrl} className="img-fluid" alt="Post" loop controls />
                             ) : null}
-                            <div className="mask">
-                                <ul>
-                                    <li>
-                                        <p><i className="fa fa-comment" aria-hidden="true"></i> 32</p>
+                            < div className={`absolute bg-gray-800 bg-opacity-30 w-full h-full opacity-0 transition duration-300 ease-in-out ${hoverIndex === index ? 'opacity-100' : ''}`} >
+                                <ul className='absolute inset-2/4 flex items-center justify-center text-white'>
+                                    <li className='flex items-center gap-2'>
+                                        <FaHeart />
+                                        <p><i className="" aria-hidden="true"></i>{data.likes.length}</p>
                                     </li>
-                                    <li>
-                                        <p><i className="fa fa-heart" aria-hidden="true"></i> 1.2K</p>
+                                    <li className='flex items-center gap-2'>
+                                        <FaCommentAlt />
+                                        <p><i className="" aria-hidden="true"></i>{data.comments.length}</p>
                                     </li>
                                 </ul>
                             </div>
                         </div>
-                    </div>
-                ) : null
-            ))}
-
+                    ) : null
+                ))}
+            </div>
         </div>
     )
 }
