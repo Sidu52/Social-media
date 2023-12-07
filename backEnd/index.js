@@ -11,15 +11,26 @@ const MongoStore = require('connect-mongo');
 const passport = require('passport');
 const passportLocal = require('./config/passport-local-streegy');
 const passportGoogle = require('./config/passport-google-oauth2-strategy');
+const flash = require('express-flash');
 const http = require("http");
 const app = express();
 const port = process.env.PORT || 4000;
 const User = require("./models/user");
+const Post = require("./models/post");
 const server = http.createServer(app);
+const Notification = require('./models/notification');
+
+const allowedOrigins =
+    process.env.NODE_ENV === 'production'
+        ? 'https://siddhantsharmasocialmedia.netlify.app'
+        : process.env.NODE_ENV === 'home'
+            ? 'http://192.168.139.176:5173'
+            : 'http://192.168.29.91:5173';
 
 const corsOptions = {
-    origin: 'https://siddhantsharmasocialmedia.netlify.app', // Allow only requests from this domain
-    // origin: 'http://192.168.139.176:5173', // Allow only requests from this domain
+    // origin: 'https://siddhantsharmasocialmedia.netlify.app', // Allow only requests from this domain
+    origin: allowedOrigins,
+    //  'http://192.168.139.176:5173', // Allow only requests from this domain
     // origin: 'http://192.168.29.91:5173', // Allow only requests from this domain
 
     optionsSuccessStatus: 200 // Some legacy browsers (IE11, various SmartTVs) choke on 204
@@ -54,7 +65,7 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(passport.setAuthenticatedUser);
-
+app.use(flash());
 // Set routes
 app.use('/user', require('./routes/user'));
 app.use('/', require('./routes/home'));
@@ -70,8 +81,9 @@ server.listen(port, () => {
 const io = require("socket.io")(server, {
     pingTimeout: 60000,
     cors: {
-        // origin: 'http://192.168.139.176:5173', // Allow only requests from this domain
-        origin: "https://siddhantsharmasocialmedia.netlify.app"
+        origin: allowedOrigins
+        // 'http://192.168.139.176:5173', // Allow only requests from this domain
+        // origin: "https://siddhantsharmasocialmedia.netlify.app"
     },
 });
 //Socket.io
@@ -98,10 +110,8 @@ io.on('connection', socket => {
     });
 
     socket.on('sendMessage', async ({ senderId, receiverId, message, conversationId }) => {
-        console.log("Sonu", users, "===", senderId)
         const receiver = users.find(user => user.id == receiverId);
         const sender = users.find(user => user.id == senderId);
-        console.log("Sonu", receiver, sender)
         if (receiver) {
             const user = await User.findById(senderId);
             io.to(receiver.socketId).to(sender.socketId).emit('getMessage', {
@@ -113,6 +123,36 @@ io.on('connection', socket => {
             });
         }
     })
+
+    socket.on('notificationsend', async ({ senderuserID, reciveruserID, notificationDes, postID, notificationType, viewBy }) => {
+        try {
+            const data = await Notification.create({
+                senderuserID,
+                reciveruserID,
+                notificationDes,
+                postID,
+                notificationType,
+                viewBy
+            });
+            const fromUser = await User.findById(data.senderuserID);
+            const post = await Post.findById(postID);
+            await reciveruserID.map(async receiver => {
+                const receiverUser = users.find(user => user.id == receiver);
+                if (receiverUser && receiverUser.socketId) {
+                    console.log(receiverUser.id, "==", receiver);
+                    io.to(receiverUser.socketId).emit('getNotification', { notification: data, fromUser, post });
+                } else {
+                    console.log(`User ${receiver} not found or no socket ID`);
+                    // Handle the case where the user is not found or has no socket ID
+                }
+            });
+            console.log("Notifications sent");
+        } catch (err) {
+            console.error("Error:", err);
+            // Handle any potential errors while creating notifications or emitting to sockets
+        }
+    });
+
 
     socket.on('disconnect', async () => {
         users = users.filter(user => user.socketId !== socket.id)

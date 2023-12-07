@@ -5,10 +5,12 @@ const notificationSchema = new mongoose.Schema({
         type: mongoose.Schema.ObjectId,
         ref: 'User'
     },
-    reciveruserID: {
-        type: mongoose.Schema.ObjectId,
-        ref: 'User'
-    },
+    reciveruserID: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'user'
+        }
+    ],
     postID: {
         type: mongoose.Schema.ObjectId,
         ref: 'Post'
@@ -19,10 +21,12 @@ const notificationSchema = new mongoose.Schema({
     notificationDes: {
         type: String,
     },
-    status: {
-        type: String,
-        default: "false"
-    }
+    viewBy: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'user'
+        }
+    ],
 }, {
     timestamps: true
 });

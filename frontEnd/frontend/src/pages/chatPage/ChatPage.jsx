@@ -228,8 +228,11 @@ export default function ChatPage() {
                                 <input type="file" id="file" className="hidden" accept="image/*" />
                             </label>
                         </div>
-                        <input type="text" value={message} placeholder='type here...' className='w-full rounded-full border p-2 outline-none pl-9' onChange={(e) => setMessage(e.target.value)} />
-                        <p className='absolute top-3 right-4' onClick={(e) => handleSendMessage(e)}>send</p>
+                        <form onSubmit={(e) => handleSendMessage(e)}>
+                            <input type="text" value={message} placeholder='type here...' className='w-full rounded-full border p-2 outline-none pl-9' onChange={(e) => setMessage(e.target.value)} />
+                            <button className='absolute top-3 right-4' >send</button>
+                        </form>
+
                     </div>
 
                 </div>

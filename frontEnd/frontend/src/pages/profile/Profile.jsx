@@ -285,8 +285,7 @@ export default function Profile() {
                             <p onClick={() => {
                                 setFollowUnfollowToggle("followers")
                                 handleButtonClick("Followers")
-                            }
-                            }
+                            }}
                             > <strong>{userData?.followers?.length || 0} </strong> followers</p>
                             <p
                                 onClick={() => {
@@ -313,12 +312,20 @@ export default function Profile() {
                             <p className=''>{posts.length}</p>
                             <p>posts</p>
                         </span>
-                        <span className='flex flex-col items-center justify-center'>
-                            <p className='' onClick={() => { handleButtonClick("Followers") }}>{userData?.followers?.length || 0}</p>
+                        <span className='flex flex-col items-center justify-center'
+                            onClick={() => {
+                                setFollowUnfollowToggle("followers")
+                                handleButtonClick("Followers")
+                            }}>
+                            <p className=''>{userData?.followers?.length || 0}</p>
                             <p>followers</p>
                         </span>
-                        <span className='flex flex-col items-center justify-center'>
-                            <p className='' onClick={() => { handleButtonClick("Following") }}>{userData?.following?.length || 0}</p>
+                        <span className='flex flex-col items-center justify-center'
+                         onClick={() => {
+                            setFollowUnfollowToggle("following")
+                            handleButtonClick("Following")
+                        }}>
+                            <p className=''>{userData?.following?.length || 0}</p>
                             <p>following</p>
                         </span>
                     </div>

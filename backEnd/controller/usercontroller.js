@@ -72,15 +72,30 @@ async function singup(req, res) {
     }
 }
 
-//SignIn
+
 async function signin(req, res) {
     try {
-        res.status(200).json({
-            message: 'Signin successful!',
-            data: true,
-            user: req.user
-        });
+        const { email, password } = req.body;
+
+        // Check if the user exists based on the email
+        const user = await User.findOne({ email });
+
+        if (!user) {
+            return res.status(200).json({ error: 'User not found.', status: false });
+        }
+
+        // Compare the provided password with the stored hashed password
+        const passwordMatch = await bcrypt.compare(password, user.password);
+
+        if (!passwordMatch) {
+            return res.status(200).json({ error: 'Invalid password.', status: false });
+        }
+
+        // Password matches, login successful
+        res.status(200).json({ message: 'Login successful!', user });
+
     } catch (error) {
+        console.error(error);
         res.status(500).json({ error: 'Internal server error.' });
     }
 }

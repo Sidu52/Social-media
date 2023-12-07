@@ -5,31 +5,15 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setLoading } from '../../../store/Store'
 import login from '../../../assets/image/videologin.mp4'
+import { toast } from 'react-toastify';
 
 export default function Signin() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { setOnlineUser, URL, socket } = useContext(MyContext);
-    const data = JSON.parse(localStorage.getItem('Data'));
+    const { URL, socket } = useContext(MyContext);
 
     // State variables to manage form data
     const [form, setForm] = useState({ email: "", password: "" });
-
-    // Check if the user is already logged in using useEffect
-    // useEffect(() => {
-    //     if (data) {
-    //         socket.emit('userLogin', data);
-    //     }
-    // }, []);
-
-    // socket.on('updateUsers', async () => {
-    //     try {
-    //         const { data } = await axios.get(`${URL}/user/Onlineuser`);
-    //         setOnlineUser(data.data);
-    //     } catch (error) {
-    //         console.error("Error fetching user data:", error);
-    //     }
-    // });
 
     // Function to handle user signin
     const onSubmit = async (e) => {
@@ -40,10 +24,17 @@ export default function Signin() {
                 email: form.email,
                 password: form.password
             });
-            const user = response.data.user;
+            console.log(response.data)
+            if (response?.data?.status == false) {
+                dispatch(setLoading(false));
+                return toast.warning(response.data.error)
+            }
+
             // Store user data in local storage
-            localStorage.setItem('Data', JSON.stringify(user));
-            if (response.data.data) {
+            if (response.data.user) {
+                const user = response.data.user;
+                socket?.emit('addUser', user?._id)
+                localStorage.setItem('Data', JSON.stringify(user));
                 dispatch(setLoading(false));
                 navigate("/");
                 // socket.emit('userLogin', response.data.user);

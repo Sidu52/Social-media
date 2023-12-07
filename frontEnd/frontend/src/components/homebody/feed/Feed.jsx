@@ -9,11 +9,10 @@ import { toast } from "react-toastify";
 import profile from "../../../assets/image/profile.png";
 import Comment from "./comment/Comment";
 import { AiOutlinePlusCircle } from 'react-icons/ai';
-import { MdClose } from "react-icons/md";
 
 export default function Feed() {
     const navigate = useNavigate();
-    const { URL, posts, setPosts } = useContext(MyContext);
+    const { URL, posts, setPosts, socket } = useContext(MyContext);
     // State variables
     const [form, setForm] = useState({ content: "", imgurl: "" });
     const [users, setUsers] = useState([]);
@@ -53,9 +52,6 @@ export default function Feed() {
         }
     };
 
-
-
-
     // Fetch data from the server on component mount and whenever refreshCount changes
     useEffect(() => {
         const fetchData = async () => {
@@ -81,7 +77,6 @@ export default function Feed() {
                     );
                 });
                 setLiked(updatedLiked);
-
                 const autoplay = posts.filter(post => {
                     return (
                         post.fileType === "mp4" ||
@@ -92,12 +87,10 @@ export default function Feed() {
                 });
                 const temp = autoplay.map(() => { return false })
                 setVideoAutoPlay(temp)
-
             } catch (error) {
                 console.log(error);
             }
         };
-
         fetchData();
     }, []); // Ensure proper dependencies are included in the dependency array
 
@@ -120,6 +113,15 @@ export default function Feed() {
                 toast.success(response.data.message);
             }
             // Add the new post to the posts state
+            console.log(data, response.data.data)
+            socket?.emit("postUpload", {
+                senderuserID: data?._id,
+                reciveruserID: data?.following,
+                notificationDes: `${data.username} upload a post ${calculateTimeDifference(response.data.data.createdAt)}`,
+                postID: response.data.data._id,
+                notificationType: "Project",
+                viewBy: []
+            })
             setPosts([response.data.data, ...posts]);
             dispatch(setLoading(false));
             // Increment the refresh count to trigger the useEffect and fetch the updated posts
@@ -143,7 +145,7 @@ export default function Feed() {
     };
 
     // Function to handle post like
-    const handleLike = async (index, id) => {
+    const handleLike = async (index, post) => {
         try {
             const newLiked = [...liked];
             if (!newLiked[index]) {
@@ -163,12 +165,13 @@ export default function Feed() {
             setLiked(newLiked);
             // Remove setClick(false) and if (click) condition, as it's not necessary
             const response = await axios.post(
-                `${URL}/toggle/like?id=${id}&type=Post&userid=${data._id}`
+                `${URL}/toggle/like?id=${post._id}&type=Post&userid=${data._id}`
             );
+
             if (response.data) {
                 // Find the post in the posts state and update its like count
                 const updatedPosts = posts.map((post) => {
-                    if (post._id === id) {
+                    if (post.id === post.id) {
                         return {
                             ...post,
                             likes: response.data.likes,
@@ -176,7 +179,6 @@ export default function Feed() {
                     }
                     return post;
                 });
-
                 if (response.data.data === "deleted") {
                     // Filter out the like to be deleted from localUserLike
                     const updatedUserLike = localUserLike.filter(
@@ -190,6 +192,14 @@ export default function Feed() {
                 // Remove setClick(true) as it's not needed here
                 setPosts(updatedPosts);
             }
+            socket.emit("notificationsend", {
+                senderuserID: data?._id,
+                reciveruserID: [post.user],
+                notificationDes: ` ${response?.data?.data} liked your post `,
+                postID: post,
+                notificationType: "Post",
+                viewBy: []
+            });
         } catch (error) {
             console.log("fail", error);
         }
@@ -369,7 +379,7 @@ export default function Feed() {
                                                 className="checkmark top-0 left-0 h-8 w-8 transition duration-100 animate-like-effect"
                                             >
                                                 <svg
-                                                    onClick={() => handleLike(index, post._id)}
+                                                    onClick={() => handleLike(index, post)}
                                                     viewBox="0 0 256 256"
                                                 >
                                                     <rect fill="none" height="256" width="256"></rect>

@@ -1,6 +1,8 @@
+const User = require("../models/user");
 const Like = require("../models/like");
 const Post = require("../models/post");
 const Comment = require('../models/comments');
+const Notification = require('../models/notification');
 
 // //Handle Likes
 const toggleLike = async function (req, res) {
@@ -214,4 +216,70 @@ const editComment = async (req, res) => {
         });
     }
 };
-module.exports = { toggleLike, toggleComment, getcomments, editComment };
+
+const getNotification = async (req, res) => {
+    const { ID } = req.body;
+    try {
+        // receiverID = ["656c1bb364b319385c72259a"]
+        const notifications = await Notification.find({
+            reciveruserID: { $in: [ID] } // Use $in with an array containing ID
+        });
+        // Fetch FromUser data for each notification
+        const notificationData = await Promise.all(
+            notifications.map(async (notification) => {
+                const post = await Post.findById(notification.postID);
+                const fromUser = await User.findById(notification.senderuserID);
+                return {
+                    notification,
+                    fromUser,
+                    post
+
+                };
+            })
+        );
+        return res.status(200).json({ message: 'Notification find Sucessfull', notificationData });
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({
+            message: 'Internal Server Error',
+            error: err.message
+        });
+    }
+}
+
+
+const createNotification = async () => {
+    const { senderuserID, reciveruserID, postID, notificationType, notificationDes, viewBy } = req.body;
+    try {
+        const notification = new Notification({
+            senderuserID,
+            reciveruserID,
+            postID,
+            notificationType,
+            notificationDes,
+            viewBy,
+        });
+        // Save the post to the database
+        await newPost.save();
+        return res.status(201).json({ message: "Post upload Succesful", data: notification });
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({
+            message: 'Internal Server Error',
+        });
+    }
+}
+const updateNotification = async (req, res) => {
+    try {
+        const { id, viewBy } = req.body;
+        console.log(req.body)
+        await Notification.findByIdAndUpdate(id, { $push: { viewBy } });
+        return res.status(201).json({ message: "Post update Succesful", staus: true });
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({
+            message: 'Internal Server Error',
+        });
+    }
+}
+module.exports = { toggleLike, toggleComment, getcomments, editComment, getNotification, createNotification, updateNotification };

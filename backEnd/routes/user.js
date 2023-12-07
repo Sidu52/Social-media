@@ -8,7 +8,7 @@ router.get('/', getAlluser);
 router.put('/updateuser', updateUser)
 router.get('/onlineuser', getOnlineuser);
 router.get('/login', passport.checkAuthentication, loginpage);
-router.post('/signin', passport.authenticate('local', { failureRedirect: '/signin', failureFlash: true }), signin);
+router.post('/signin', signin);
 router.post('/signup', singup);
 router.post('/signout', signout);
 router.post('/emailverification', emailverification);

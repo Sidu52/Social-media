@@ -10,7 +10,7 @@ import EmojiPicker from 'emoji-picker-react';
 
 export default function Comment({ post, users, localuser, localUserLike }) {
     const navigate = useNavigate();
-    const { URL } = useContext(MyContext);
+    const { URL, socket } = useContext(MyContext);
     const [commentinput, setCommentInput] = useState("");
     const [data, setData] = useState([]);
     const [comment, setComment] = useState([]);
@@ -25,6 +25,7 @@ export default function Comment({ post, users, localuser, localUserLike }) {
 
     // Find the user who created the post
     const postUser = users.find((user) => user._id == post.user);
+    const localUser = JSON.parse(localStorage.getItem("Data"));
 
     // Fetch comments for the post from the backend when the component mounts or postUser changes
     useEffect(() => {
@@ -79,8 +80,6 @@ export default function Comment({ post, users, localuser, localUserLike }) {
         }
     };
 
-
-
     // Handle adding a new comment to the post
     const handleComment = async (e) => {
         try {
@@ -88,14 +87,26 @@ export default function Comment({ post, users, localuser, localUserLike }) {
             const response = await axios.post(
                 `${URL}/toggle/comment?id=${post._id}&userid=${localuser._id}&data=${commentinput}`
             );
-            console.log(response.data.data)
-            if (response.data) {
-                setData((prevState) => [...prevState, response.data.data]);
+            if (response?.data?.data) {
+                // Update data state with the newly added comment
+                setData((prevState) => [response.data.data, ...prevState]);
+                const commentsdata = response.data.data.content;
+                // Update comment state with the newly added comment's content
+                setComment((prevComments) => [commentsdata, ...prevComments]);
+                socket.emit("notificationsend", {
+                    senderuserID: localUser?._id,
+                    reciveruserID: [post.user],
+                    notificationDes: `${commentinput} Comment on your post`,
+                    postID: post,
+                    notificationType: "Post",
+                    viewBy: []
+                });
             }
         } catch (error) {
             console.log("fail", error);
         }
     };
+
 
     // Handle liking a comment
     const handleLike = async (index, id) => {
@@ -138,7 +149,6 @@ export default function Comment({ post, users, localuser, localUserLike }) {
     };
     // Handle editing a comment
     const handleEdit = async (e, id, editedContent) => {
-        console.log("Enter")
         e.preventDefault();
         try {
             const response = await axios.put(
@@ -209,12 +219,12 @@ export default function Comment({ post, users, localuser, localUserLike }) {
                     {data?.map((commentdata, index) => {
                         let CDATA = [...comment];
                         let CDATAVALUE = [...contactEdit];
-                        const commentUser = users.find(user => user._id == commentdata.user);
+                        let commentUser = users.find(user => user._id == commentdata.user || commentdata.user._id);
                         return (
                             <div className="flex items-center justify-between">
                                 <div key={index}>
                                     <span className="flex items-center gap-2">
-                                        <img src={commentUser?.avatar || profile} alt="profile" className='w-9 h-9 rounded-full cursor-pointer' />
+                                        <img src={commentUser?.avatar ? commentUser?.avatar : profile} alt="profile" className='w-9 h-9 rounded-full cursor-pointer' />
                                         <p className='text-lg font-semibold cursor-pointer'>{commentUser?.username}</p>
                                         <input
                                             className='text-sm border border-gray-300 p-1 outline-none border-none'
@@ -294,63 +304,5 @@ export default function Comment({ post, users, localuser, localUserLike }) {
 
         </div >
 
-        // <div className="comment__main_conatainer">
-        //     <div className="comment__post">
-        //         {post.fileUrl &&
-        //             ((post.fileType === 'png' ||
-        //                 post.fileType === 'jpg' ||
-        //                 post.fileType === 'jpeg' ||
-        //                 post.fileType === 'gif' ||
-        //                 post.fileType === 'webp' ||
-        //                 post.fileType === 'jfif') ? (
-        //                 <img src={post.fileUrl} alt="post" />
-        //             ) : post.fileType === 'mp4' ||
-        //                 post.fileType === 'avi' ||
-        //                 post.fileType === 'mov' ||
-        //                 post.fileType === 'wmv' ? (
-        //                 <video src={post.fileUrl} alt="post" loop controls />
-        //             ) : null)}
-        //     </div>
-        //     <div className='comment__data'>
-        //         <div className="comment__head" onClick={((e) => { handleUserProfile(e, data) })}>
-        //             <img src={postUser?.avatar ? postUser.avatar : profile} alt="profile" />
-        //             <p>{postUser?.username}</p>
-        //         </div>
-
-        //         <div style={{ overflow: "scroll", height: "78%", paddingBottom: "15%" }}>
-        //             {data.map((datacomment, index) => {
-        //                 const commentUser = users.find(user => user._id == datacomment.user);
-        //                 return (
-        //                     <div style={{ paddingBottom: "15px" }} key={index}>
-        //                         <div className="comment__container">
-        //                             <img src={commentUser?.avatar ? commentUser.avatar : profile} alt="profile" />
-        //                             <p><strong>{commentUser?.username}</strong>
-        //                                 {/* <span contentEditable={contactEdit}> {datacomment.content}</span> */}
-        //                                 <span contentEditable={contactEdit} onBlur={(e) => handleEdit(e, datacomment._id, e.target.innerText)}>
-        //                                     {datacomment.content}
-        //                                 </span>
-        //                             </p>
-        //                         </div>
-        //                         <div className="commentControl__buttons">
-        //                             <span>{calculateTimeDifference(datacomment.createdAt)}</span>
-        //                             <span onClick={(() => { handleLike(datacomment._id) })}>{datacomment.likes ? datacomment.likes.length : ""} Like</span>
-        //                             <span onClick={(() => { setContactEdit(!contactEdit) })}>{contactEdit ? "save" : "edit"}</span>
-
-        //                         </div>
-        //                     </div>
-
-        //                 )
-
-        //             })}
-        //         </div>
-
-        //         <div className="comment__footer">
-        //             <form onSubmit={(e) => { handleComment(e) }}>
-        //                 <input type="text" value={comment} placeholder='Comment' onChange={(e) => { setComment(e.target.value) }} />
-        //                 <button>Post</button>
-        //             </form>
-        //         </div>
-        //     </div>
-        // </div>
     );
 }

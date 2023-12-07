@@ -26,7 +26,7 @@ import Login from '../../../pages/form/component/Signin';
 export default function Sidebar() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { URL, posts, setPosts } = useContext(MyContext);
+    const { URL, posts, setPosts, onlineUser, socket } = useContext(MyContext);
     const [user, setUser] = useState([]);
     const [loginForm, setLoginForm] = useState("");
     const [stoggle, setSToggle] = useState(false);
@@ -38,10 +38,63 @@ export default function Sidebar() {
     const [dropdownToggle, setDropdownToggle] = useState(false);
     const [searchValue, setSearchValue] = useState("");// To hold the value of the search input
     const [searchItem, setSearchItem] = useState([]); // To store the search results
+    const [notification, setNotifications] = useState([]);
+    const [notificatiionCount, setNotificationcount] = useState(0);
 
     // Get user data from local storage
     const data = JSON.parse(localStorage.getItem('Data'));
+    // Calculate time difference between current time and the time the post was uploaded
+    const calculateTimeDifference = (uploadTime) => {
+        const currentTime = new Date();
+        const uploadTimestamp = new Date(uploadTime);
+        const timeDifference = currentTime.getTime() - uploadTimestamp.getTime();
+        const seconds = Math.floor(timeDifference / 1000);
+        const minutes = Math.floor(seconds / 60);
+        const hours = Math.floor(minutes / 60);
+        const days = Math.floor(hours / 24);
+
+        if (days > 0) {
+            return `${days}d ago`;
+        } else if (hours > 0) {
+            return `${hours}h ago`;
+        } else if (minutes > 0) {
+            return `${minutes}m ago`;
+        } else {
+            return "Just now";
+        }
+    };
+
+
     // Fetch user data from the server using Axios
+    useEffect(() => {
+        socket?.on("getNotification", data => {
+            // if (notificatiionCount > 0) {
+            //     setNotificationcount(prevCount => prevCount + 1);
+            // } else {
+            //     setNotificationcount(1);
+            // }
+            setNotificationcount(prevCount => prevCount + 1);
+            setNotifications(prevNotifications => [data, ...prevNotifications]);
+        })
+
+    }, [socket])
+    const fetchNotification = async () => {
+        try {
+            const response = await axios.post(`${URL}/toggle/notificationget`, { ID: data?._id });
+            const notificationData = response?.data?.notificationData || [];
+            const count = notificationData.reduce((accumulator, item) => {
+                if (!item?.notification?.viewBy?.includes(data._id)) {
+                    return accumulator + 1;
+                }
+                return accumulator;
+            }, 0);
+            console.log(count)
+            setNotificationcount(count);
+            setNotifications(notificationData);
+        } catch (error) {
+            console.error("Error fetching user data:", error);
+        }
+    }
     useEffect(() => {
         const fetchUserData = async () => {
             try {
@@ -51,14 +104,12 @@ export default function Sidebar() {
                 console.error("Error fetching user data:", error);
             }
         };
+
+
         fetchUserData();
+        fetchNotification();
     }, []);
 
-    // socket.on('notification', (data) => {
-    //     console.log("Enter in notification emit", data)
-    //     // On receiving a notification, update the state to display it
-    //     setNotifications((prevNotifications) => [data, ...prevNotifications]);
-    // });
     // Handle click on user profile link
     const handleUserProfile = async (e, data) => {
         e.preventDefault();
@@ -100,7 +151,14 @@ export default function Sidebar() {
                 toast.success(response.data.message);
                 const postDATA = response.data.data;
                 // socket.emit('uploadPost', { user: data, post: postDATA, type: "Post_Upload" });
-
+                socket?.emit("notificationsend", {
+                    senderuserID: data?._id,
+                    reciveruserID: data?.following,
+                    notificationDes: `upload a post `,
+                    postID: postDATA._id,
+                    notificationType: "Post",
+                    viewBy: []
+                })
                 setPosts([postDATA, ...posts]);
                 dispatch(setLoading(false));
                 setSToggle(false)
@@ -112,6 +170,7 @@ export default function Sidebar() {
             console.log("fail", error);
         }
     };
+
 
     // Handle searching user
     const handleSerach = (e) => {
@@ -129,31 +188,22 @@ export default function Sidebar() {
         }
     }
 
-    // Function to sign out the user
-    const userSignout = async () => {
-        try {
-            // toast.warn('Loading');
-            const response = await axios.post(`${URL}/user/signout`);
-            if (response.data) {
-                localStorage.clear();// Clear user data from local storage
-                toast.success(response.data.message);// Show success message using toast
-                window.location.reload();// Refresh the page after sign out
-                // Remove session cookies
-                document.cookie = 'connect.sidhu; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-            }
-
-        } catch (error) {
-            console.log('fail', error);
-        }
-    }
-
     const handleRefresh = () => {
         if (window.location.hash === '#/home') {
             window.location.reload();
         }
     };
 
-    // console.log("Notificaation", notification)
+    const handleViewNotification = async (id) => {
+        try {
+            // navigate('')
+            await axios.post(`${URL}/toggle/notificationUpdate`, { id, viewBy: data._id });
+            setNotificationcount(prevCount => prevCount - 1);
+            fetchNotification()
+        } catch (err) {
+            console.log(err);
+        }
+    }
 
     return (
         <>
@@ -191,7 +241,7 @@ export default function Sidebar() {
                             </div>
                             <img src={uploading} alt="img" className='h-full w-full' />
                         </div>
-                        <div className="h-full w-2/5 mx-5 max-sm:w-5/6  max-sm:mb-56" style={{ display: currentStep == 2 ? "block" : "none" }}>
+                        <div className="h-full w-2/5 mx-5 max-sm:w-5/6 overflow-hidden" style={{ display: currentStep == 2 ? "block" : "none" }}>
                             <div className='flex items-center justify-between p-4 bg-white'>
                                 <FaArrowLeft className=' text-blue-500 text-xl' onClick={() => setCurrentStep(currentStep - 1)} />
                                 <span className=' text-blue-500' onClick={(e) => handleSubmit(e)} >Post</span>
@@ -203,7 +253,6 @@ export default function Sidebar() {
                                         <img src={data ? data.avatar : profile} alt="Profile" className='w-9 h-9 rounded-full' />
                                         <span>
                                             <p>{data?.username || "Alston"}</p>
-                                            {/* <p>{data.content}</p> */}
                                         </span>
                                     </div >
                                     <div className='relative'>
@@ -218,7 +267,7 @@ export default function Sidebar() {
                 </div > :
                 null
             }
-            <div className="absolute top-0 left-16 bg-white h-full z-20 mt-10 transition-all duration-300 ease-linear overflow-hidden overflow-y-scroll max-sm:left-0 max-w-xs" style={{ width: searchToggle === "" ? "0" : "100%", paddingLeft: searchToggle === "" ? "0" : "15px" }}>
+            <div className="absolute top-0 left-16 bg-white h-full z-20 mt-10 transition-all duration-300 ease-linear overflow-hidden overflow-y-scroll max-sm:left-0 max-w-lg " style={{ width: searchToggle === "" ? "0" : "100%", paddingLeft: searchToggle === "" ? "0" : "15px" }}>
                 {searchToggle === "search" ?
                     <>
                         <p className='font-extrabold text-4xl my-10'>Search</p>
@@ -228,28 +277,45 @@ export default function Sidebar() {
                         <hr className='my-4' />
                         <div>
                             {searchItem.map((user, index) => (
-                                <div key={index} className='flex items-center gap-2'>
-                                    <img src={user.avatar} alt="profile" className='w-8 h-8 rounded-full cursor-pointer' onClick={((e) => { handleUserProfile(e, user) })} />
-                                    <span className='cursor-pointer' onClick={((e) => { handleUserProfile(e, user) })}>
-                                        <p className="text-lg">{user.username}</p>
-                                        <p className="text-xs">Bio</p>
+                                <div key={index} className='relative flex items-center justify-between mb-5'>
+                                    <span className='flex items-center gap-2'>
+                                        <img src={user.avatar} alt="profile" className='w-8 h-8 rounded-full cursor-pointer' onClick={((e) => { handleUserProfile(e, user) })} />
+                                        <span className='cursor-pointer' onClick={((e) => { handleUserProfile(e, user) })}>
+                                            <p className="text-lg">{user.username}</p>
+                                            {/* <p className="text-xs">{user.Bio}</p> */}
+                                        </span>
                                     </span>
+                                    {onlineUser.find((onlineu => onlineu._id == user._id)) ? <p className='w-2 h-2 rounded-full absolute top-5 right-3 bg-green-600' ></p> : null}
                                 </div>
                             ))}
                         </div>
                     </> : searchToggle === "notification" ?
                         <div className='flex flex-col gap-4 p-3'>
-                            <span>Notification</span>
-                            <div className='flex items-center justify-between'>
-                                <span className='flex items-center gap-3'>
-                                    <img src={profile} alt="profile" className='w-10 h-10 rounded-full' />
-                                    <p className='text-sm'><strong>Name</strong>,Noty</p>
-                                </span>
-                                <button className=' bg-gray-100 py-2 px-4 rounded-md'>Follow</button>
-                            </div>
-                        </div> : null
-                }
+                            <span className='flex items-center gap-2 mt-3'>
+                                <span className='font-extrabold text-xl '>Notification</span>
+                                <p className='flex items-center justify-center p-3 w-5 h-5 bg-red-500 text-white rounded-full'>{notificatiionCount}</p>
+                            </span>
 
+                            <div className='flex-1 overflow-y-scroll'>
+                                {notification?.map((item, index) => (
+                                    <div key={index}
+                                        className='flex items-center justify-between gap-5 my-2 py-3 px-8 rounded-xl cursor-pointer'
+                                        style={{ backgroundColor: item?.notification?.viewBy.includes(data._id) ? "" : "#eaeaea" }}
+                                        onClick={() => handleViewNotification(item?.notification?._id)}
+                                    >
+                                        <span className='flex items-center gap-3'>
+                                            <img src={item?.fromUser?.avatar || profile} alt="profile" className='w-10 h-10 rounded-full' />
+                                            <p className='text-sm'><strong>{item?.fromUser?.username || "Alston"}</strong>{item?.notification?.notificationDes}</p>
+                                            <p className="text-sm font-semibold">
+                                                {calculateTimeDifference(item?.notification?.createdAt)}..
+                                            </p>
+                                        </span>
+                                        {/* <button className=' bg-gray-100 py-2 px-4 rounded-md'>Follow</button> */}
+                                        <img src={item?.post?.fileUrl || profile} alt="profile" className='w-10 h-10 ' />
+                                    </div>
+                                ))}
+                            </div>
+                        </div> : null}
             </div>
 
             <div className='relative ml-10 max-sm:ml-0 max-sm:sticky max-sm:top-0 max-sm:flex max-sm:border-b-2 items-center justify-between bg-white max-sm:z-30'>
@@ -306,12 +372,15 @@ export default function Sidebar() {
                                 <p>Messages</p>
                             </Link>
                         </li>
-                        <li>
+                        <li className='relative'>
+
                             <Link>
                                 <span className="icon" onClick={() => setSearchToggle(searchToggle == "" || searchToggle == "search" ? "notification" : "")}>
                                     <AiOutlineHeart />
                                 </span>
                                 <p onClick={() => setSearchToggle(searchToggle == "" || searchToggle == "search" ? "notification" : "")}>Notifications</p>
+
+                                {notificatiionCount > 0 ? <p className='flex items-center justify-center p-3 w-5 h-5 bg-red-500 text-white rounded-full'>{notificatiionCount}</p> : null}
                             </Link>
                         </li>
                         <li className='relative'>
@@ -382,13 +451,15 @@ export default function Sidebar() {
                     <ul className="nav_link_container text-base list-none flex items-start flex-col max-sm:flex-row gap-10 max-sm:gap-5 max-sm:mr-10 ">
                         <li>
                             <Link to="#">
-                                <span className="icon" onClick={() => {
+                                <span className="icon relative" onClick={() => {
                                     if (data) {
                                         return
                                     }
-                                    toast.success("Coming soon");
                                 }}>
-                                    <AiOutlineHeart />
+                                    <span onClick={() => setSearchToggle(searchToggle == "" || searchToggle == "search" ? "notification" : "")}>
+                                        <AiOutlineHeart />
+                                        {notificatiionCount > 0 ? <p className='absolute -top-2 -left-2 flex items-center justify-center p-2 w-1 h-1 bg-red-500 text-white rounded-full'>{notificatiionCount}</p> : null}
+                                    </span>
                                 </span>
                             </Link>
                         </li>
@@ -398,8 +469,9 @@ export default function Sidebar() {
                                     if (data) {
                                         setSToggle(true);
                                         setCurrentStep(0)
+                                    } else {
+                                        toast.warning("User not Login");
                                     }
-                                    toast.warning("User not Login")
                                 }}>
                                     <BsPlusCircle />
                                 </span>
@@ -428,7 +500,7 @@ export default function Sidebar() {
                     </li>
                     <li>
                         <Link to="#">
-                            <span className="icon" style={{ fontSize: '1.3em' }} onClick={() => setSearchToggle(!searchToggle)}>
+                            <span className="icon" style={{ fontSize: '1.3em' }} onClick={() => setSearchToggle(searchToggle == "" || searchToggle == "notification" ? "search" : "")}>
                                 <CiSearch />
                             </span>
 

@@ -9,17 +9,24 @@ function MyProvider(props) {
   const [notification, setNotifications] = useState([]);
   const [socket, setSocket] = useState(null);
   const [chatWindow, setChatWindow] = useState(true);
+  const IPTYPE = "production"
+  const allowedOrigins =
+    IPTYPE === 'production'
+      ? 'https://alston-social-media-jyyt.onrender.com'
+      : IPTYPE === 'home'
+        ? 'http://192.168.139.176:9000'
+        : 'http://192.168.29.91:9000';
 
   useEffect(() => (
     // setSocket(io('http://localhost:9000'))
-    // setSocket(io("http://192.168.139.176:9000"))
-    setSocket(io(`https://alston-social-media-jyyt.onrender.com`))
+    setSocket(io(allowedOrigins))
   ), [])
 
   // const URL = "http://localhost:9000";
   // const URL = "http://192.168.29.91:9000"
-  // const URL = "http://192.168.139.176:9000"
-  const URL = "https://alston-social-media-jyyt.onrender.com";
+  const URL = allowedOrigins
+  // "http://192.168.139.176:9000"
+  // const URL = "https://alston-social-media-jyyt.onrender.com";
 
   return (
     <MyContext.Provider value={{ onlineUser, posts, setPosts, notification, setNotifications, setOnlineUser, chatWindow, setChatWindow, URL, socket }}>
