@@ -21,15 +21,10 @@ function MyProvider(props) {
         : 'http://192.168.29.91:9000';
 
   useEffect(() => (
-    // setSocket(io('http://localhost:9000'))
     setSocket(io(allowedOrigins))
   ), [])
 
-  // const URL = "http://localhost:9000";
-  // const URL = "http://192.168.29.91:9000"
   const URL = allowedOrigins
-  // "http://192.168.139.176:9000"
-  // const URL = "https://alston-social-media-jyyt.onrender.com";
 
   return (
     <MyContext.Provider value={{ users, setUsers, onlineUser, posts, setPosts, notification, setNotifications, setOnlineUser, chatWindow, setChatWindow, URL, socket }}>

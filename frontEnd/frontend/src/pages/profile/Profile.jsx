@@ -161,7 +161,7 @@ export default function Profile() {
     return (
         <div className='profile_container grid mx-4 justify-between '>
             {profiletoggle ?
-                <div className='absolute top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center z-10'>
+                <div className='absolute top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center z-20'>
                     <MdClose className='absolute top-0 max-sm:top-16 right-2 bg-gray-100 rounded-full text-4xl' onClick={() => setProfiletoggle(false)} />
                     <div className=" w-96 h-fit bg-white rounded-lg p-4">
                         <div className=' flex gap-3'>
@@ -203,7 +203,7 @@ export default function Profile() {
                     </div>
                 </div> : null}
             {settingToggle ?
-                <div className='absolute top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center z-10'>
+                <div className='absolute top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center z-20'>
                     <div className=" w-40 h-fit bg-white rounded-lg">
                         <ul className=' text-center'>
                             {data && data?._id === userData?._id ? <li className='py-2 cursor-pointer' onClick={userSignout} >LogOut</li> : null}
@@ -214,7 +214,7 @@ export default function Profile() {
                     </div>
                 </div> : null}
             {followUnfollowToggle !== "" ?
-                <div className='absolute top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center z-10'>
+                <div className='absolute top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center z-20'>
                     <div className=" w-96 h-80 bg-white rounded-lg">
                         <span className='relative py-2'>
                             <p className='text-center text-xl font-semibold py-3'>{followUnfollowToggle == "followers" ? "Followers" : followUnfollowToggle == "following" ? "Following" : null}</p>

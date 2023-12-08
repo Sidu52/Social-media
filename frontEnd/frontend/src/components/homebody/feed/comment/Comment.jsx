@@ -1,10 +1,10 @@
 import { useEffect, useState, useContext } from "react";
-import "./Comment.scss";
 import axios from "axios";
 import { MyContext } from "../../../../Context/Mycontext";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import profile from "../../../../assets/image/profile.png";
+import { MdOutlineEmojiEmotions } from "react-icons/md"
 import EmojiPicker from 'emoji-picker-react';
 
 
@@ -17,7 +17,7 @@ export default function Comment({ post, users, localuser, localUserLike }) {
     const [contactEdit, setContactEdit] = useState([]);
     const [likeCount, setLikeCount] = useState([]);
     const [liked, setLiked] = useState([]);
-    const [chosenEmoji, setChosenEmoji] = useState(null);
+    const [showEmojis, setShowEmojis] = useState(false);
 
     const onEmojiClick = (event, emojiObject) => {
         setChosenEmoji(emojiObject);
@@ -84,6 +84,7 @@ export default function Comment({ post, users, localuser, localUserLike }) {
     const handleComment = async (e) => {
         try {
             e.preventDefault();
+            setShowEmojis(false)
             const response = await axios.post(
                 `${URL}/toggle/comment?id=${post._id}&userid=${localuser._id}&data=${commentinput}`
             );
@@ -176,6 +177,10 @@ export default function Comment({ post, users, localuser, localUserLike }) {
             console.log("Error editing comment:", error);
         }
     };
+
+    const handleEmojiClick = (emoji) => {
+        setCommentInput((prevMessage) => prevMessage + emoji.emoji); // Update the message with the clicked emoji
+    };
     //Handle Profile Page
     const handleUserProfile = async (e, data) => {
         e.preventDefault();
@@ -189,7 +194,7 @@ export default function Comment({ post, users, localuser, localUserLike }) {
     };
 
     return (
-        <div className="flex w-4/5 h-4/5 bg-white">
+        <div className="flex w-4/5 h-4/5 bg-white max-sm:flex-col">
             <div className="w-full h-full">
                 {post.fileUrl &&
                     (post.fileType === "png" ||
@@ -287,19 +292,27 @@ export default function Comment({ post, users, localuser, localUserLike }) {
                         )
                     })}
                 </div>
-
-                <form className=" absolute bottom-0 items-center justify-between py-3" style={{ width: "92%" }} onSubmit={(e) => { handleComment(e) }} >
+                {showEmojis && (
+                    <div className=' absolute bottom-14 left-0'>
+                        <EmojiPicker onEmojiClick={handleEmojiClick} />
+                    </div>
+                )}
+                <div className=" absolute bottom-0" style={{ width: "92%" }} >
                     <hr />
-                    <input
-                        value={commentinput}
-                        type="text"
-                        required
-                        placeholder="Add a comment"
-                        className="outline-none w-5/6"
-                        onChange={(e) => { setCommentInput(e.target.value) }}
-                    />
-                    <button>Post</button>
-                </form>
+                    <form className="flex items-center justify-between py-3" onSubmit={(e) => { handleComment(e) }}>
+                        <MdOutlineEmojiEmotions className=" text-2xl" onClick={() => setShowEmojis(!showEmojis)} />
+                        <input
+                            value={commentinput}
+                            type="text"
+                            required
+                            placeholder="Add a comment"
+                            className="outline-none w-full pl-2"
+                            onChange={(e) => { setCommentInput(e.target.value) }}
+                        />
+                        <button type="submit">Post</button>
+                    </form>
+
+                </div>
             </div>
 
         </div >

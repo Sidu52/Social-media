@@ -1,4 +1,3 @@
-import './Sidebar.scss';
 import axios from 'axios';
 import { useState, useEffect, useContext } from 'react'
 import { useDispatch } from "react-redux";
@@ -16,12 +15,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import MultiStep from 'react-multistep'
 import { FaRegFileImage } from "react-icons/fa";
 import { FaArrowLeft } from "react-icons/fa6";
-import { MdClose } from "react-icons/md";
+import { MdClose, MdOutlineEmojiEmotions } from "react-icons/md";
+import EmojiPicker from 'emoji-picker-react';
 import SignUp from '../../../pages/form/component/Signup';
 import Login from '../../../pages/form/component/Signin';
-
-
-
 
 export default function Sidebar() {
     const navigate = useNavigate();
@@ -36,6 +33,7 @@ export default function Sidebar() {
     const [currentStep, setCurrentStep] = useState(0);
     const [searchToggle, setSearchToggle] = useState("");
     const [dropdownToggle, setDropdownToggle] = useState(false);
+    const [showEmojis, setShowEmojis] = useState(false);
     const [searchValue, setSearchValue] = useState("");// To hold the value of the search input
     const [searchItem, setSearchItem] = useState([]); // To store the search results
     const [notification, setNotifications] = useState([]);
@@ -140,6 +138,7 @@ export default function Sidebar() {
     // Function to handle form submission and create a new post
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setShowEmojis(false)
         const formData = new FormData();
         formData.append("content", form.content);
         formData.append("img", form.imgurl);
@@ -187,6 +186,11 @@ export default function Sidebar() {
             setSearchItem([])
         }
     }
+
+    //Add emoji
+    const handleEmojiClick = (emoji) => {
+        setForm({ ...form, content: form.content + emoji.emoji })
+    };
 
     const handleRefresh = () => {
         if (window.location.hash === '#/home') {
@@ -249,6 +253,11 @@ export default function Sidebar() {
                             <div className="w-full h-80 grid grid-cols-2 max-sm:grid-cols-1 justify-center " >
                                 <img src={uploading} alt="img" className='w-full h-full max-sm:h-44 bg-white' />
                                 <div className='bg-white p-5'>
+                                    {showEmojis && (
+                                        <div className=' absolute bottom-14 left-0'>
+                                            <EmojiPicker onEmojiClick={handleEmojiClick} />
+                                        </div>
+                                    )}
                                     <div className='flex gap-2'>
                                         <img src={data ? data.avatar : profile} alt="Profile" className='w-9 h-9 rounded-full' />
                                         <span>
@@ -257,6 +266,8 @@ export default function Sidebar() {
                                     </div >
                                     <div className='relative'>
                                         <textarea name="text" value={form.content} maxLength={200} className='w-full max-sm:h- mt-3 outline-none' rows="10" placeholder='Write a caption...' onChange={(e) => setForm({ ...form, content: e.target.value })}></textarea>
+
+                                        <MdOutlineEmojiEmotions className="absolute bottom-2 left-2 text-2xl" onClick={() => setShowEmojis(!showEmojis)} />
                                         <p className=' absolute bottom-2 right-2 text-sm text-gray-400'>{form?.content.length}/200</p>
                                     </div>
                                     <hr />
@@ -324,16 +335,17 @@ export default function Sidebar() {
                     <p className='font-extrabold text-4xl max-sm:ml-10' style={{ fontFamily: " 'Dancing Script', cursive" }} onClick={() => navigate('/')}>{searchToggle == "" ? "Alston" : "A"}</p>
                 </div>
                 <div className='flex flex-col gap-6 max-sm:hidden'>
-                    <ul className="nav_link_container text-base list-none flex items-start flex-col gap-10">
+                    <ul className="text-base list-none flex items-start flex-col gap-10">
                         <li>
-                            {window.location.hash === '#/home' ? <Link onClick={handleRefresh}>
-                                <span className="icon">
-                                    <AiOutlineHome />
-                                </span>
-                                <p>Home</p>
-                            </Link> :
-                                <Link to='/home'>
-                                    <span className="icon">
+                            {window.location.hash === '#/home' ?
+                                <Link onClick={handleRefresh} className='flex items-center justify-center gap-3'>
+                                    <span>
+                                        <AiOutlineHome />
+                                    </span>
+                                    <p>Home</p>
+                                </Link> :
+                                <Link to='/home' className='flex items-center justify-center gap-3'>
+                                    <span>
                                         <AiOutlineHome />
                                     </span>
                                     <p>Home</p>
@@ -341,7 +353,7 @@ export default function Sidebar() {
                             }
                         </li>
                         <li>
-                            <Link to="#">
+                            <Link to="#" className='flex items-center justify-center gap-3'>
                                 <span className="icon" onClick={() => setSearchToggle(searchToggle == "" || searchToggle == "notification" ? "search" : "")}>
                                     <CiSearch />
                                 </span>
@@ -349,7 +361,7 @@ export default function Sidebar() {
                             </Link>
                         </li>
                         <li>
-                            <Link to="about">
+                            <Link to="about" className='flex items-center justify-center gap-3'>
                                 <span className="icon">
                                     <BsChatLeft />
                                 </span>
@@ -357,7 +369,7 @@ export default function Sidebar() {
                             </Link>
                         </li>
                         <li>
-                            <Link to="/home/reels">
+                            <Link to="/home/reels" className='flex items-center justify-center gap-3'>
                                 <span className="icon" >
                                     <MdSlowMotionVideo />
                                 </span>
@@ -365,7 +377,7 @@ export default function Sidebar() {
                             </Link>
                         </li>
                         <li>
-                            <Link to="chat">
+                            <Link to="chat" className='flex items-center justify-center gap-3'>
                                 <span className="icon">
                                     <AiOutlineMessage />
                                 </span>
@@ -374,7 +386,7 @@ export default function Sidebar() {
                         </li>
                         <li className='relative'>
 
-                            <Link>
+                            <Link className='flex items-center justify-center gap-3'>
                                 <span className="icon" onClick={() => setSearchToggle(searchToggle == "" || searchToggle == "search" ? "notification" : "")}>
                                     <AiOutlineHeart />
                                 </span>
@@ -385,6 +397,7 @@ export default function Sidebar() {
                         </li>
                         <li className='relative'>
                             <Link to="#"
+                                className='flex items-center justify-center gap-3'
                                 onClick={() => setSToggle(true)}
                             >
                                 <span className="icon">
@@ -443,28 +456,28 @@ export default function Sidebar() {
 
 
                     <hr />
-                    <ul className="nav_link_container text-base font-extralight list-none flex items-start flex-col gap-10">
-                        <li><Link>More</Link></li>
+                    <ul className="text-base font-extralight list-none flex items-start flex-col gap-10">
+                        <li><Link className='flex items-center justify-center gap-3'>More</Link></li>
                     </ul>
                 </div>
                 <div className='sm:hidden'>
-                    <ul className="nav_link_container text-base list-none flex items-start flex-col max-sm:flex-row gap-10 max-sm:gap-5 max-sm:mr-10 ">
+                    <ul className="text-base list-none flex items-start flex-col max-sm:flex-row gap-10 max-sm:gap-5 max-sm:mr-10 ">
                         <li>
-                            <Link to="#">
-                                <span className="icon relative" onClick={() => {
+                            <Link to="#" className='flex items-center justify-center gap-3'>
+                                <span className="relative" onClick={() => {
                                     if (data) {
                                         return
                                     }
                                 }}>
                                     <span onClick={() => setSearchToggle(searchToggle == "" || searchToggle == "search" ? "notification" : "")}>
                                         <AiOutlineHeart />
-                                        {notificatiionCount > 0 ? <p className='absolute -top-2 -left-2 flex items-center justify-center p-2 w-1 h-1 bg-red-500 text-white rounded-full'>{notificatiionCount}</p> : null}
+                                        {notificatiionCount > 0 ? <p className='absolute top-0 left-0 flex items-center justify-center p-1 bg-red-500 text-white rounded-full'></p> : null}
                                     </span>
                                 </span>
                             </Link>
                         </li>
                         <li className='relative'>
-                            <Link to="#">
+                            <Link to="#" className='flex items-center justify-center gap-3'>
                                 <span className="icon" onClick={() => {
                                     if (data) {
                                         setSToggle(true);
@@ -482,15 +495,15 @@ export default function Sidebar() {
             </div >
             {/* fotter for  max-width 620px */}
             <div className='max-sm:block hidden fixed bottom-0 text-center bg-white w-full py-3 border-t-2 z-30' >
-                <ul className="nav_link_container text-base list-none flex items-center justify-around ">
+                <ul className="text-base list-none flex items-center justify-around ">
                     <li>
                         {window.location.hash === '#/home' ?
-                            <Link onClick={handleRefresh}>
+                            <Link onClick={handleRefresh} className='flex items-center justify-center gap-3'>
                                 <span className="icon" style={{ fontSize: '1.3em' }}>
                                     <AiOutlineHome />
                                 </span>
                             </Link> :
-                            <Link to='/home'>
+                            <Link to='/home' className='flex items-center justify-center gap-3'>
                                 <span className="icon" style={{ fontSize: '1.3em' }}>
                                     <AiOutlineHome />
                                 </span>
@@ -499,23 +512,23 @@ export default function Sidebar() {
 
                     </li>
                     <li>
-                        <Link to="#">
-                            <span className="icon" style={{ fontSize: '1.3em' }} onClick={() => setSearchToggle(searchToggle == "" || searchToggle == "notification" ? "search" : "")}>
+                        <Link to="#" className='flex items-center justify-center gap-3'>
+                            <span style={{ fontSize: '1.3em' }} onClick={() => setSearchToggle(searchToggle == "" || searchToggle == "notification" ? "search" : "")}>
                                 <CiSearch />
                             </span>
 
                         </Link>
                     </li>
                     <li>
-                        <Link to="/home/reels">
-                            <span className="icon" style={{ fontSize: '1.3em' }}>
+                        <Link to="/home/reels" className='flex items-center justify-center gap-3'>
+                            <span style={{ fontSize: '1.3em' }}>
                                 <MdSlowMotionVideo />
                             </span>
 
                         </Link>
                     </li>
                     <li>
-                        <Link to="chat">
+                        <Link to="chat" className='flex items-center justify-center gap-3'>
                             <span className="icon" style={{ fontSize: '1.3em' }}>
                                 <AiOutlineMessage onClick={() => {
                                     if (data) {

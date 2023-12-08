@@ -52,13 +52,6 @@ const datareducer = createSlice({
                 );
             });
             state.reels.push(item);
-            // data.forEach((item) => {
-            //     // Check if item.id already exists in state.items
-            //     const isItemExist = state.reels.some((existingItem) => existingItem.id == item.id);
-            //     if (!isItemExist && item.fileType == "mp4") {
-            //         state.reels.push(item);
-            //     }
-            // });
         },
     },
 });
