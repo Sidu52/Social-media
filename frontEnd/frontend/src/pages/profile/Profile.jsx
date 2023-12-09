@@ -296,61 +296,13 @@ export default function Profile() {
                 </div>
 
                 <hr />
-                <div className="flex-1 overflow-y-scroll relative">
-                    <div className=' sticky top-0 z-10 bg-white'>
-                        <div className="flex flex-wrap justify-center p-4">
-                            <div className='hidden max-sm:flex items-center justify-around gap-8'>
-                                <span className='flex flex-col items-center justify-center'>
-                                    <p className=''>{posts.length}</p>
-                                    <p>posts</p>
-                                </span>
-                                <span className='flex flex-col items-center justify-center'
-                                    onClick={() => {
-                                        setFollowUnfollowToggle("followers")
-                                        handleButtonClick("Followers")
-                                    }}>
-                                    <p className=''>{userData?.followers?.length || 0}</p>
-                                    <p>followers</p>
-                                </span>
-                                <span className='flex flex-col items-center justify-center'
-                                    onClick={() => {
-                                        setFollowUnfollowToggle("following")
-                                        handleButtonClick("Following")
-                                    }}>
-                                    <p className=''>{userData?.following?.length || 0}</p>
-                                    <p>following</p>
-                                </span>
-                            </div>
-                            <hr />
-                        </div>
-                        <div className='flex items-center justify-center max-sm:justify-around pb-5 gap-20 max-md:gap-14 max-sm:gap-5'>
-                            <span><Link to="/profile/post" className='flex items-center gap-2'>
-                                <LuGrid className='text-md max-sm:text-3xl' />
-                                <p className='max-sm:hidden'>Post</p>
-                            </Link></span>
-                            <span><Link to="/profile/reel" className='flex items-center gap-2'>
-                                <MdOutlineSlowMotionVideo className='text-md max-sm:text-3xl' />
-                                <p className='max-sm:hidden'>Reel</p>
-                            </Link></span>
-                            <span><Link
-                                to="/profile/save"
-                                className='flex items-center gap-2'>
-                                <LiaSave className='text-md max-sm:text-3xl' />
-                                <p className='max-sm:hidden'>Saved</p>
-                            </Link></span>
-                            <span><Link to="#" className='flex items-center gap-2'>
-                                <IoPricetagsOutline className='text-md max-sm:text-3xl' onClick={() => toast.success("Coming Soon")} />
-                                <p className='max-sm:hidden' onClick={() => toast.success("Coming Soon")}>Tagged</p>
-                            </Link></span>
-                        </div>
 
 
-                    </div>
-                    <hr className='mb-2' />
-                    <div className=' flex-1 overflow-y-scroll'>
-                        <Outlet />
-                    </div>
+                <div className=' flex-1 overflow-y-scroll'>
+                    <Outlet />
                 </div>
+
+                <div className='mb-20'>h3</div>
                 {/* Image gallery component */}
 
             </div>

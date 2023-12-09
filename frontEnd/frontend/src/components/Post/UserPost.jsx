@@ -10,10 +10,10 @@ export default function UserPost() {
     const [hoverIndex, setHoverIndex] = useState(null);
     return (
         <div>
-            <div className='grid grid-cols-3 items-center w-full gap-2'>
+            <div className='grid grid-cols-3 h-screen items-center w-full gap-2'>
                 {posts.map((data, index) => (
                     data.fileUrl ? (
-                        <div key={index} className='relative max-w-80 h-64'
+                        <div key={index} className='relative max-w-80 h-44'
                             onMouseEnter={() => setHoverIndex(index)}
                             onMouseLeave={() => setHoverIndex(null)}
                         >

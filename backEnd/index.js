@@ -17,22 +17,16 @@ const app = express();
 const port = process.env.PORT || 4000;
 const User = require("./models/user");
 const Post = require("./models/post");
+const Messages = require("./models/Message")
 const server = http.createServer(app);
 const Notification = require('./models/notification');
 
-const allowedOrigins =
-    process.env.NODE_ENV === 'production'
-        ? 'https://siddhantsharmasocialmedia.netlify.app'
-        : process.env.NODE_ENV === 'home'
-            ? 'http://192.168.139.176:5173'
-            : 'http://192.168.29.91:5173';
-
 const corsOptions = {
-    // origin: 'https://siddhantsharmasocialmedia.netlify.app', // Allow only requests from this domain
-    origin: allowedOrigins,
-    //  'http://192.168.139.176:5173', // Allow only requests from this domain
-    // origin: 'http://192.168.29.91:5173', // Allow only requests from this domain
-
+    origin: [
+        'http://192.168.29.91:5173',
+        'https://siddhantsharmasocialmedia.netlify.app',
+        'http://192.168.139.176:5173'
+    ],
     optionsSuccessStatus: 200 // Some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 
@@ -81,9 +75,11 @@ server.listen(port, () => {
 const io = require("socket.io")(server, {
     pingTimeout: 60000,
     cors: {
-        origin: allowedOrigins
-        // 'http://192.168.139.176:5173', // Allow only requests from this domain
-        // origin: "https://siddhantsharmasocialmedia.netlify.app"
+        origin: [
+            'http://192.168.29.91:5173',
+            'https://siddhantsharmasocialmedia.netlify.app',
+            'http://192.168.139.176:5173'
+        ],
     },
 });
 //Socket.io
@@ -114,15 +110,22 @@ io.on('connection', socket => {
         const sender = users.find(user => user.id == senderId);
         if (receiver) {
             const user = await User.findById(senderId);
+            const data = await Messages.find({ message });
+            const messageUserData = { user: { id: user._id, email: user.email, usename: user.username, avatar: user.avatar }, message: data }
             io.to(receiver.socketId).to(sender.socketId).emit('getMessage', {
                 senderId,
-                message,
                 receiverId,
                 conversationId,
-                user
+                messageUserData
             });
         }
     })
+    socket.on('inputfocus', async ({ receiverId, value }) => {
+        console.log(receiverId)
+        const receiver = users.find(user => user.id == receiverId);
+        io.to(receiver?.socketId).emit('inputfocusserver', value);
+    })
+
 
     socket.on('notificationsend', async ({ senderuserID, reciveruserID, notificationDes, postID, notificationType, viewBy }) => {
         try {
@@ -151,6 +154,20 @@ io.on('connection', socket => {
             console.error("Error:", err);
             // Handle any potential errors while creating notifications or emitting to sockets
         }
+    });
+
+    //Video Calling Socket
+    // Handle signaling events
+    socket.on('offer', (offer, targetSocketId) => {
+        io.to(targetSocketId).emit('offer', offer, socket.id);
+    });
+
+    socket.on('answer', (answer, targetSocketId) => {
+        io.to(targetSocketId).emit('answer', answer);
+    });
+
+    socket.on('ice-candidate', (candidate, targetSocketId) => {
+        io.to(targetSocketId).emit('ice-candidate', candidate);
     });
 
 

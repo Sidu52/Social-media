@@ -66,11 +66,6 @@ export default function Sidebar() {
     // Fetch user data from the server using Axios
     useEffect(() => {
         socket?.on("getNotification", data => {
-            // if (notificatiionCount > 0) {
-            //     setNotificationcount(prevCount => prevCount + 1);
-            // } else {
-            //     setNotificationcount(1);
-            // }
             setNotificationcount(prevCount => prevCount + 1);
             setNotifications(prevNotifications => [data, ...prevNotifications]);
         })
@@ -102,8 +97,6 @@ export default function Sidebar() {
                 console.error("Error fetching user data:", error);
             }
         };
-
-
         fetchUserData();
         fetchNotification();
     }, []);
@@ -248,7 +241,12 @@ export default function Sidebar() {
                         <div className="h-full w-2/5 mx-5 max-sm:w-5/6 overflow-hidden" style={{ display: currentStep == 2 ? "block" : "none" }}>
                             <div className='flex items-center justify-between p-4 bg-white'>
                                 <FaArrowLeft className=' text-blue-500 text-xl' onClick={() => setCurrentStep(currentStep - 1)} />
-                                <span className=' text-blue-500' onClick={(e) => handleSubmit(e)} >Post</span>
+                                <span className=' text-blue-500' onClick={(e) => {
+                                    if (!data) {
+                                        return toast.warning("User not login")
+                                    }
+                                    handleSubmit(e)
+                                }}>Post</span>
                             </div>
                             <div className="w-full h-80 grid grid-cols-2 max-sm:grid-cols-1 justify-center " >
                                 <img src={uploading} alt="img" className='w-full h-full max-sm:h-44 bg-white' />
@@ -340,13 +338,13 @@ export default function Sidebar() {
                             {window.location.hash === '#/home' ?
                                 <Link onClick={handleRefresh} className='flex items-center justify-center gap-3'>
                                     <span>
-                                        <AiOutlineHome />
+                                        <AiOutlineHome className=' w-5 h-5' />
                                     </span>
                                     <p>Home</p>
                                 </Link> :
                                 <Link to='/home' className='flex items-center justify-center gap-3'>
                                     <span>
-                                        <AiOutlineHome />
+                                        <AiOutlineHome className=' w-5 h-5' />
                                     </span>
                                     <p>Home</p>
                                 </Link>
@@ -363,7 +361,7 @@ export default function Sidebar() {
                         <li>
                             <Link to="about" className='flex items-center justify-center gap-3'>
                                 <span className="icon">
-                                    <BsChatLeft />
+                                    <BsChatLeft className=' w-5 h-5' />
                                 </span>
                                 <p>About</p>
                             </Link>
@@ -371,7 +369,7 @@ export default function Sidebar() {
                         <li>
                             <Link to="/home/reels" className='flex items-center justify-center gap-3'>
                                 <span className="icon" >
-                                    <MdSlowMotionVideo />
+                                    <MdSlowMotionVideo className=' w-5 h-5' />
                                 </span>
                                 <p>Reels</p>
                             </Link>
@@ -379,7 +377,7 @@ export default function Sidebar() {
                         <li>
                             <Link to="chat" className='flex items-center justify-center gap-3'>
                                 <span className="icon">
-                                    <AiOutlineMessage />
+                                    <AiOutlineMessage className=' w-5 h-5' />
                                 </span>
                                 <p>Messages</p>
                             </Link>
@@ -388,7 +386,7 @@ export default function Sidebar() {
 
                             <Link className='flex items-center justify-center gap-3'>
                                 <span className="icon" onClick={() => setSearchToggle(searchToggle == "" || searchToggle == "search" ? "notification" : "")}>
-                                    <AiOutlineHeart />
+                                    <AiOutlineHeart className=' w-5 h-5' />
                                 </span>
                                 <p onClick={() => setSearchToggle(searchToggle == "" || searchToggle == "search" ? "notification" : "")}>Notifications</p>
 
@@ -401,7 +399,7 @@ export default function Sidebar() {
                                 onClick={() => setSToggle(true)}
                             >
                                 <span className="icon">
-                                    <BsPlusCircle />
+                                    <BsPlusCircle className=' w-5 h-5' />
                                 </span>
                                 <p>Create</p>
                             </Link>
@@ -470,7 +468,7 @@ export default function Sidebar() {
                                     }
                                 }}>
                                     <span onClick={() => setSearchToggle(searchToggle == "" || searchToggle == "search" ? "notification" : "")}>
-                                        <AiOutlineHeart />
+                                        <AiOutlineHeart className=' w-5 h-5' />
                                         {notificatiionCount > 0 ? <p className='absolute top-0 left-0 flex items-center justify-center p-1 bg-red-500 text-white rounded-full'></p> : null}
                                     </span>
                                 </span>
@@ -486,7 +484,7 @@ export default function Sidebar() {
                                         toast.warning("User not Login");
                                     }
                                 }}>
-                                    <BsPlusCircle />
+                                    <BsPlusCircle className=' w-5 h-5' />
                                 </span>
                             </Link>
                         </li>
@@ -500,12 +498,12 @@ export default function Sidebar() {
                         {window.location.hash === '#/home' ?
                             <Link onClick={handleRefresh} className='flex items-center justify-center gap-3'>
                                 <span className="icon" style={{ fontSize: '1.3em' }}>
-                                    <AiOutlineHome />
+                                    <AiOutlineHome className=' w-5 h-5' />
                                 </span>
                             </Link> :
                             <Link to='/home' className='flex items-center justify-center gap-3'>
                                 <span className="icon" style={{ fontSize: '1.3em' }}>
-                                    <AiOutlineHome />
+                                    <AiOutlineHome className=' w-5 h-5' />
                                 </span>
                             </Link>
                         }
@@ -514,7 +512,7 @@ export default function Sidebar() {
                     <li>
                         <Link to="#" className='flex items-center justify-center gap-3'>
                             <span style={{ fontSize: '1.3em' }} onClick={() => setSearchToggle(searchToggle == "" || searchToggle == "notification" ? "search" : "")}>
-                                <CiSearch />
+                                <CiSearch className=' w-5 h-5' />
                             </span>
 
                         </Link>
@@ -522,7 +520,7 @@ export default function Sidebar() {
                     <li>
                         <Link to="/home/reels" className='flex items-center justify-center gap-3'>
                             <span style={{ fontSize: '1.3em' }}>
-                                <MdSlowMotionVideo />
+                                <MdSlowMotionVideo className=' w-5 h-5' />
                             </span>
 
                         </Link>
@@ -530,11 +528,10 @@ export default function Sidebar() {
                     <li>
                         <Link to="chat" className='flex items-center justify-center gap-3'>
                             <span className="icon" style={{ fontSize: '1.3em' }}>
-                                <AiOutlineMessage onClick={() => {
+                                <AiOutlineMessage className=' w-5 h-5' onClick={() => {
                                     if (data) {
                                         return
                                     }
-                                    toast.success("Coming soon")
                                 }}
                                 />
                             </span>

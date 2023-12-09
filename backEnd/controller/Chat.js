@@ -10,7 +10,7 @@ const messageGetByConversationId = async (req, res) => {
         const data = await Messages.find({ conversationId });
         const messageUserData = await Promise.all(data.map(async (message) => {
             const user = await Users.findById(message.senderId);
-            return { user: { id: user._id, email: user.email, usename: user.username, avatar: user.avatar }, message: message.message }
+            return { user: { id: user._id, email: user.email, usename: user.username, avatar: user.avatar }, message: message }
         }));
 
         return res.status(200).json({ message: "Conversation Message finds Successfully", messageUserData });
@@ -38,9 +38,10 @@ const messageCreated = async (req, res) => {
         } else if (!conversationId && !receiverId) {
             return res.status(200).json({ message: "Conversation and ReciverId not found" });
         }
-        const newMessage = new Messages({ conversationId, senderId, message });
-        await newMessage.save();
-        res.status(200).json({ message: "Conversation Message Created Successfully" });
+        const newMessage = await Messages.create({ conversationId, senderId, message });
+        const user = await Users.find({ senderId: newMessage.senderId });
+
+        res.status(200).json({ message: "Conversation Message Created Successfully", user: { id: user._id, email: user.email, usename: user.username, avatar: user.avatar }, message: newMessage });
     } catch (err) {
         res.status(500).json({ message: "Server Error", error: err });
     }

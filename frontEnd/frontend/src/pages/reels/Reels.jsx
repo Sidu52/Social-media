@@ -9,6 +9,7 @@ import { MyContext } from '../../Context/Mycontext';
 import { toast } from 'react-toastify';
 import { IoMdShare } from "react-icons/io";
 import { HiSave } from "react-icons/hi";
+import cdImage from '../../assets/image/cdImage.png'
 
 const Reels = () => {
     const [reels, setReels] = useState([]);
@@ -274,21 +275,34 @@ const Reels = () => {
                                             </label>
                                         </span>
                                     </div>
-                                    <div className='reel_detail_container'>
-                                        <div style={{ display: "flex", gap: '10px', alignItems: 'center' }}>
+                                    <div className="absolute bottom-6 w-full bg-black text-white bg-opacity-20 p-4 rounded-lg shadow-md">
+                                        <div className="flex items-center gap-4">
                                             <img
-                                                src={data && data.avatar ? data.avatar : Profile}
-                                                style={{ width: "40px", height: "40px", borderRadius: "50%" }}
-                                                onClick={((e) => handleProfileClick(e, data))}
+                                                src={postUser && postUser.avatar ? postUser.avatar : Profile}
+                                                className="w-10 h-10 rounded-full cursor-pointer"
+                                                onClick={e => handleProfileClick(e, data)}
+                                                alt="User Avatar"
                                             />
                                             <h3
-                                                onClick={((e) => handleProfileClick(e, data))}
-                                            >{postUser?.username}</h3>
+                                                onClick={e => handleProfileClick(e, data)}
+                                                className="text-xl font-semibold cursor-pointer"
+                                            >
+                                                {postUser?.username}
+                                            </h3>
                                         </div>
-                                        <p className='text-xs'>{reel.content}</p>
-                                    </div>
-                                </>
+                                        <p className="text-sm text-gray-300 mt-2">{reel?.content}</p>
 
+                                        <div className="flex items-center gap-3 mt-4">
+                                            <div className=" rounded-full w-10 h-10 flex items-center justify-center">
+                                                <img src={cdImage}  className={`w-10 h-10 ${isPlaying ? "animate-spin" : ""}`} alt="CD Image" />
+                                            </div>
+                                            <p className="text-xs text-gray-300">
+                                                Unknown music by ({postUser?.username})
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                </>
                             )}
                         </div>
                     )

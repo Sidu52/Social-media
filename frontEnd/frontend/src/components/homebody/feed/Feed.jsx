@@ -321,7 +321,7 @@ export default function Feed() {
                 {posts?.map((post, index) => {
                     const postUser = users.find((user) => user._id == post.user); //Find for which user upload post
                     return (
-                        <div key={index} className="w-3/4 max-[400px]:w-[90%]">
+                        <div key={index} className="w-3/4 max-[400px]:w-[90%] max-sm:mb-10">
                             <div className="flex items-center justify-between mb-2">
                                 <span className="flex items-center justify-between gap-2">
                                     <img

@@ -17,6 +17,7 @@ import ChatPage from "./pages/chatPage/ChatPage";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { HashRouter } from "react-router-dom";
+import VideoCalling from './pages/videoCalling/VideoCalling';
 
 export default function App({ }) {
   const { setOnlineUser, socket } = useContext(MyContext);
@@ -51,6 +52,7 @@ export default function App({ }) {
             <Route path='' element={<Home />}>
               <Route index element={<Feed />} />
               <Route path="reels" element={<Reels />} />
+              <Route path="video" element={<VideoCalling />} />
             </Route>
             <Route path="about" element={<About />} />
             <Route path="about" element={<About />} />

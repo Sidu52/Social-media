@@ -101,6 +101,37 @@
       top: 0%;
     }
   }
+
+  .realimganimation {
+    animation: rotate360 1s alternate infinite ease;
+}
+
+@keyframes pulse {
+  0% {
+    background-color: #c2c0c0;
+    box-shadow: 0 0 0 0 rgba(178, 212, 252, 0.7);
+  }
+
+  50% {
+    background-color: #626262;
+    box-shadow: 0 0 0 1px rgba(178, 212, 252, 0);
+  }
+
+  100% {
+    background-color: #c2c0c0;
+    box-shadow: 0 0 0 0 rgba(178, 212, 252, 0.7);
+  }
+}
+
+@keyframes rotate360 {
+  /* Rotate from 0 degrees to 360 degrees */
+  from {
+      transform: rotate(360deg);
+  }
+  to {
+      transform: rotate(360deg);
+  }
+}
   
   .circle:nth-child(2) {
     left: 45%;
