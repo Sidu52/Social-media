@@ -21,16 +21,24 @@ const Messages = require("./models/Message")
 const server = http.createServer(app);
 const Notification = require('./models/notification');
 
+// const corsOptions = {
+//     origin: [
+//         'http://localhost:5173',
+//         'http://192.168.29.91:5173',
+//         'https://siddhantsharmasocialmedia.netlify.app',
+//         'http://192.168.139.176:5173',
+//         'http://192.168.235.176:8090'
+//     ],
+//     optionsSuccessStatus: 200 // Some legacy browsers (IE11, various SmartTVs) choke on 204
+// };
+
 const corsOptions = {
-    origin: [
-        'http://192.168.29.91:5173',
-        'https://siddhantsharmasocialmedia.netlify.app',
-        'http://192.168.139.176:5173'
-    ],
-    optionsSuccessStatus: 200 // Some legacy browsers (IE11, various SmartTVs) choke on 204
+    origin: '*',
+    optionsSuccessStatus: 200
 };
 
 app.use(cors(corsOptions));
+app.use(cors({ origin: true, credentials: true }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookie());// Use cookie-parser middleware
@@ -76,6 +84,7 @@ const io = require("socket.io")(server, {
     pingTimeout: 60000,
     cors: {
         origin: [
+            'http://localhost:5173',
             'http://192.168.29.91:5173',
             'https://siddhantsharmasocialmedia.netlify.app',
             'http://192.168.139.176:5173'
@@ -142,7 +151,7 @@ io.on('connection', socket => {
             await reciveruserID.map(async receiver => {
                 const receiverUser = users.find(user => user.id == receiver);
                 if (receiverUser && receiverUser.socketId) {
-                    console.log(receiverUser.id, "==", receiver);
+
                     io.to(receiverUser.socketId).emit('getNotification', { notification: data, fromUser, post });
                 } else {
                     console.log(`User ${receiver} not found or no socket ID`);
@@ -156,19 +165,53 @@ io.on('connection', socket => {
         }
     });
 
+
+    socket.on('calluser', (userToCall, signalData, from, name) => {
+        io.to(userToCall).emit(["calluser", { signal: signalData, from, name }]);
+
+    });
+    socket.on("answercall", (data) => {
+        io.to(data.to).emit("callaccepted", data.signal);
+    })
+
+    socket.on('callUser', (roomID, from, to) => {
+        io.to(rooms[roomID][to]).emit('incomingCall', { from, to });
+    });
+
+    socket.on('acceptCall', (roomID, from, to) => {
+        io.to(rooms[roomID][from]).emit('callAccepted', { from, to });
+    });
+
+
+
     //Video Calling Socket
-    // Handle signaling events
-    socket.on('offer', (offer, targetSocketId) => {
-        io.to(targetSocketId).emit('offer', offer, socket.id);
-    });
+    // socket.on("callsend", async (data) => {
+    //     const { senderId, receiverId, offer } = data;
+    //     const user = await User.findById(senderId);
+    //     const receiver = users.find(user => user.id == receiverId);
+    //     io.to(receiver?.socketId).emit("IncomingCall", { user, senderId, offer });
+    // });
+    // socket.on("callAccepted", async (data) => {
+    //     const { senderId, receiverId, ans } = data;
 
-    socket.on('answer', (answer, targetSocketId) => {
-        io.to(targetSocketId).emit('answer', answer);
-    });
+    //     await peerConnection.setRemoteDescription(new RTCSessionDescription(answer));
 
-    socket.on('ice-candidate', (candidate, targetSocketId) => {
-        io.to(targetSocketId).emit('ice-candidate', candidate);
-    });
+    //     // const user = await User.findById(senderId);
+    //     // const sender = users.find(user => user.id == senderId);
+    //     // const receiver = users.find(user => user.id == receiverId);
+    //     // io.to(receiver?.socketId).emit("callAccept", { user, senderId, ans });
+    // });
+
+    // socket.on("peer:nego:needed", async ({ to, offer }) => {
+    //     const receiver = users.find(user => user.id == to);
+    //     io.to(receiver.socketId).emit("peer:nego:needed", { offer });
+    // });
+
+    // socket.on("peer:nego:done", ({ to, ans }) => {
+    //     console.log("object", to, ans)
+    //     const receiver = users.find(user => user.id == to);
+    //     io.to(receiver.senderId).emit("peer:nego:final", { ans });
+    // });
 
 
     socket.on('disconnect', async () => {

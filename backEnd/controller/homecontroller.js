@@ -153,6 +153,24 @@ const updateUserAvatar = async (req, res) => {
 //         res.status(500).json({ error: err })
 //     }
 // }
+
+
+//Get Post For android new way
+const getFeeds = async (req, res) => {
+    try {
+        const posts = await Post.find()
+            .populate('user')
+            .populate('comments')
+            .populate('likes');
+
+        return res.status(200).json({ data: posts });
+    } catch (error) {
+        return res.status(500).json({ message: 'Error fetching posts', error: error.message });
+    }
+}
+
+
+
 //Get All Post
 const getPosts = async (req, res) => {
     try {
@@ -254,4 +272,4 @@ const savepost = async (req, res) => {
 };
 
 
-module.exports = { createPost, updateUserAvatar, getPosts, getReels, getpostanduserByID, savepost, deltePost, updatePost }
+module.exports = { createPost, getFeeds, updateUserAvatar, getPosts, getReels, getpostanduserByID, savepost, deltePost, updatePost }
